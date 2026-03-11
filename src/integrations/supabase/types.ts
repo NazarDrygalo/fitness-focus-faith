@@ -14,7 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      workout_logs: {
+        Row: {
+          created_at: string
+          id: string
+          pushups: number
+          situps: number
+          updated_at: string
+          workout_date: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pushups?: number
+          situps?: number
+          updated_at?: string
+          workout_date: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pushups?: number
+          situps?: number
+          updated_at?: string
+          workout_date?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
