@@ -97,3 +97,37 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
+
+/* Remove number input spinners */
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-spinners[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Interactive element animations */
+.active-scale {
+  @apply transition-transform duration-150;
+}
+.active-scale:active {
+  transform: scale(0.95);
+}
+
+.hover-lift {
+  @apply transition-all duration-300;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -8px hsl(var(--foreground) / 0.08);
+}
+
+/* Success color utility */
+.text-success {
+  color: hsl(var(--success));
+}
+.bg-success {
+  background-color: hsl(var(--success));
+}

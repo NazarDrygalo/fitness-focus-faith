@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Navigation } from "@/components/Navigation";
-import { Car3DViewer } from "@/components/Car3DViewer";
+import { Painting3DViewer } from "@/components/Painting3DViewer";
 import { supabase } from "@/integrations/supabase/client";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
-import { getDailyCar } from "@/data/cars";
+import { getDailyPainting } from "@/data/paintings";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Check, Quote, Car, Dumbbell } from "lucide-react";
+import { Check, Quote, Palette, Dumbbell } from "lucide-react";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -24,7 +24,7 @@ export default function WorkoutTracker() {
 
   const verse = getDailyVerse();
   const message = getDailyMessage();
-  const car = getDailyCar();
+  const painting = getDailyPainting();
   const today = format(new Date(), "yyyy-MM-dd");
 
   const handleSave = async () => {
@@ -67,14 +67,14 @@ export default function WorkoutTracker() {
               <div className="grid grid-cols-2 gap-4 mb-4">
                 <div>
                   <Label htmlFor="pushups" className="text-sm text-muted-foreground">Pushups</Label>
-                  <Input id="pushups" type="number" min="0" placeholder="0" value={pushups} onChange={e => setPushups(e.target.value)} className="mt-1 bg-secondary border-border" />
+                  <Input id="pushups" type="number" min="0" placeholder="0" value={pushups} onChange={e => setPushups(e.target.value)} className="mt-1 bg-secondary border-border no-spinners" />
                 </div>
                 <div>
                   <Label htmlFor="situps" className="text-sm text-muted-foreground">Situps</Label>
-                  <Input id="situps" type="number" min="0" placeholder="0" value={situps} onChange={e => setSitups(e.target.value)} className="mt-1 bg-secondary border-border" />
+                  <Input id="situps" type="number" min="0" placeholder="0" value={situps} onChange={e => setSitups(e.target.value)} className="mt-1 bg-secondary border-border no-spinners" />
                 </div>
               </div>
-              <Button onClick={handleSave} disabled={saving} className="w-full transition-all duration-300">
+              <Button onClick={handleSave} disabled={saving} className="w-full transition-all duration-300 active-scale">
                 {saved ? <><Check className="h-4 w-4 mr-2" /> Saved!</> : saving ? "Saving..." : "Log Workout"}
               </Button>
             </CardContent>
@@ -83,7 +83,7 @@ export default function WorkoutTracker() {
 
         {/* Encouragement */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }}>
-          <Card className="bg-card border-border mb-6">
+          <Card className="bg-card border-border mb-6 hover-lift">
             <CardContent className="p-6">
               <p className="text-lg font-medium text-center italic text-foreground leading-relaxed">
                 "{message}"
@@ -94,7 +94,7 @@ export default function WorkoutTracker() {
 
         {/* Bible Verse */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }}>
-          <Card className="bg-card border-border mb-6">
+          <Card className="bg-card border-border mb-6 hover-lift">
             <CardContent className="p-6">
               <Quote className="h-5 w-5 text-muted-foreground mb-3" />
               <p className="text-base leading-relaxed text-foreground mb-3">
@@ -105,32 +105,28 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
 
-        {/* Car of the Day */}
+        {/* Painting of the Day */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2"><Car className="h-5 w-5" /> Car of the Day</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2"><Palette className="h-5 w-5" /> Painting of the Day</CardTitle>
             </CardHeader>
             <CardContent>
-              <Car3DViewer color={car.color} />
+              <Painting3DViewer colors={painting.colors} />
               <div className="mt-4">
-                <h3 className="text-xl font-bold">{car.year} {car.make} {car.model}</h3>
+                <h3 className="text-xl font-bold">{painting.title}</h3>
                 <div className="grid grid-cols-2 gap-3 mt-3">
                   <div className="p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">Engine</p>
-                    <p className="text-sm font-medium">{car.engine}</p>
+                    <p className="text-xs text-muted-foreground">Painter</p>
+                    <p className="text-sm font-medium">{painting.painter}</p>
                   </div>
                   <div className="p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">Horsepower</p>
-                    <p className="text-sm font-medium">{car.horsepower} HP</p>
+                    <p className="text-xs text-muted-foreground">Year Painted</p>
+                    <p className="text-sm font-medium">{painting.yearPainted}</p>
                   </div>
-                  <div className="p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">0-60 mph</p>
-                    <p className="text-sm font-medium">{car.zeroToSixty}</p>
-                  </div>
-                  <div className="p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">Top Speed</p>
-                    <p className="text-sm font-medium">{car.topSpeed}</p>
+                  <div className="col-span-2 p-2 rounded bg-secondary">
+                    <p className="text-xs text-muted-foreground">Illustration</p>
+                    <p className="text-sm font-medium">{painting.subject}</p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 text-center">Drag to rotate • Scroll to zoom</p>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { Flame, TrendingUp, Calendar as CalendarIcon } from "lucide-react";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
@@ -43,7 +44,6 @@ function calculateStreak(logs: WorkoutLog[]): number {
     if (isSameDay(logDate, expected)) {
       streak++;
     } else if (i === 0 && differenceInDays(today, logDate) === 1) {
-      // yesterday counts as start
       streak++;
       today.setDate(today.getDate() - 1);
     } else {
@@ -71,6 +71,8 @@ export default function Dashboard() {
   const daysLeft = getDaysUntilTarget();
 
   const logDates = useMemo(() => new Set(logs.map(l => l.workout_date)), [logs]);
+  const todayStr = format(new Date(), "yyyy-MM-dd");
+  const todayLogged = logDates.has(todayStr);
 
   const selectedLog = useMemo(() => {
     if (!selectedDay) return null;
@@ -106,10 +108,10 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
-            <Card className="bg-card border-border">
+            <Card className={`border-border transition-all duration-500 ${todayLogged ? "bg-success/15 border-success/40 shadow-[0_0_15px_hsl(var(--success)/0.15)]" : "bg-card"}`}>
               <CardContent className="p-4 text-center">
-                <CalendarIcon className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-3xl font-bold text-foreground">{daysLeft}</p>
+                <CalendarIcon className={`h-5 w-5 mx-auto mb-2 transition-colors duration-500 ${todayLogged ? "text-success" : "text-muted-foreground"}`} style={todayLogged ? { color: "hsl(var(--success))" } : {}} />
+                <AnimatedCounter value={daysLeft} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">days to Dec 20</p>
               </CardContent>
             </Card>
@@ -119,7 +121,7 @@ export default function Dashboard() {
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
                 <Flame className="h-5 w-5 mx-auto mb-2" style={{ color: "hsl(var(--streak))" }} />
-                <p className="text-3xl font-bold text-foreground">{streak}</p>
+                <AnimatedCounter value={streak} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">day streak</p>
               </CardContent>
             </Card>
@@ -129,7 +131,7 @@ export default function Dashboard() {
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
                 <TrendingUp className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-3xl font-bold text-foreground">{totalPushups}</p>
+                <AnimatedCounter value={totalPushups} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">total pushups</p>
               </CardContent>
             </Card>
@@ -139,7 +141,7 @@ export default function Dashboard() {
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
                 <TrendingUp className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-3xl font-bold text-foreground">{totalSitups}</p>
+                <AnimatedCounter value={totalSitups} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">total situps</p>
               </CardContent>
             </Card>
@@ -152,10 +154,10 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Activity</CardTitle>
                 <div className="flex gap-2">
-                  <Button size="sm" variant={viewMode === "month" ? "default" : "ghost"} onClick={() => { setViewMode("month"); setCurrentMonth(new Date()); setSelectedDay(null); }}>
+                  <Button size="sm" variant={viewMode === "month" ? "default" : "ghost"} className="active-scale" onClick={() => { setViewMode("month"); setCurrentMonth(new Date()); setSelectedDay(null); }}>
                     Today
                   </Button>
-                  <Button size="sm" variant={viewMode === "year" ? "default" : "ghost"} onClick={() => setViewMode("year")}>
+                  <Button size="sm" variant={viewMode === "year" ? "default" : "ghost"} className="active-scale" onClick={() => setViewMode("year")}>
                     Year
                   </Button>
                 </div>
@@ -165,9 +167,9 @@ export default function Dashboard() {
               {viewMode === "month" ? (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(m => subMonths(m, 1))}>←</Button>
+                    <Button variant="ghost" size="sm" className="active-scale" onClick={() => setCurrentMonth(m => subMonths(m, 1))}>←</Button>
                     <span className="text-sm font-medium">{format(currentMonth, "MMMM yyyy")}</span>
-                    <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(m => addMonths(m, 1))}>→</Button>
+                    <Button variant="ghost" size="sm" className="active-scale" onClick={() => setCurrentMonth(m => addMonths(m, 1))}>→</Button>
                   </div>
                   <div className="grid grid-cols-7 gap-1 mb-2">
                     {dayNames.map(d => (
@@ -182,20 +184,23 @@ export default function Dashboard() {
                       const dateStr = format(day, "yyyy-MM-dd");
                       const hasLog = logDates.has(dateStr);
                       const isSelected = selectedDay === dateStr;
-                      const today = isToday(day);
+                      const isTodayDay = isToday(day);
+                      const isPast = day < new Date() && !isTodayDay;
                       return (
-                        <button
+                        <motion.button
                           key={dateStr}
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.9 }}
                           onClick={() => setSelectedDay(isSelected ? null : dateStr)}
                           className={`
-                            aspect-square rounded-md text-xs flex items-center justify-center transition-all duration-150
+                            aspect-square rounded-md text-xs flex items-center justify-center transition-all duration-200
                             ${isSelected ? "ring-2 ring-ring" : ""}
-                            ${hasLog ? "bg-accent text-foreground font-semibold" : "text-muted-foreground hover:bg-secondary"}
-                            ${today ? "ring-1 ring-muted-foreground" : ""}
+                            ${hasLog ? "bg-success/25 text-success font-semibold" : isPast ? "text-muted-foreground hover:bg-secondary" : "text-muted-foreground hover:bg-secondary"}
+                            ${isTodayDay && hasLog ? "ring-1 ring-success shadow-[0_0_8px_hsl(var(--success)/0.3)]" : isTodayDay ? "ring-1 ring-muted-foreground" : ""}
                           `}
                         >
                           {day.getDate()}
-                        </button>
+                        </motion.button>
                       );
                     })}
                   </div>
@@ -214,20 +219,27 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-4">
-                  {months.map((monthDays, i) => (
+                  {months.map((mDays, i) => (
                     <div key={i}>
                       <p className="text-xs text-muted-foreground mb-1">{monthNames[i]}</p>
                       <div className="grid grid-cols-7 gap-px">
-                        {Array.from({ length: getDay(monthDays[0]) }).map((_, j) => (
+                        {Array.from({ length: getDay(mDays[0]) }).map((_, j) => (
                           <div key={`e-${j}`} className="w-2 h-2" />
                         ))}
-                        {monthDays.map(day => {
+                        {mDays.map(day => {
                           const dateStr = format(day, "yyyy-MM-dd");
                           const hasLog = logDates.has(dateStr);
+                          const isPast = day <= new Date();
                           return (
                             <div
                               key={dateStr}
-                              className={`w-2 h-2 rounded-sm ${hasLog ? "bg-accent-foreground/60" : "bg-secondary"}`}
+                              className={`w-2 h-2 rounded-sm transition-colors duration-300 ${
+                                hasLog
+                                  ? "bg-success"
+                                  : isPast
+                                    ? "bg-destructive/40"
+                                    : "bg-secondary"
+                              }`}
                             />
                           );
                         })}
