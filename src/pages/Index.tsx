@@ -204,20 +204,27 @@ export default function Dashboard() {
                       const isSelected = selectedDay === dateStr;
                       const isTodayDay = isToday(day);
                       const isPast = day < new Date() && !isTodayDay;
+                      const dayLog = logMap.get(dateStr);
                       return (
                         <motion.button
                           key={dateStr}
-                          whileHover={{ scale: 1.15 }}
-                          whileTap={{ scale: 0.9 }}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
                           onClick={() => setSelectedDay(isSelected ? null : dateStr)}
                           className={`
-                            aspect-square rounded-md text-xs flex items-center justify-center transition-all duration-200
+                            aspect-square rounded-md text-xs flex flex-col items-center justify-center transition-all duration-200 p-0.5
                             ${isSelected ? "ring-2 ring-ring" : ""}
                             ${hasLog ? "bg-success/25 text-success font-semibold" : isPast ? "text-muted-foreground hover:bg-secondary" : "text-muted-foreground hover:bg-secondary"}
                             ${isTodayDay && hasLog ? "ring-1 ring-success shadow-[0_0_8px_hsl(var(--success)/0.3)]" : isTodayDay ? "ring-1 ring-muted-foreground" : ""}
                           `}
                         >
-                          {day.getDate()}
+                          <span className="leading-none">{day.getDate()}</span>
+                          {dayLog && (
+                            <span className="leading-tight mt-0.5 text-[7px] font-normal opacity-80">
+                              {dayLog.pushups > 0 && <span className="block">P:{dayLog.pushups}</span>}
+                              {dayLog.situps > 0 && <span className="block">S:{dayLog.situps}</span>}
+                            </span>
+                          )}
                         </motion.button>
                       );
                     })}
