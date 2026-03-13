@@ -84,6 +84,11 @@ export default function Dashboard() {
   const daysLeft = getDaysUntilTarget();
 
   const logDates = useMemo(() => new Set(logs.map(l => l.workout_date)), [logs]);
+  const logMap = useMemo(() => {
+    const map = new Map<string, WorkoutLog>();
+    logs.forEach(l => map.set(l.workout_date, l));
+    return map;
+  }, [logs]);
   const todayStr = format(new Date(), "yyyy-MM-dd");
   const todayLogged = logDates.has(todayStr);
 
