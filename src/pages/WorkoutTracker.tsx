@@ -33,8 +33,19 @@ export default function WorkoutTracker() {
     if (p === 0 && s === 0) { toast.error("Enter at least one exercise count."); return; }
 
     setSaving(true);
+
+    // Fetch existing entry for today to add to it
+    const { data: existing } = await supabase
+      .from("workout_logs")
+      .select("pushups, situps")
+      .eq("workout_date", today)
+      .maybeSingle();
+
+    const newPushups = (existing?.pushups || 0) + p;
+    const newSitups = (existing?.situps || 0) + s;
+
     const { error } = await supabase.from("workout_logs").upsert(
-      { workout_date: today, pushups: p, situps: s },
+      { workout_date: today, pushups: newPushups, situps: newSitups },
       { onConflict: "workout_date" }
     );
     setSaving(false);
@@ -43,7 +54,9 @@ export default function WorkoutTracker() {
       toast.error("Failed to save workout.");
     } else {
       setSaved(true);
-      toast.success("Workout logged!");
+      toast.success(`Workout logged! Today's total: ${newPushups} pushups, ${newSitups} situps`);
+      setPushups("");
+      setSitups("");
       setTimeout(() => setSaved(false), 2000);
     }
   };
