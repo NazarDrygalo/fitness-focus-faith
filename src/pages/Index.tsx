@@ -59,10 +59,23 @@ export default function Dashboard() {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
-  useEffect(() => {
+  const fetchLogs = () => {
     supabase.from("workout_logs").select("workout_date, pushups, situps").then(({ data }) => {
       if (data) setLogs(data);
     });
+  };
+
+  useEffect(() => {
+    fetchLogs();
+    const handleFocus = () => fetchLogs();
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") fetchLogs();
+    });
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleFocus);
+    };
   }, []);
 
   const totalPushups = useMemo(() => logs.reduce((s, l) => s + l.pushups, 0), [logs]);
