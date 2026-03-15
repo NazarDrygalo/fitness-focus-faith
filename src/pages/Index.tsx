@@ -224,6 +224,7 @@ export default function Dashboard() {
                             <span className="leading-tight mt-0.5 text-[7px] font-normal opacity-80">
                               {dayLog.pushups > 0 && <span className="block">P:{dayLog.pushups}</span>}
                               {dayLog.situps > 0 && <span className="block">S:{dayLog.situps}</span>}
+                              {dayLog.ladder_percent > 0 && <span className="block">L:{dayLog.ladder_percent}%</span>}
                             </span>
                           )}
                         </motion.button>
