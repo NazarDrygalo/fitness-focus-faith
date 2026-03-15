@@ -236,6 +236,7 @@ export default function Dashboard() {
                       <p className="text-sm font-medium mb-1">{format(new Date(selectedDay + "T00:00:00"), "EEEE, MMM d")}</p>
                       <p className="text-sm text-muted-foreground">Pushups: <span className="text-foreground font-medium">{selectedLog.pushups}</span></p>
                       <p className="text-sm text-muted-foreground">Situps: <span className="text-foreground font-medium">{selectedLog.situps}</span></p>
+                      {selectedLog.ladder_percent > 0 && <p className="text-sm text-muted-foreground">Ladder: <span className="text-foreground font-medium">{selectedLog.ladder_percent}%</span></p>}
                     </motion.div>
                   )}
                   {selectedDay && !selectedLog && (
