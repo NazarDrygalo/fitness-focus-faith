@@ -131,32 +131,33 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
 
-        {/* Painting of the Day */}
+        {/* Pull-Up Ladder */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2"><Palette className="h-5 w-5" /> Painting of the Day</CardTitle>
+              <CardTitle className="text-lg flex items-center gap-2"><ArrowUpDown className="h-5 w-5" /> Pull-Up Ladder</CardTitle>
             </CardHeader>
             <CardContent>
-              <Painting3DViewer colors={painting.colors} />
-              <div className="mt-4">
-                <h3 className="text-xl font-bold">{painting.title}</h3>
-                <div className="grid grid-cols-2 gap-3 mt-3">
-                  <div className="p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">Painter</p>
-                    <p className="text-sm font-medium">{painting.painter}</p>
-                  </div>
-                  <div className="p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">Year Painted</p>
-                    <p className="text-sm font-medium">{painting.yearPainted}</p>
-                  </div>
-                  <div className="col-span-2 p-2 rounded bg-secondary">
-                    <p className="text-xs text-muted-foreground">Illustration</p>
-                    <p className="text-sm font-medium">{painting.subject}</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground mt-3 text-center">Drag to rotate • Scroll to zoom</p>
-              </div>
+              {ladderLoaded && (
+                <PullUpLadder
+                  initialPercent={existingLadder}
+                  disabled={ladderDone}
+                  onFinish={async (percent) => {
+                    setLadderDone(true);
+                    // Upsert ladder_percent for today
+                    const upsertData: any = { workout_date: today, ladder_percent: percent };
+                    const { error } = await supabase.from("workout_logs").upsert(
+                      upsertData,
+                      { onConflict: "workout_date" }
+                    );
+                    if (error) {
+                      toast.error("Failed to save ladder progress.");
+                    } else {
+                      toast.success(`Ladder saved at ${percent}%!`);
+                    }
+                  }}
+                />
+              )}
             </CardContent>
           </Card>
         </motion.div>
