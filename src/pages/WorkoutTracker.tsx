@@ -56,8 +56,9 @@ export default function WorkoutTracker() {
     const newPushups = (existing?.pushups || 0) + p;
     const newSitups = (existing?.situps || 0) + s;
 
+    const upsertData: any = { workout_date: today, pushups: newPushups, situps: newSitups };
     const { error } = await supabase.from("workout_logs").upsert(
-      { workout_date: today, pushups: newPushups, situps: newSitups },
+      upsertData,
       { onConflict: "workout_date" }
     );
     setSaving(false);
