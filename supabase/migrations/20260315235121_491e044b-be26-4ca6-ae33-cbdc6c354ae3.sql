@@ -1,0 +1,1 @@
+ALTER TABLE public.workout_logs ADD COLUMN ladder_percent integer NOT NULL DEFAULT 0;
