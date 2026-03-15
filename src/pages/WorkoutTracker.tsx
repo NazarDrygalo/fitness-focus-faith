@@ -21,10 +21,23 @@ export default function WorkoutTracker() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const [ladderDone, setLadderDone] = useState(false);
+  const [existingLadder, setExistingLadder] = useState<number>(0);
+  const [ladderLoaded, setLadderLoaded] = useState(false);
+
   const verse = getDailyVerse();
   const message = getDailyMessage();
-  const painting = getDailyPainting();
   const today = format(new Date(), "yyyy-MM-dd");
+
+  useEffect(() => {
+    supabase.from("workout_logs").select("ladder_percent").eq("workout_date", today).maybeSingle().then(({ data }) => {
+      if (data && (data as any).ladder_percent > 0) {
+        setExistingLadder((data as any).ladder_percent);
+        setLadderDone(true);
+      }
+      setLadderLoaded(true);
+    });
+  }, [today]);
 
   const handleSave = async () => {
     const p = parseInt(pushups) || 0;
