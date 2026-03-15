@@ -5,14 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Navigation } from "@/components/Navigation";
-import { Painting3DViewer } from "@/components/Painting3DViewer";
+import { PullUpLadder } from "@/components/PullUpLadder";
 import { supabase } from "@/integrations/supabase/client";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
-import { getDailyPainting } from "@/data/paintings";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Check, Quote, Palette, Dumbbell } from "lucide-react";
+import { Check, Quote, Dumbbell, ArrowUpDown } from "lucide-react";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
