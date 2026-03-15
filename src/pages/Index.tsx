@@ -12,6 +12,7 @@ interface WorkoutLog {
   workout_date: string;
   pushups: number;
   situps: number;
+  ladder_percent: number;
 }
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
@@ -60,8 +61,8 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
   const fetchLogs = () => {
-    supabase.from("workout_logs").select("workout_date, pushups, situps").then(({ data }) => {
-      if (data) setLogs(data);
+    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent").then(({ data }) => {
+      if (data) setLogs(data as WorkoutLog[]);
     });
   };
 
@@ -223,6 +224,7 @@ export default function Dashboard() {
                             <span className="leading-tight mt-0.5 text-[7px] font-normal opacity-80">
                               {dayLog.pushups > 0 && <span className="block">P:{dayLog.pushups}</span>}
                               {dayLog.situps > 0 && <span className="block">S:{dayLog.situps}</span>}
+                              {dayLog.ladder_percent > 0 && <span className="block">L:{dayLog.ladder_percent}%</span>}
                             </span>
                           )}
                         </motion.button>
@@ -234,6 +236,7 @@ export default function Dashboard() {
                       <p className="text-sm font-medium mb-1">{format(new Date(selectedDay + "T00:00:00"), "EEEE, MMM d")}</p>
                       <p className="text-sm text-muted-foreground">Pushups: <span className="text-foreground font-medium">{selectedLog.pushups}</span></p>
                       <p className="text-sm text-muted-foreground">Situps: <span className="text-foreground font-medium">{selectedLog.situps}</span></p>
+                      {selectedLog.ladder_percent > 0 && <p className="text-sm text-muted-foreground">Ladder: <span className="text-foreground font-medium">{selectedLog.ladder_percent}%</span></p>}
                     </motion.div>
                   )}
                   {selectedDay && !selectedLog && (
