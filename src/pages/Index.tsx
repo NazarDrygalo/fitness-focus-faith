@@ -12,6 +12,7 @@ interface WorkoutLog {
   workout_date: string;
   pushups: number;
   situps: number;
+  ladder_percent: number;
 }
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
