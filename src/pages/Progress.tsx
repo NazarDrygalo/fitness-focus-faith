@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
-import { ThemeToggle } from "@/components/ThemeToggle";
+
 import { BarChart3 } from "lucide-react";
 import { format, subDays } from "date-fns";
 import {
@@ -96,7 +96,7 @@ export default function Progress() {
               <h1 className="text-3xl font-bold">Progress</h1>
               <p className="text-muted-foreground">Track your gains over time</p>
             </div>
-            <ThemeToggle />
+            
           </div>
         </motion.div>
 
