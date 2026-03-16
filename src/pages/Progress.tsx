@@ -96,7 +96,7 @@ export default function Progress() {
               <h1 className="text-3xl font-bold">Progress</h1>
               <p className="text-muted-foreground">Track your gains over time</p>
             </div>
-            <ThemeToggle />
+            
           </div>
         </motion.div>
 
