@@ -29,6 +29,13 @@ export function Navigation() {
             <span className="hidden sm:inline">Workout</span>
           </NavLink>
           <NavLink
+            to="/progress"
+            className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}
+          >
+            <BarChart3 className="h-4 w-4" />
+            <span className="hidden sm:inline">Progress</span>
+          </NavLink>
+          <NavLink
             to="/bible"
             className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}
           >
