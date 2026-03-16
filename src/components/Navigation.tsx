@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Dumbbell, BookOpen } from "lucide-react";
+import { Home, Dumbbell, BookOpen, BarChart3 } from "lucide-react";
 
 export function Navigation() {
   const linkClass = "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-accent active-scale";
