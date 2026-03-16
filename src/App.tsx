@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import WorkoutTracker from "./pages/WorkoutTracker.tsx";
+import Progress from "./pages/Progress.tsx";
 import BibleStudy from "./pages/BibleStudy.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
