@@ -61,7 +61,11 @@ function CustomLegend({ payload }: any) {
   if (!payload?.length) return null;
   return (
     <div className="flex items-center justify-center gap-6 pt-4">
-      {payload.map((entry: any, i: number) => (
+      {payload
+        .filter((entry: any, i: number, arr: any[]) =>
+          arr.findIndex((e: any) => e.value === entry.value) === i
+        )
+        .map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
           <span
             className="w-3 h-1.5 rounded-full"
