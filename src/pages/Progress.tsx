@@ -36,7 +36,11 @@ function CustomTooltip({ active, payload, label }: any) {
     <div className="rounded-xl border border-border bg-card/95 backdrop-blur-lg p-4 shadow-xl shadow-black/20">
       <p className="text-sm font-semibold text-foreground mb-2">{label}</p>
       <div className="space-y-1.5">
-        {payload.map((entry: any, i: number) => (
+        {payload
+          .filter((entry: any, i: number, arr: any[]) =>
+            arr.findIndex((e: any) => e.name === entry.name) === i
+          )
+          .map((entry: any, i: number) => (
           <div key={i} className="flex items-center gap-2 text-sm">
             <span
               className="w-2.5 h-2.5 rounded-full"
