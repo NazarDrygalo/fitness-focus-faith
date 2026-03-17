@@ -225,7 +225,7 @@ export default function Dashboard() {
                               {dayLog.ladder_percent > 0 && <span className="block">L:{dayLog.ladder_percent}%</span>}
                             </span>
                           )}
-                        </motion.button>
+                        </button>
                       );
                     })}
                   </div>
