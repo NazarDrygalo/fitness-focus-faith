@@ -207,10 +207,8 @@ export default function Dashboard() {
                       const isPast = day < new Date() && !isTodayDay;
                       const dayLog = logMap.get(dateStr);
                       return (
-                        <motion.button
+                        <button
                           key={dateStr}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
                           onClick={() => setSelectedDay(isSelected ? null : dateStr)}
                           className={`
                             aspect-square rounded-md text-xs flex flex-col items-center justify-center transition-all duration-200 p-0.5
