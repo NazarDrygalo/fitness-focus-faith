@@ -1,7 +1,6 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -37,7 +36,11 @@ function CustomTooltip({ active, payload, label }: any) {
     <div className="rounded-xl border border-border bg-card/95 backdrop-blur-lg p-4 shadow-xl shadow-black/20">
       <p className="text-sm font-semibold text-foreground mb-2">{label}</p>
       <div className="space-y-1.5">
-        {payload.map((entry: any, i: number) => (
+        {payload
+          .filter((entry: any, i: number, arr: any[]) =>
+            arr.findIndex((e: any) => e.name === entry.name) === i
+          )
+          .map((entry: any, i: number) => (
           <div key={i} className="flex items-center gap-2 text-sm">
             <span
               className="w-2.5 h-2.5 rounded-full"
@@ -58,7 +61,11 @@ function CustomLegend({ payload }: any) {
   if (!payload?.length) return null;
   return (
     <div className="flex items-center justify-center gap-6 pt-4">
-      {payload.map((entry: any, i: number) => (
+      {payload
+        .filter((entry: any, i: number, arr: any[]) =>
+          arr.findIndex((e: any) => e.value === entry.value) === i
+        )
+        .map((entry: any, i: number) => (
         <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
           <span
             className="w-3 h-1.5 rounded-full"
@@ -273,7 +280,7 @@ export default function Progress() {
                       />
                       <Tooltip
                         content={<CustomTooltip />}
-                        cursor={{ fill: "hsl(220, 12%, 16%)", radius: 4 }}
+                        cursor={{ fill: "hsl(220, 12%, 16%)" }}
                       />
                       <Legend content={<CustomLegend />} />
                       <Area
@@ -282,7 +289,9 @@ export default function Progress() {
                         dataKey="ladder"
                         fill="url(#ladderGrad)"
                         stroke="none"
-                        name="Ladder %"
+                        name="Ladder Area"
+                        legendType="none"
+                        tooltipType="none"
                         animationDuration={800}
                         animationEasing="ease-out"
                       />
