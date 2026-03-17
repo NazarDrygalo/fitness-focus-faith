@@ -207,10 +207,8 @@ export default function Dashboard() {
                       const isPast = day < new Date() && !isTodayDay;
                       const dayLog = logMap.get(dateStr);
                       return (
-                        <motion.button
+                        <button
                           key={dateStr}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
                           onClick={() => setSelectedDay(isSelected ? null : dateStr)}
                           className={`
                             aspect-square rounded-md text-xs flex flex-col items-center justify-center transition-all duration-200 p-0.5
@@ -227,12 +225,12 @@ export default function Dashboard() {
                               {dayLog.ladder_percent > 0 && <span className="block">L:{dayLog.ladder_percent}%</span>}
                             </span>
                           )}
-                        </motion.button>
+                        </button>
                       );
                     })}
                   </div>
                   {selectedLog && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-4 p-3 rounded-lg bg-secondary">
+                    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="mt-4 p-3 rounded-lg bg-secondary">
                       <p className="text-sm font-medium mb-1">{format(new Date(selectedDay + "T00:00:00"), "EEEE, MMM d")}</p>
                       <p className="text-sm text-muted-foreground">Pushups: <span className="text-foreground font-medium">{selectedLog.pushups}</span></p>
                       <p className="text-sm text-muted-foreground">Situps: <span className="text-foreground font-medium">{selectedLog.situps}</span></p>

@@ -169,8 +169,8 @@ export default function Progress() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
+              <div style={{ width: "100%", height: 320, minWidth: 0 }}>
+                <ResponsiveContainer width="100%" height={320}>
                   <ComposedChart data={chartData}>
                     <CartesianGrid
                       strokeDasharray="3 3"

@@ -91,7 +91,7 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
                 disabled={isLocked || !isNext}
                 className={`
                   w-10 h-8 rounded-md text-xs font-bold transition-all duration-200 flex items-center justify-center
-                  ${done ? "bg-success text-success-foreground" : isNext ? "bg-primary text-primary-foreground ring-2 ring-ring animate-pulse" : "bg-secondary text-muted-foreground"}
+                  ${done ? "bg-success text-success-foreground" : isNext ? "bg-primary text-primary-foreground ring-2 ring-ring" : "bg-secondary text-muted-foreground"}
                   ${isLocked && !done ? "opacity-50 cursor-not-allowed" : ""}
                 `}
               >
@@ -143,7 +143,7 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
                 disabled={isLocked || !isNext}
                 className={`
                   w-10 h-8 rounded-md text-xs font-bold transition-all duration-200 flex items-center justify-center
-                  ${done ? "bg-success text-success-foreground" : isNext ? "bg-primary text-primary-foreground ring-2 ring-ring animate-pulse" : "bg-secondary text-muted-foreground"}
+                  ${done ? "bg-success text-success-foreground" : isNext ? "bg-primary text-primary-foreground ring-2 ring-ring" : "bg-secondary text-muted-foreground"}
                   ${isLocked && !done ? "opacity-50 cursor-not-allowed" : ""}
                 `}
               >
