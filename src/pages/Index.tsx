@@ -230,7 +230,7 @@ export default function Dashboard() {
                     })}
                   </div>
                   {selectedLog && (
-                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-4 p-3 rounded-lg bg-secondary">
+                    <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="mt-4 p-3 rounded-lg bg-secondary">
                       <p className="text-sm font-medium mb-1">{format(new Date(selectedDay + "T00:00:00"), "EEEE, MMM d")}</p>
                       <p className="text-sm text-muted-foreground">Pushups: <span className="text-foreground font-medium">{selectedLog.pushups}</span></p>
                       <p className="text-sm text-muted-foreground">Situps: <span className="text-foreground font-medium">{selectedLog.situps}</span></p>

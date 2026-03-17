@@ -37,9 +37,9 @@ export function AnimatedCounter({ value, duration = 1.5, className = "" }: Anima
   return (
     <motion.span
       className={className}
-      initial={{ opacity: 0, scale: 0.5 }}
+      initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {display}
     </motion.span>
