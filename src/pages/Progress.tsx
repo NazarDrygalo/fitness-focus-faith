@@ -280,7 +280,7 @@ export default function Progress() {
                       />
                       <Tooltip
                         content={<CustomTooltip />}
-                        cursor={{ fill: "hsl(220, 12%, 16%)", radius: 4 }}
+                        cursor={{ fill: "hsl(220, 12%, 16%)" }}
                       />
                       <Legend content={<CustomLegend />} />
                       <Area
