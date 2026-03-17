@@ -289,7 +289,9 @@ export default function Progress() {
                         dataKey="ladder"
                         fill="url(#ladderGrad)"
                         stroke="none"
-                        name="Ladder %"
+                        name="Ladder Area"
+                        legendType="none"
+                        tooltipType="none"
                         animationDuration={800}
                         animationEasing="ease-out"
                       />
