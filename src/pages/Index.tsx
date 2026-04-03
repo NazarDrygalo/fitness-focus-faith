@@ -13,6 +13,11 @@ interface WorkoutLog {
   pushups: number;
   situps: number;
   ladder_percent: number;
+  plank_seconds: number;
+  deadhang_seconds: number;
+  squat_count: number;
+  squat_weight: number;
+  squat_unit: string;
 }
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
