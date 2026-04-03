@@ -232,7 +232,6 @@ export default function Dashboard() {
                               {dayLog.deadhang_seconds > 0 && <span className="block">DH:{dayLog.deadhang_seconds}s</span>}
                               {dayLog.squat_count > 0 && <span className="block">Sq:{dayLog.squat_count}</span>}
                             </span>
-                            </span>
                           )}
                         </button>
                       );
