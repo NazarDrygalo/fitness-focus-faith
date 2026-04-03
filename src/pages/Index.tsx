@@ -13,6 +13,11 @@ interface WorkoutLog {
   pushups: number;
   situps: number;
   ladder_percent: number;
+  plank_seconds: number;
+  deadhang_seconds: number;
+  squat_count: number;
+  squat_weight: number;
+  squat_unit: string;
 }
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
@@ -61,7 +66,7 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
   const fetchLogs = () => {
-    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent").then(({ data }) => {
+    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit").then(({ data }) => {
       if (data) setLogs(data as WorkoutLog[]);
     });
   };
@@ -223,6 +228,9 @@ export default function Dashboard() {
                               {dayLog.pushups > 0 && <span className="block">P:{dayLog.pushups}</span>}
                               {dayLog.situps > 0 && <span className="block">S:{dayLog.situps}</span>}
                               {dayLog.ladder_percent > 0 && <span className="block">L:{dayLog.ladder_percent}%</span>}
+                              {dayLog.plank_seconds > 0 && <span className="block">Pl:{Math.floor(dayLog.plank_seconds/60)}m</span>}
+                              {dayLog.deadhang_seconds > 0 && <span className="block">DH:{dayLog.deadhang_seconds}s</span>}
+                              {dayLog.squat_count > 0 && <span className="block">Sq:{dayLog.squat_count}</span>}
                             </span>
                           )}
                         </button>
@@ -235,6 +243,9 @@ export default function Dashboard() {
                       <p className="text-sm text-muted-foreground">Pushups: <span className="text-foreground font-medium">{selectedLog.pushups}</span></p>
                       <p className="text-sm text-muted-foreground">Situps: <span className="text-foreground font-medium">{selectedLog.situps}</span></p>
                       {selectedLog.ladder_percent > 0 && <p className="text-sm text-muted-foreground">Ladder: <span className="text-foreground font-medium">{selectedLog.ladder_percent}%</span></p>}
+                      {selectedLog.plank_seconds > 0 && <p className="text-sm text-muted-foreground">Plank: <span className="text-foreground font-medium">{Math.floor(selectedLog.plank_seconds/60)}m {selectedLog.plank_seconds%60}s</span></p>}
+                      {selectedLog.deadhang_seconds > 0 && <p className="text-sm text-muted-foreground">Dead Hang: <span className="text-foreground font-medium">{selectedLog.deadhang_seconds}s</span></p>}
+                      {selectedLog.squat_count > 0 && <p className="text-sm text-muted-foreground">Squats: <span className="text-foreground font-medium">{selectedLog.squat_count}{selectedLog.squat_weight > 0 ? ` @ ${selectedLog.squat_weight} ${selectedLog.squat_unit}` : ""}</span></p>}
                     </motion.div>
                   )}
                   {selectedDay && !selectedLog && (

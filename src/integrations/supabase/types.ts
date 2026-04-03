@@ -17,28 +17,43 @@ export type Database = {
       workout_logs: {
         Row: {
           created_at: string
+          deadhang_seconds: number
           id: string
           ladder_percent: number
+          plank_seconds: number
           pushups: number
           situps: number
+          squat_count: number
+          squat_unit: string
+          squat_weight: number
           updated_at: string
           workout_date: string
         }
         Insert: {
           created_at?: string
+          deadhang_seconds?: number
           id?: string
           ladder_percent?: number
+          plank_seconds?: number
           pushups?: number
           situps?: number
+          squat_count?: number
+          squat_unit?: string
+          squat_weight?: number
           updated_at?: string
           workout_date: string
         }
         Update: {
           created_at?: string
+          deadhang_seconds?: number
           id?: string
           ladder_percent?: number
+          plank_seconds?: number
           pushups?: number
           situps?: number
+          squat_count?: number
+          squat_unit?: string
+          squat_weight?: number
           updated_at?: string
           workout_date?: string
         }
