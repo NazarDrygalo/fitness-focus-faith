@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Navigation } from "@/components/Navigation";
 import { PullUpLadder } from "@/components/PullUpLadder";
+import { PlankTimer } from "@/components/PlankTimer";
+import { DeadHangTimer } from "@/components/DeadHangTimer";
+import { SquatCounter } from "@/components/SquatCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
@@ -15,25 +19,36 @@ import { Check, Quote, Dumbbell, ArrowUpDown } from "lucide-react";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
+type ExerciseMode = "pullup-ladder" | "plank" | "dead-hang" | "squats";
+
 export default function WorkoutTracker() {
   const [pushups, setPushups] = useState("");
   const [situps, setSitups] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
+  const [exerciseMode, setExerciseMode] = useState<ExerciseMode>("pullup-ladder");
+
+  // Pull-up ladder state
   const [ladderDone, setLadderDone] = useState(false);
   const [existingLadder, setExistingLadder] = useState<number>(0);
   const [ladderLoaded, setLadderLoaded] = useState(false);
+
+  // Existing exercise data for today
+  const [existingData, setExistingData] = useState<any>(null);
 
   const verse = getDailyVerse();
   const message = getDailyMessage();
   const today = format(new Date(), "yyyy-MM-dd");
 
   useEffect(() => {
-    supabase.from("workout_logs").select("ladder_percent").eq("workout_date", today).maybeSingle().then(({ data }) => {
-      if (data && (data as any).ladder_percent > 0) {
-        setExistingLadder((data as any).ladder_percent);
-        setLadderDone(true);
+    supabase.from("workout_logs").select("*").eq("workout_date", today).maybeSingle().then(({ data }) => {
+      if (data) {
+        setExistingData(data);
+        if ((data as any).ladder_percent > 0) {
+          setExistingLadder((data as any).ladder_percent);
+          setLadderDone(true);
+        }
       }
       setLadderLoaded(true);
     });
@@ -45,8 +60,6 @@ export default function WorkoutTracker() {
     if (p === 0 && s === 0) { toast.error("Enter at least one exercise count."); return; }
 
     setSaving(true);
-
-    // Fetch existing entry for today to add to it
     const { data: existing } = await supabase
       .from("workout_logs")
       .select("pushups, situps")
@@ -57,10 +70,7 @@ export default function WorkoutTracker() {
     const newSitups = (existing?.situps || 0) + s;
 
     const upsertData: any = { workout_date: today, pushups: newPushups, situps: newSitups };
-    const { error } = await supabase.from("workout_logs").upsert(
-      upsertData,
-      { onConflict: "workout_date" }
-    );
+    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date" });
     setSaving(false);
 
     if (error) {
@@ -72,6 +82,31 @@ export default function WorkoutTracker() {
       setSitups("");
       setTimeout(() => setSaved(false), 2000);
     }
+  };
+
+  const handleSaveExercise = async (field: string, value: number, extras?: Record<string, any>) => {
+    const upsertData: any = { workout_date: today, [field]: value, ...extras };
+    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date" });
+    if (error) {
+      toast.error("Failed to save.");
+    } else {
+      const labels: Record<string, string> = {
+        plank_seconds: "Plank",
+        deadhang_seconds: "Dead hang",
+        squat_count: "Squats",
+      };
+      toast.success(`${labels[field] || "Exercise"} saved!`);
+      // Refresh existing data
+      const { data } = await supabase.from("workout_logs").select("*").eq("workout_date", today).maybeSingle();
+      if (data) setExistingData(data);
+    }
+  };
+
+  const exerciseLabels: Record<ExerciseMode, string> = {
+    "pullup-ladder": "Pull-Up Ladder",
+    "plank": "Plank",
+    "dead-hang": "Dead Hang",
+    "squats": "Squats",
   };
 
   return (
@@ -131,33 +166,75 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
 
-        {/* Pull-Up Ladder */}
+        {/* Exercise Section with Dropdown */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2"><ArrowUpDown className="h-5 w-5" /> Pull-Up Ladder</CardTitle>
+              <div className="flex items-center justify-between gap-3">
+                <CardTitle className="text-lg flex items-center gap-2 shrink-0">
+                  <ArrowUpDown className="h-5 w-5" /> Exercise
+                </CardTitle>
+                <Select value={exerciseMode} onValueChange={(v) => setExerciseMode(v as ExerciseMode)}>
+                  <SelectTrigger className="w-48 bg-secondary border-border">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pullup-ladder">Pull-Up Ladder</SelectItem>
+                    <SelectItem value="plank">Plank</SelectItem>
+                    <SelectItem value="dead-hang">Dead Hang</SelectItem>
+                    <SelectItem value="squats">Squats</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </CardHeader>
             <CardContent>
-              {ladderLoaded && (
-                <PullUpLadder
-                  initialPercent={existingLadder}
-                  disabled={ladderDone}
-                  onFinish={async (percent) => {
-                    setLadderDone(true);
-                    // Upsert ladder_percent for today
-                    const upsertData: any = { workout_date: today, ladder_percent: percent };
-                    const { error } = await supabase.from("workout_logs").upsert(
-                      upsertData,
-                      { onConflict: "workout_date" }
-                    );
-                    if (error) {
-                      toast.error("Failed to save ladder progress.");
-                    } else {
-                      toast.success(`Ladder saved at ${percent}%!`);
-                    }
-                  }}
-                />
-              )}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={exerciseMode}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {exerciseMode === "pullup-ladder" && ladderLoaded && (
+                    <PullUpLadder
+                      initialPercent={existingLadder}
+                      disabled={ladderDone}
+                      onFinish={async (percent) => {
+                        setLadderDone(true);
+                        const upsertData: any = { workout_date: today, ladder_percent: percent };
+                        const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date" });
+                        if (error) toast.error("Failed to save ladder progress.");
+                        else toast.success(`Ladder saved at ${percent}%!`);
+                      }}
+                    />
+                  )}
+
+                  {exerciseMode === "plank" && (
+                    <PlankTimer
+                      initialSeconds={existingData?.plank_seconds || 0}
+                      disabled={!!(existingData?.plank_seconds && existingData.plank_seconds > 0)}
+                      onFinish={(secs) => handleSaveExercise("plank_seconds", secs)}
+                    />
+                  )}
+
+                  {exerciseMode === "dead-hang" && (
+                    <DeadHangTimer
+                      initialSeconds={existingData?.deadhang_seconds || 0}
+                      disabled={!!(existingData?.deadhang_seconds && existingData.deadhang_seconds > 0)}
+                      onFinish={(secs) => handleSaveExercise("deadhang_seconds", secs)}
+                    />
+                  )}
+
+                  {exerciseMode === "squats" && (
+                    <SquatCounter
+                      initialData={existingData?.squat_count > 0 ? { count: existingData.squat_count, weight: existingData.squat_weight || 0, unit: existingData.squat_unit || "lb" } : undefined}
+                      disabled={!!(existingData?.squat_count && existingData.squat_count > 0)}
+                      onFinish={(count, weight, unit) => handleSaveExercise("squat_count", count, { squat_weight: weight, squat_unit: unit })}
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
             </CardContent>
           </Card>
         </motion.div>
