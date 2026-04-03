@@ -228,6 +228,10 @@ export default function Dashboard() {
                               {dayLog.pushups > 0 && <span className="block">P:{dayLog.pushups}</span>}
                               {dayLog.situps > 0 && <span className="block">S:{dayLog.situps}</span>}
                               {dayLog.ladder_percent > 0 && <span className="block">L:{dayLog.ladder_percent}%</span>}
+                              {dayLog.plank_seconds > 0 && <span className="block">Pl:{Math.floor(dayLog.plank_seconds/60)}m</span>}
+                              {dayLog.deadhang_seconds > 0 && <span className="block">DH:{dayLog.deadhang_seconds}s</span>}
+                              {dayLog.squat_count > 0 && <span className="block">Sq:{dayLog.squat_count}</span>}
+                            </span>
                             </span>
                           )}
                         </button>
