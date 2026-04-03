@@ -66,7 +66,7 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
   const fetchLogs = () => {
-    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent").then(({ data }) => {
+    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit").then(({ data }) => {
       if (data) setLogs(data as WorkoutLog[]);
     });
   };
