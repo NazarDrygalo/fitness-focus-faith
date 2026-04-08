@@ -16,6 +16,7 @@ import { getDailyMessage } from "@/data/encouragementMessages";
 import { format } from "date-fns";
 import { toast } from "sonner";
 import { Check, Quote, Dumbbell, ArrowUpDown } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -37,6 +38,7 @@ export default function WorkoutTracker() {
   // Existing exercise data for today
   const [existingData, setExistingData] = useState<any>(null);
 
+  const { user } = useAuth();
   const verse = getDailyVerse();
   const message = getDailyMessage();
   const today = format(new Date(), "yyyy-MM-dd");
@@ -69,8 +71,8 @@ export default function WorkoutTracker() {
     const newPushups = (existing?.pushups || 0) + p;
     const newSitups = (existing?.situps || 0) + s;
 
-    const upsertData: any = { workout_date: today, pushups: newPushups, situps: newSitups };
-    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date" });
+    const upsertData: any = { workout_date: today, pushups: newPushups, situps: newSitups, user_id: user?.id };
+    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
     setSaving(false);
 
     if (error) {
@@ -85,8 +87,8 @@ export default function WorkoutTracker() {
   };
 
   const handleSaveExercise = async (field: string, value: number, extras?: Record<string, any>) => {
-    const upsertData: any = { workout_date: today, [field]: value, ...extras };
-    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date" });
+    const upsertData: any = { workout_date: today, [field]: value, ...extras, user_id: user?.id };
+    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
     if (error) {
       toast.error("Failed to save.");
     } else {
@@ -202,8 +204,8 @@ export default function WorkoutTracker() {
                       disabled={ladderDone}
                       onFinish={async (percent) => {
                         setLadderDone(true);
-                        const upsertData: any = { workout_date: today, ladder_percent: percent };
-                        const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date" });
+                        const upsertData: any = { workout_date: today, ladder_percent: percent, user_id: user?.id };
+                        const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
                         if (error) toast.error("Failed to save ladder progress.");
                         else toast.success(`Ladder saved at ${percent}%!`);
                       }}
