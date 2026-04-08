@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Flame, TrendingUp, Calendar as CalendarIcon } from "lucide-react";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
@@ -126,7 +127,7 @@ export default function Dashboard() {
       <Navigation />
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
-          <h1 className="text-3xl font-bold mb-1">{getGreeting()}, Nazar Drygalo</h1>
+          <h1 className="text-3xl font-bold mb-1">{getGreeting()}</h1>
           <p className="text-muted-foreground mb-8">Keep pushing. Every rep counts.</p>
         </motion.div>
 

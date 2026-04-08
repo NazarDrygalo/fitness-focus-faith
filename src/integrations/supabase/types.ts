@@ -27,6 +27,7 @@ export type Database = {
           squat_unit: string
           squat_weight: number
           updated_at: string
+          user_id: string | null
           workout_date: string
         }
         Insert: {
@@ -41,6 +42,7 @@ export type Database = {
           squat_unit?: string
           squat_weight?: number
           updated_at?: string
+          user_id?: string | null
           workout_date: string
         }
         Update: {
@@ -55,6 +57,7 @@ export type Database = {
           squat_unit?: string
           squat_weight?: number
           updated_at?: string
+          user_id?: string | null
           workout_date?: string
         }
         Relationships: []
