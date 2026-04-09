@@ -8,6 +8,9 @@ import Index from "./pages/Index.tsx";
 import WorkoutTracker from "./pages/WorkoutTracker.tsx";
 import Progress from "./pages/Progress.tsx";
 import BibleStudy from "./pages/BibleStudy.tsx";
+import Settings from "./pages/Settings.tsx";
+import Terms from "./pages/Terms.tsx";
+import Privacy from "./pages/Privacy.tsx";
 import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -47,10 +50,13 @@ const App = () => (
           <Routes>
             <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             <Route path="/workout" element={<ProtectedRoute><WorkoutTracker /></ProtectedRoute>} />
             <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
             <Route path="/bible" element={<ProtectedRoute><BibleStudy /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
