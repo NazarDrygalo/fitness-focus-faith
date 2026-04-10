@@ -190,6 +190,11 @@ export default function Progress() {
           ))}
         </motion.div>
 
+        {/* Personal Records */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }} className="mb-6">
+          <PersonalRecords logs={logs} />
+        </motion.div>
+
         {/* Combined chart */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }}>
           <Card className="bg-card border-border overflow-hidden">
