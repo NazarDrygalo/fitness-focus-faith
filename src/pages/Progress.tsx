@@ -5,6 +5,8 @@ import { Navigation } from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 
 import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as DumbbellIcon } from "lucide-react";
+import { PersonalRecords } from "@/components/PersonalRecords";
+import { ExportButton } from "@/components/ExportButton";
 import { format, subDays } from "date-fns";
 import {
   ResponsiveContainer,
