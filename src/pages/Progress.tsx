@@ -5,6 +5,8 @@ import { Navigation } from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 
 import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as DumbbellIcon } from "lucide-react";
+import { PersonalRecords } from "@/components/PersonalRecords";
+import { ExportButton } from "@/components/ExportButton";
 import { format, subDays } from "date-fns";
 import {
   ResponsiveContainer,
@@ -157,6 +159,7 @@ export default function Progress() {
               <h1 className="text-3xl font-bold">Progress</h1>
               <p className="text-muted-foreground">Track your gains over time</p>
             </div>
+            <ExportButton logs={logs} />
           </div>
         </motion.div>
 
@@ -185,6 +188,11 @@ export default function Progress() {
               </Card>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Personal Records */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }} className="mb-6">
+          <PersonalRecords logs={logs} />
         </motion.div>
 
         {/* Combined chart */}
