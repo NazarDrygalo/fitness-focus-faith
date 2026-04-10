@@ -37,27 +37,45 @@ function getDaysUntilTarget() {
   return Math.max(0, differenceInDays(target, today));
 }
 
-function calculateStreak(logs: WorkoutLog[]): number {
-  if (!logs.length) return 0;
-  const sorted = [...logs].sort((a, b) => b.workout_date.localeCompare(a.workout_date));
-  let streak = 0;
+function calculateStreak(logs: WorkoutLog[]): { current: number; longest: number } {
+  if (!logs.length) return { current: 0, longest: 0 };
+  const sorted = [...logs].sort((a, b) => a.workout_date.localeCompare(b.workout_date));
+  
+  // Calculate all streaks
+  let longest = 1;
+  let currentRun = 1;
+  for (let i = 1; i < sorted.length; i++) {
+    const prev = new Date(sorted[i - 1].workout_date + "T00:00:00");
+    const curr = new Date(sorted[i].workout_date + "T00:00:00");
+    if (differenceInDays(curr, prev) === 1) {
+      currentRun++;
+      longest = Math.max(longest, currentRun);
+    } else {
+      currentRun = 1;
+    }
+  }
+  if (sorted.length === 1) longest = 1;
+
+  // Calculate current streak
+  const descSorted = [...logs].sort((a, b) => b.workout_date.localeCompare(a.workout_date));
+  let current = 0;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  for (let i = 0; i < sorted.length; i++) {
-    const logDate = new Date(sorted[i].workout_date + "T00:00:00");
+  for (let i = 0; i < descSorted.length; i++) {
+    const logDate = new Date(descSorted[i].workout_date + "T00:00:00");
     const expected = new Date(today);
     expected.setDate(expected.getDate() - i);
     expected.setHours(0, 0, 0, 0);
     if (isSameDay(logDate, expected)) {
-      streak++;
+      current++;
     } else if (i === 0 && differenceInDays(today, logDate) === 1) {
-      streak++;
+      current++;
       today.setDate(today.getDate() - 1);
     } else {
       break;
     }
   }
-  return streak;
+  return { current, longest };
 }
 
 export default function Dashboard() {
