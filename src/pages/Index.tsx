@@ -167,6 +167,9 @@ export default function Dashboard() {
                 <Flame className="h-5 w-5 mx-auto mb-2" style={{ color: "hsl(var(--streak))" }} />
                 <AnimatedCounter value={streak} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">day streak</p>
+                {streakData.longest > 0 && (
+                  <p className="text-[10px] text-muted-foreground mt-0.5">best: {streakData.longest}d</p>
+                )}
               </CardContent>
             </Card>
           </motion.div>
