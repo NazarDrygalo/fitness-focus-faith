@@ -7,6 +7,8 @@ import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Flame, TrendingUp, Calendar as CalendarIcon } from "lucide-react";
+import { DailyEncouragement } from "@/components/DailyEncouragement";
+import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
 interface WorkoutLog {
@@ -143,6 +145,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      <WelcomeOnboarding />
       <Navigation />
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
@@ -195,7 +198,11 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }}>
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-8">
+          <DailyEncouragement />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">

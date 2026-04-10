@@ -8,8 +8,9 @@ import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, Lock, Trash2, FileText, Shield } from "lucide-react";
+import { Settings as SettingsIcon, Lock, Trash2, FileText, Shield, Sun, Moon, Monitor } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "@/hooks/useTheme";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,6 +27,7 @@ const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
 export default function Settings() {
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -83,6 +85,37 @@ export default function Settings() {
             <SettingsIcon className="h-7 w-7" /> Settings
           </h1>
           <p className="text-muted-foreground mb-8">{user?.email}</p>
+        </motion.div>
+
+        {/* Theme */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.05 }}>
+          <Card className="bg-card border-border mb-6">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Sun className="h-5 w-5" /> Appearance
+              </CardTitle>
+              <CardDescription>Choose your preferred theme</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-2">
+                {([
+                  { value: "dark" as const, icon: Moon, label: "Dark" },
+                  { value: "light" as const, icon: Sun, label: "Light" },
+                  { value: "system" as const, icon: Monitor, label: "System" },
+                ]).map((opt) => (
+                  <Button
+                    key={opt.value}
+                    variant={theme === opt.value ? "default" : "outline"}
+                    className="flex-1 gap-2"
+                    onClick={() => setTheme(opt.value)}
+                  >
+                    <opt.icon className="h-4 w-4" />
+                    {opt.label}
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
 
         {/* Change Password */}
