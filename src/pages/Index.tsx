@@ -105,7 +105,8 @@ export default function Dashboard() {
 
   const totalPushups = useMemo(() => logs.reduce((s, l) => s + l.pushups, 0), [logs]);
   const totalSitups = useMemo(() => logs.reduce((s, l) => s + l.situps, 0), [logs]);
-  const streak = useMemo(() => calculateStreak(logs), [logs]);
+  const streakData = useMemo(() => calculateStreak(logs), [logs]);
+  const streak = streakData.current;
   const daysLeft = getDaysUntilTarget();
 
   const logDates = useMemo(() => new Set(logs.map(l => l.workout_date)), [logs]);
