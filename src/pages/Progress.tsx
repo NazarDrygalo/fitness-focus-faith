@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as DumbbellIcon } from "lucide-react";
 import { PersonalRecords } from "@/components/PersonalRecords";
+import { BodyWeightTracker } from "@/components/BodyWeightTracker";
 import { ExportButton } from "@/components/ExportButton";
 import { format, subDays } from "date-fns";
 import {
