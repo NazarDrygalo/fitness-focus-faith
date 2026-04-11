@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Navigation } from "@/components/Navigation";
 import { PullUpLadder } from "@/components/PullUpLadder";
 import { PlankTimer } from "@/components/PlankTimer";
@@ -137,6 +138,17 @@ export default function WorkoutTracker() {
                   <Label htmlFor="situps" className="text-sm text-muted-foreground">Situps</Label>
                   <Input id="situps" type="number" min="0" placeholder="0" value={situps} onChange={e => setSitups(e.target.value)} className="mt-1 bg-secondary border-border no-spinners" />
                 </div>
+              </div>
+              <div className="mb-4">
+                <Label htmlFor="notes" className="text-sm text-muted-foreground">Notes (optional)</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="How did the workout feel? Any PRs?"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="mt-1 bg-secondary border-border resize-none"
+                  rows={2}
+                />
               </div>
               <Button onClick={handleSave} disabled={saving} className="w-full transition-all duration-300 active-scale">
                 {saved ? <><Check className="h-4 w-4 mr-2" /> Saved!</> : saving ? "Saving..." : "Log Workout"}
