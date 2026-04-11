@@ -203,6 +203,10 @@ export default function Dashboard() {
           <DailyEncouragement />
         </motion.div>
 
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">
+          <WorkoutGoals todayLog={logMap.get(todayStr) || null} />
+        </motion.div>
+
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-2">
