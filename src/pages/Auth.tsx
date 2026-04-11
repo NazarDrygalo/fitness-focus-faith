@@ -7,6 +7,8 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Dumbbell, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
+import { lovable } from "@/integrations/lovable";
+import { Separator } from "@/components/ui/separator";
 
 type Mode = "login" | "signup" | "forgot";
 
