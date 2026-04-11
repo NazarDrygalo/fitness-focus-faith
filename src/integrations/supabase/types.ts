@@ -14,12 +14,52 @@ export type Database = {
   }
   public: {
     Tables: {
+      workout_goals: {
+        Row: {
+          created_at: string
+          deadhang_seconds: number
+          id: string
+          ladder_percent: number
+          plank_seconds: number
+          pushups: number
+          situps: number
+          squat_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deadhang_seconds?: number
+          id?: string
+          ladder_percent?: number
+          plank_seconds?: number
+          pushups?: number
+          situps?: number
+          squat_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          deadhang_seconds?: number
+          id?: string
+          ladder_percent?: number
+          plank_seconds?: number
+          pushups?: number
+          situps?: number
+          squat_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       workout_logs: {
         Row: {
           created_at: string
           deadhang_seconds: number
           id: string
           ladder_percent: number
+          notes: string
           plank_seconds: number
           pushups: number
           situps: number
@@ -35,6 +75,7 @@ export type Database = {
           deadhang_seconds?: number
           id?: string
           ladder_percent?: number
+          notes?: string
           plank_seconds?: number
           pushups?: number
           situps?: number
@@ -50,6 +91,7 @@ export type Database = {
           deadhang_seconds?: number
           id?: string
           ladder_percent?: number
+          notes?: string
           plank_seconds?: number
           pushups?: number
           situps?: number
