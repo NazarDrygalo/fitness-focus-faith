@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Navigation } from "@/components/Navigation";
 import { PullUpLadder } from "@/components/PullUpLadder";
 import { PlankTimer } from "@/components/PlankTimer";
@@ -25,6 +26,7 @@ type ExerciseMode = "pullup-ladder" | "plank" | "dead-hang" | "squats";
 export default function WorkoutTracker() {
   const [pushups, setPushups] = useState("");
   const [situps, setSitups] = useState("");
+  const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -71,7 +73,7 @@ export default function WorkoutTracker() {
     const newPushups = (existing?.pushups || 0) + p;
     const newSitups = (existing?.situps || 0) + s;
 
-    const upsertData: any = { workout_date: today, pushups: newPushups, situps: newSitups, user_id: user?.id };
+    const upsertData: any = { workout_date: today, pushups: newPushups, situps: newSitups, user_id: user?.id, ...(notes.trim() ? { notes: notes.trim() } : {}) };
     const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
     setSaving(false);
 
@@ -82,6 +84,7 @@ export default function WorkoutTracker() {
       toast.success(`Workout logged! Today's total: ${newPushups} pushups, ${newSitups} situps`);
       setPushups("");
       setSitups("");
+      setNotes("");
       setTimeout(() => setSaved(false), 2000);
     }
   };
@@ -136,6 +139,17 @@ export default function WorkoutTracker() {
                   <Label htmlFor="situps" className="text-sm text-muted-foreground">Situps</Label>
                   <Input id="situps" type="number" min="0" placeholder="0" value={situps} onChange={e => setSitups(e.target.value)} className="mt-1 bg-secondary border-border no-spinners" />
                 </div>
+              </div>
+              <div className="mb-4">
+                <Label htmlFor="notes" className="text-sm text-muted-foreground">Notes (optional)</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="How did the workout feel? Any PRs?"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  className="mt-1 bg-secondary border-border resize-none"
+                  rows={2}
+                />
               </div>
               <Button onClick={handleSave} disabled={saving} className="w-full transition-all duration-300 active-scale">
                 {saved ? <><Check className="h-4 w-4 mr-2" /> Saved!</> : saving ? "Saving..." : "Log Workout"}
