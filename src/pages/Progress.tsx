@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as DumbbellIcon } from "lucide-react";
 import { PersonalRecords } from "@/components/PersonalRecords";
+import { BodyWeightTracker } from "@/components/BodyWeightTracker";
 import { ExportButton } from "@/components/ExportButton";
 import { format, subDays } from "date-fns";
 import {
@@ -193,6 +194,11 @@ export default function Progress() {
         {/* Personal Records */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }} className="mb-6">
           <PersonalRecords logs={logs} />
+        </motion.div>
+
+        {/* Body Weight Tracker */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }} className="mb-6">
+          <BodyWeightTracker />
         </motion.div>
 
         {/* Combined chart */}
