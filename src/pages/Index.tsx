@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Flame, TrendingUp, Calendar as CalendarIcon } from "lucide-react";
 import { DailyEncouragement } from "@/components/DailyEncouragement";
 import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
+import { WorkoutGoals } from "@/components/WorkoutGoals";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
 interface WorkoutLog {
