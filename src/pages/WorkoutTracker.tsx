@@ -25,6 +25,7 @@ type ExerciseMode = "pullup-ladder" | "plank" | "dead-hang" | "squats";
 export default function WorkoutTracker() {
   const [pushups, setPushups] = useState("");
   const [situps, setSitups] = useState("");
+  const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
