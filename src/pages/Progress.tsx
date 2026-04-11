@@ -196,6 +196,11 @@ export default function Progress() {
           <PersonalRecords logs={logs} />
         </motion.div>
 
+        {/* Body Weight Tracker */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }} className="mb-6">
+          <BodyWeightTracker />
+        </motion.div>
+
         {/* Combined chart */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }}>
           <Card className="bg-card border-border overflow-hidden">
