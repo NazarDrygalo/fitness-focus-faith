@@ -23,6 +23,7 @@ interface WorkoutLog {
   squat_count: number;
   squat_weight: number;
   squat_unit: string;
+  notes: string;
 }
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
@@ -89,7 +90,7 @@ export default function Dashboard() {
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
 
   const fetchLogs = () => {
-    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit").then(({ data }) => {
+    supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit, notes").then(({ data }) => {
       if (data) setLogs(data as WorkoutLog[]);
     });
   };
@@ -286,6 +287,12 @@ export default function Dashboard() {
                       {selectedLog.plank_seconds > 0 && <p className="text-sm text-muted-foreground">Plank: <span className="text-foreground font-medium">{Math.floor(selectedLog.plank_seconds/60)}m {selectedLog.plank_seconds%60}s</span></p>}
                       {selectedLog.deadhang_seconds > 0 && <p className="text-sm text-muted-foreground">Dead Hang: <span className="text-foreground font-medium">{selectedLog.deadhang_seconds}s</span></p>}
                       {selectedLog.squat_count > 0 && <p className="text-sm text-muted-foreground">Squats: <span className="text-foreground font-medium">{selectedLog.squat_count}{selectedLog.squat_weight > 0 ? ` @ ${selectedLog.squat_weight} ${selectedLog.squat_unit}` : ""}</span></p>}
+                      {selectedLog.notes && (
+                        <div className="mt-2 pt-2 border-t border-border">
+                          <p className="text-xs text-muted-foreground mb-0.5">Notes</p>
+                          <p className="text-sm text-foreground">{selectedLog.notes}</p>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                   {selectedDay && !selectedLog && (
