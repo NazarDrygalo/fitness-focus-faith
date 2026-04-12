@@ -293,6 +293,7 @@ export default function Dashboard() {
                           <p className="text-sm text-foreground">{selectedLog.notes}</p>
                         </div>
                       )}
+                    </motion.div>
                   )}
                   {selectedDay && !selectedLog && (
                     <div className="mt-4 p-3 rounded-lg bg-secondary">
