@@ -201,8 +201,36 @@ export default function Progress() {
           <BodyWeightTracker />
         </motion.div>
 
+        {/* Time-based exercises chart */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-6">
+          <Card className="bg-card border-border overflow-hidden">
+            <CardHeader className="pb-0">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Timer className="h-5 w-5 text-muted-foreground" /> Plank & Dead Hang
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <AnimatePresence mode="wait">
+                <motion.div key={`time-${range}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} style={{ width: "100%", height: 260, minWidth: 0 }}>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <ComposedChart data={chartData} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 12%, 16%)" vertical={false} />
+                      <XAxis dataKey="date" tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickLine={false} axisLine={false} dy={8} />
+                      <YAxis tick={{ fill: "hsl(220, 10%, 45%)", fontSize: 11 }} tickLine={false} axisLine={false} width={40} tickFormatter={(v) => `${v}s`} />
+                      <Tooltip content={<CustomTooltip />} cursor={{ fill: "hsl(220, 12%, 16%)" }} />
+                      <Legend content={<CustomLegend />} />
+                      <Bar dataKey="plank" fill="hsl(40, 70%, 50%)" radius={[6, 6, 0, 0]} name="Plank (s)" barSize={range <= 7 ? 20 : range <= 30 ? 8 : 4} animationDuration={600} />
+                      <Bar dataKey="deadhang" fill="hsl(190, 60%, 50%)" radius={[6, 6, 0, 0]} name="Dead Hang (s)" barSize={range <= 7 ? 20 : range <= 30 ? 8 : 4} animationDuration={600} animationBegin={150} />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </motion.div>
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Combined chart */}
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }}>
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }}>
           <Card className="bg-card border-border overflow-hidden">
             <CardHeader className="pb-0">
               <CardTitle className="text-lg flex items-center gap-2">
