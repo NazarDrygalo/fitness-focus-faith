@@ -11,6 +11,8 @@ import { WeeklyRecap } from "@/components/WeeklyRecap";
 import { StreakMilestones } from "@/components/StreakMilestones";
 import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { WorkoutGoals } from "@/components/WorkoutGoals";
+import { QuickLog } from "@/components/QuickLog";
+import { ConsistencyStats } from "@/components/ConsistencyStats";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
 interface WorkoutLog {
@@ -201,6 +203,10 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-8">
+          <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} />
+        </motion.div>
+
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-8">
           <StreakMilestones streak={streakData.current} totalPushups={totalPushups} totalSitups={totalSitups} totalWorkouts={logs.length} />
         </motion.div>
@@ -210,6 +216,10 @@ export default function Dashboard() {
         </motion.div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">
+          <ConsistencyStats logs={logs} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.37 }} className="mb-8">
           <WorkoutGoals todayLog={logMap.get(todayStr) || null} />
         </motion.div>
 
