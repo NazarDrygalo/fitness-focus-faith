@@ -7,7 +7,8 @@ import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Flame, TrendingUp, Calendar as CalendarIcon } from "lucide-react";
-import { DailyEncouragement } from "@/components/DailyEncouragement";
+import { WeeklyRecap } from "@/components/WeeklyRecap";
+import { StreakMilestones } from "@/components/StreakMilestones";
 import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { WorkoutGoals } from "@/components/WorkoutGoals";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
@@ -200,7 +201,11 @@ export default function Dashboard() {
         </div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-8">
-          <DailyEncouragement />
+          <StreakMilestones streak={streakData.current} totalPushups={totalPushups} totalSitups={totalSitups} totalWorkouts={logs.length} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.33 }} className="mb-8">
+          <WeeklyRecap logs={logs} />
         </motion.div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">
