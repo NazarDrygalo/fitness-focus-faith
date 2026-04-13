@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navigation } from "@/components/Navigation";
+import { MobileNav } from "@/components/MobileNav";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyStudy } from "@/data/bibleStudy";
 import { BookOpen, Lightbulb, Info, ScrollText } from "lucide-react";
