@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Navigation } from "@/components/Navigation";
+import { MobileNav } from "@/components/MobileNav";
 import { PullUpLadder } from "@/components/PullUpLadder";
 import { PlankTimer } from "@/components/PlankTimer";
 import { DeadHangTimer } from "@/components/DeadHangTimer";
@@ -115,8 +116,9 @@ export default function WorkoutTracker() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <Navigation />
+      <MobileNav />
       <main className="container mx-auto px-4 py-8 max-w-3xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <h1 className="text-3xl font-bold mb-1">Daily Workout</h1>
