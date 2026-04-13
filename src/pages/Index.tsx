@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
+import { MobileNav } from "@/components/MobileNav";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,6 +14,8 @@ import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { WorkoutGoals } from "@/components/WorkoutGoals";
 import { QuickLog } from "@/components/QuickLog";
 import { ConsistencyStats } from "@/components/ConsistencyStats";
+import { RestDayIndicator } from "@/components/RestDayIndicator";
+import { WorkoutHistory } from "@/components/WorkoutHistory";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
 interface WorkoutLog {
