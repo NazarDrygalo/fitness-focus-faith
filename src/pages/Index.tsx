@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
+import { MobileNav } from "@/components/MobileNav";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,6 +14,8 @@ import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { WorkoutGoals } from "@/components/WorkoutGoals";
 import { QuickLog } from "@/components/QuickLog";
 import { ConsistencyStats } from "@/components/ConsistencyStats";
+import { RestDayIndicator } from "@/components/RestDayIndicator";
+import { WorkoutHistory } from "@/components/WorkoutHistory";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
 interface WorkoutLog {
@@ -149,7 +152,7 @@ export default function Dashboard() {
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <WelcomeOnboarding />
       <Navigation />
       <main className="container mx-auto px-4 py-8 max-w-4xl">
@@ -221,6 +224,14 @@ export default function Dashboard() {
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.37 }} className="mb-8">
           <WorkoutGoals todayLog={logMap.get(todayStr) || null} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.39 }} className="mb-8">
+          <RestDayIndicator currentStreak={streakData.current} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.41 }} className="mb-8">
+          <WorkoutHistory logs={logs} onUpdated={fetchLogs} />
         </motion.div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }}>
@@ -346,6 +357,7 @@ export default function Dashboard() {
           </Card>
         </motion.div>
       </main>
+      <MobileNav />
     </div>
   );
 }
