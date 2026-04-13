@@ -226,6 +226,14 @@ export default function Dashboard() {
           <WorkoutGoals todayLog={logMap.get(todayStr) || null} />
         </motion.div>
 
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.39 }} className="mb-8">
+          <RestDayIndicator currentStreak={streakData.current} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.41 }} className="mb-8">
+          <WorkoutHistory logs={logs} onUpdated={fetchLogs} />
+        </motion.div>
+
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-2">
@@ -349,6 +357,7 @@ export default function Dashboard() {
           </Card>
         </motion.div>
       </main>
+      <MobileNav />
     </div>
   );
 }
