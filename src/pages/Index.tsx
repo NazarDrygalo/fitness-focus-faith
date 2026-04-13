@@ -152,7 +152,7 @@ export default function Dashboard() {
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <WelcomeOnboarding />
       <Navigation />
       <main className="container mx-auto px-4 py-8 max-w-4xl">
