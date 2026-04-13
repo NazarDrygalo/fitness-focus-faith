@@ -16,6 +16,7 @@ export default function BibleStudyPage() {
     return (
       <div className="min-h-screen bg-background pb-16 sm:pb-0">
         <Navigation />
+        <MobileNav />
         <main className="container mx-auto px-4 py-8 max-w-3xl">
           <p className="text-muted-foreground">No study available for today's verse ({verse.reference}).</p>
         </main>
