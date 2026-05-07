@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Plus, Check, ChevronDown, ChevronUp } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { celebrate } from "@/lib/celebrate";
 
 interface QuickLogProps {
   todayLogged: boolean;
@@ -53,6 +54,7 @@ export function QuickLog({ todayLogged, onLogged }: QuickLogProps) {
       toast.error("Failed to save.");
     } else {
       toast.success("Quick log saved!");
+      celebrate();
       setPushups("");
       setSitups("");
       setSquats("");

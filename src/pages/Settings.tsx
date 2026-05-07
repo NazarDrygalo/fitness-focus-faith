@@ -58,21 +58,14 @@ export default function Settings() {
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
-    // Delete all user workout data first
-    const { error: dataError } = await supabase
-      .from("workout_logs")
-      .delete()
-      .eq("user_id", user?.id);
-
-    if (dataError) {
-      toast.error("Failed to delete your data. Please try again.");
+    const { error } = await supabase.functions.invoke("delete-account");
+    if (error) {
+      toast.error("Failed to delete account. Please try again.");
       setDeleting(false);
       return;
     }
-
-    // Sign out the user (account deletion requires a backend function for full removal)
     await signOut();
-    toast.success("Your data has been deleted and you have been signed out.");
+    toast.success("Your account has been deleted.");
     navigate("/auth");
     setDeleting(false);
   };
