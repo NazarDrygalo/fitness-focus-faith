@@ -16,6 +16,8 @@ import { QuickLog } from "@/components/QuickLog";
 import { ConsistencyStats } from "@/components/ConsistencyStats";
 import { RestDayIndicator } from "@/components/RestDayIndicator";
 import { WorkoutHistory } from "@/components/WorkoutHistory";
+import { EmptyDashboard } from "@/components/EmptyDashboard";
+import { DashboardSkeleton } from "@/components/DashboardSkeleton";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 
 interface WorkoutLog {
@@ -90,6 +92,7 @@ function calculateStreak(logs: WorkoutLog[]): { current: number; longest: number
 
 export default function Dashboard() {
   const [logs, setLogs] = useState<WorkoutLog[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
@@ -97,6 +100,7 @@ export default function Dashboard() {
   const fetchLogs = () => {
     supabase.from("workout_logs").select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit, notes").then(({ data }) => {
       if (data) setLogs(data as WorkoutLog[]);
+      setLoaded(true);
     });
   };
 
@@ -209,6 +213,12 @@ export default function Dashboard() {
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-8">
           <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} />
         </motion.div>
+
+        {loaded && logs.length === 0 && (
+          <div className="mb-8">
+            <EmptyDashboard />
+          </div>
+        )}
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-8">
           <StreakMilestones streak={streakData.current} totalPushups={totalPushups} totalSitups={totalSitups} totalWorkouts={logs.length} />
