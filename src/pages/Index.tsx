@@ -160,6 +160,7 @@ export default function Dashboard() {
       <WelcomeOnboarding />
       <Navigation />
       <main className="container mx-auto px-4 py-8 max-w-4xl">
+        {!loaded ? <DashboardSkeleton /> : <>
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <h1 className="text-3xl font-bold mb-1">{getGreeting()}</h1>
           <p className="text-muted-foreground mb-8">Keep pushing. Every rep counts.</p>
