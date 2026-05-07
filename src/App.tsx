@@ -16,6 +16,8 @@ import Auth from "./pages/Auth.tsx";
 import ResetPassword from "./pages/ResetPassword.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { Loader2 } from "lucide-react";
+import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
+import { InstallPrompt } from "./components/InstallPrompt.tsx";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +44,7 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 }
 
 const App = () => (
+  <ErrorBoundary>
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
     <TooltipProvider>
@@ -49,6 +52,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <InstallPrompt />
           <Routes>
             <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
             <Route path="/reset-password" element={<ResetPassword />} />
@@ -66,6 +70,7 @@ const App = () => (
     </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
