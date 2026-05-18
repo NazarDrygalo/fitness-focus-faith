@@ -9,6 +9,8 @@ import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as 
 import { PersonalRecords } from "@/components/PersonalRecords";
 import { BodyWeightTracker } from "@/components/BodyWeightTracker";
 import { ExportButton } from "@/components/ExportButton";
+import { ProgressSkeleton } from "@/components/ProgressSkeleton";
+import { EmptyProgress } from "@/components/EmptyProgress";
 import { format, subDays } from "date-fns";
 import {
   ResponsiveContainer,
@@ -83,15 +85,28 @@ function CustomLegend({ payload }: any) {
 
 export default function Progress() {
   const [logs, setLogs] = useState<WorkoutLog[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [range, setRange] = useState<Range>(7);
 
   useEffect(() => {
-    supabase
-      .from("workout_logs")
-      .select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit")
-      .then(({ data }) => {
-        if (data) setLogs(data as WorkoutLog[]);
-      });
+    const fetchLogs = () => {
+      supabase
+        .from("workout_logs")
+        .select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit")
+        .then(({ data }) => {
+          if (data) setLogs(data as WorkoutLog[]);
+          setLoaded(true);
+        });
+    };
+    fetchLogs();
+    const onFocus = () => fetchLogs();
+    const onVis = () => { if (document.visibilityState === "visible") fetchLogs(); };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, []);
 
   const chartData = useMemo(() => {
@@ -166,6 +181,7 @@ export default function Progress() {
           </div>
         </motion.div>
 
+        {!loaded ? <ProgressSkeleton /> : logs.length === 0 ? <EmptyProgress /> : <>
         {/* Range selector */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }} className="flex gap-1 mb-6 p-1 bg-secondary rounded-lg w-fit">
           {([7, 30, 90] as Range[]).map((r) => (
@@ -276,6 +292,7 @@ export default function Progress() {
             </CardContent>
           </Card>
         </motion.div>
+        </>}
       </main>
     </div>
   );
