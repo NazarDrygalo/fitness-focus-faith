@@ -9,6 +9,8 @@ import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as 
 import { PersonalRecords } from "@/components/PersonalRecords";
 import { BodyWeightTracker } from "@/components/BodyWeightTracker";
 import { ExportButton } from "@/components/ExportButton";
+import { ProgressSkeleton } from "@/components/ProgressSkeleton";
+import { EmptyProgress } from "@/components/EmptyProgress";
 import { format, subDays } from "date-fns";
 import {
   ResponsiveContainer,
@@ -83,15 +85,28 @@ function CustomLegend({ payload }: any) {
 
 export default function Progress() {
   const [logs, setLogs] = useState<WorkoutLog[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [range, setRange] = useState<Range>(7);
 
   useEffect(() => {
-    supabase
-      .from("workout_logs")
-      .select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit")
-      .then(({ data }) => {
-        if (data) setLogs(data as WorkoutLog[]);
-      });
+    const fetchLogs = () => {
+      supabase
+        .from("workout_logs")
+        .select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit")
+        .then(({ data }) => {
+          if (data) setLogs(data as WorkoutLog[]);
+          setLoaded(true);
+        });
+    };
+    fetchLogs();
+    const onFocus = () => fetchLogs();
+    const onVis = () => { if (document.visibilityState === "visible") fetchLogs(); };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, []);
 
   const chartData = useMemo(() => {
