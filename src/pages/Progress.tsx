@@ -181,6 +181,7 @@ export default function Progress() {
           </div>
         </motion.div>
 
+        {!loaded ? <ProgressSkeleton /> : logs.length === 0 ? <EmptyProgress /> : <>
         {/* Range selector */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }} className="flex gap-1 mb-6 p-1 bg-secondary rounded-lg w-fit">
           {([7, 30, 90] as Range[]).map((r) => (
@@ -291,6 +292,7 @@ export default function Progress() {
             </CardContent>
           </Card>
         </motion.div>
+        </>}
       </main>
     </div>
   );
