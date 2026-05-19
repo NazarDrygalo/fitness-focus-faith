@@ -5,71 +5,73 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
-import Index from "./pages/Index.tsx";
-import WorkoutTracker from "./pages/WorkoutTracker.tsx";
-import Progress from "./pages/Progress.tsx";
-import BibleStudy from "./pages/BibleStudy.tsx";
-import Settings from "./pages/Settings.tsx";
-import Terms from "./pages/Terms.tsx";
-import Privacy from "./pages/Privacy.tsx";
-import Auth from "./pages/Auth.tsx";
-import ResetPassword from "./pages/ResetPassword.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
 import { InstallPrompt } from "./components/InstallPrompt.tsx";
 
+const Index = lazy(() => import("./pages/Index.tsx"));
+const WorkoutTracker = lazy(() => import("./pages/WorkoutTracker.tsx"));
+const Progress = lazy(() => import("./pages/Progress.tsx"));
+const BibleStudy = lazy(() => import("./pages/BibleStudy.tsx"));
+const Settings = lazy(() => import("./pages/Settings.tsx"));
+const Terms = lazy(() => import("./pages/Terms.tsx"));
+const Privacy = lazy(() => import("./pages/Privacy.tsx"));
+const Auth = lazy(() => import("./pages/Auth.tsx"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
+const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+
 const queryClient = new QueryClient();
+
+const Fallback = () => (
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+  </div>
+);
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-    </div>
-  );
+  if (loading) return <Fallback />;
   if (!user) return <Navigate to="/auth" replace />;
   return <>{children}</>;
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-    </div>
-  );
+  if (loading) return <Fallback />;
   if (user) return <Navigate to="/" replace />;
   return <>{children}</>;
 }
 
 const App = () => (
   <ErrorBoundary>
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AuthProvider>
-          <InstallPrompt />
-          <Routes>
-            <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-            <Route path="/workout" element={<ProtectedRoute><WorkoutTracker /></ProtectedRoute>} />
-            <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
-            <Route path="/bible" element={<ProtectedRoute><BibleStudy /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <InstallPrompt />
+              <Suspense fallback={<Fallback />}>
+                <Routes>
+                  <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                  <Route path="/workout" element={<ProtectedRoute><WorkoutTracker /></ProtectedRoute>} />
+                  <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
+                  <Route path="/bible" element={<ProtectedRoute><BibleStudy /></ProtectedRoute>} />
+                  <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </ErrorBoundary>
 );
 
