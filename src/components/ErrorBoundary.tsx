@@ -1,6 +1,7 @@
 import { Component, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle } from "lucide-react";
+import { reportError } from "@/lib/analytics";
 
 interface Props { children: ReactNode }
 interface State { hasError: boolean; error: Error | null }
@@ -14,6 +15,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: unknown) {
     console.error("ErrorBoundary caught:", error, info);
+    reportError(error, { source: "ErrorBoundary" });
   }
 
   reset = () => {

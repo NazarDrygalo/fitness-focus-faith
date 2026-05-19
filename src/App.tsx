@@ -9,6 +9,7 @@ import { lazy, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
 import { InstallPrompt } from "./components/InstallPrompt.tsx";
+import { PageTracker } from "./hooks/usePageTracking.tsx";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
 const WorkoutTracker = lazy(() => import("./pages/WorkoutTracker.tsx"));
@@ -52,6 +53,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
+              <PageTracker />
               <InstallPrompt />
               <Suspense fallback={<Fallback />}>
                 <Routes>
