@@ -59,7 +59,7 @@ export function PersonalRecords({ logs }: PersonalRecordsProps) {
   return (
     <div>
       <div className="flex items-center gap-2 mb-4">
-        <Trophy className="h-5 w-5 text-yellow-500" />
+        <Trophy className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
         <h2 className="text-lg font-semibold text-foreground">Personal Records</h2>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -73,7 +73,7 @@ export function PersonalRecords({ logs }: PersonalRecordsProps) {
             <Card className="bg-card border-border hover-lift">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <record.icon className="h-4 w-4" style={{ color: record.color }} />
+                  <record.icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
                   <span className="text-xs text-muted-foreground">{record.label}</span>
                 </div>
                 <p className="text-xl font-bold text-foreground">{record.value}</p>
