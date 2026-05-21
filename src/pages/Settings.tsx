@@ -9,7 +9,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, Lock, Trash2, FileText, Shield, Sun, Moon, Monitor } from "lucide-react";
+import { Lock, Trash2, FileText, Shield, Sun, Moon, Monitor } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
 import {
@@ -76,9 +76,7 @@ export default function Settings() {
       <MobileNav />
       <main className="container mx-auto px-4 py-8 max-w-2xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
-          <h1 className="text-3xl font-bold mb-1 flex items-center gap-2">
-            <SettingsIcon className="h-7 w-7" /> Settings
-          </h1>
+          <h1 className="text-3xl font-bold mb-1">Settings</h1>
           <p className="text-muted-foreground mb-8">{user?.email}</p>
         </motion.div>
 

@@ -39,17 +39,16 @@ export function PersonalRecords({ logs }: PersonalRecordsProps) {
     const squatWeightLog = logs.find((l) => l.squat_weight === maxSquatWeight);
 
     return [
-      { icon: TrendingUp, label: "Best Pushups", value: maxPushups, color: "hsl(220, 70%, 55%)", show: maxPushups > 0 },
-      { icon: Zap, label: "Best Situps", value: maxSitups, color: "hsl(280, 60%, 55%)", show: maxSitups > 0 },
-      { icon: Target, label: "Best Ladder", value: `${maxLadder}%`, color: "hsl(142, 50%, 45%)", show: maxLadder > 0 },
-      { icon: Timer, label: "Longest Plank", value: formatSecs(maxPlank), color: "hsl(40, 70%, 50%)", show: maxPlank > 0 },
-      { icon: Hand, label: "Longest Hang", value: formatSecs(maxDeadhang), color: "hsl(190, 60%, 50%)", show: maxDeadhang > 0 },
-      { icon: Dumbbell, label: "Most Squats", value: maxSquats, color: "hsl(350, 60%, 55%)", show: maxSquats > 0 },
+      { icon: TrendingUp, label: "Best Pushups", value: maxPushups, show: maxPushups > 0 },
+      { icon: Zap, label: "Best Situps", value: maxSitups, show: maxSitups > 0 },
+      { icon: Target, label: "Best Ladder", value: `${maxLadder}%`, show: maxLadder > 0 },
+      { icon: Timer, label: "Longest Plank", value: formatSecs(maxPlank), show: maxPlank > 0 },
+      { icon: Hand, label: "Longest Hang", value: formatSecs(maxDeadhang), show: maxDeadhang > 0 },
+      { icon: Dumbbell, label: "Most Squats", value: maxSquats, show: maxSquats > 0 },
       {
         icon: Dumbbell,
         label: "Heaviest Squat",
         value: maxSquatWeight > 0 ? `${maxSquatWeight} ${squatWeightLog?.squat_unit || "lb"}` : 0,
-        color: "hsl(20, 70%, 50%)",
         show: maxSquatWeight > 0,
       },
     ].filter((r) => r.show);
@@ -60,7 +59,7 @@ export function PersonalRecords({ logs }: PersonalRecordsProps) {
   return (
     <div>
       <div className="flex items-center gap-2 mb-4">
-        <Trophy className="h-5 w-5 text-yellow-500" />
+        <Trophy className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
         <h2 className="text-lg font-semibold text-foreground">Personal Records</h2>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -74,7 +73,7 @@ export function PersonalRecords({ logs }: PersonalRecordsProps) {
             <Card className="bg-card border-border hover-lift">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <record.icon className="h-4 w-4" style={{ color: record.color }} />
+                  <record.icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
                   <span className="text-xs text-muted-foreground">{record.label}</span>
                 </div>
                 <p className="text-xl font-bold text-foreground">{record.value}</p>

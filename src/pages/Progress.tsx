@@ -157,13 +157,13 @@ export default function Progress() {
   };
 
   const summaryCards = [
-    { icon: TrendingUp, value: totals.pushups, label: "Pushups", color: "hsl(220, 70%, 55%)" },
-    { icon: Zap, value: totals.situps, label: "Situps", color: "hsl(280, 60%, 55%)" },
-    { icon: Target, value: `${totals.avgLadder}%`, label: "Avg Ladder", color: "hsl(var(--success))" },
-    { icon: Timer, value: formatSecs(totals.plank), label: "Plank", color: "hsl(40, 70%, 50%)" },
-    { icon: Hand, value: formatSecs(totals.deadhang), label: "Dead Hang", color: "hsl(190, 60%, 50%)" },
-    { icon: DumbbellIcon, value: totals.squats, label: "Squats", color: "hsl(350, 60%, 55%)" },
-    { icon: Calendar, value: totals.days, label: "Active Days", color: "hsl(var(--streak))" },
+    { icon: TrendingUp, value: totals.pushups, label: "Pushups" },
+    { icon: Zap, value: totals.situps, label: "Situps" },
+    { icon: Target, value: `${totals.avgLadder}%`, label: "Avg Ladder" },
+    { icon: Timer, value: formatSecs(totals.plank), label: "Plank" },
+    { icon: Hand, value: formatSecs(totals.deadhang), label: "Dead Hang" },
+    { icon: DumbbellIcon, value: totals.squats, label: "Squats" },
+    { icon: Calendar, value: totals.days, label: "Active Days" },
   ];
 
   return (
@@ -199,7 +199,7 @@ export default function Progress() {
               <Card className="bg-card border-border hover-lift">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <card.icon className="h-4 w-4" style={{ color: card.color }} />
+                    <card.icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
                     <span className="text-xs text-muted-foreground">{card.label}</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">{card.value}</p>
