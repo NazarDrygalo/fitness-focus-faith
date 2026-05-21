@@ -170,7 +170,9 @@ export default function Dashboard() {
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
             <Card className={`border-border transition-all duration-500 ${todayLogged ? "bg-success/15 border-success/40 shadow-[0_0_15px_hsl(var(--success)/0.15)]" : "bg-card"}`}>
               <CardContent className="p-4 text-center">
-                <CalendarIcon className={`h-5 w-5 mx-auto mb-2 transition-colors duration-500 ${todayLogged ? "text-success" : "text-muted-foreground"}`} style={todayLogged ? { color: "hsl(var(--success))" } : {}} />
+                <div className="h-5 flex items-center justify-center mb-2">
+                  <CalendarIcon className={`h-5 w-5 transition-colors duration-500 ${todayLogged ? "text-success" : "text-muted-foreground"}`} strokeWidth={1.75} style={todayLogged ? { color: "hsl(var(--success))" } : {}} />
+                </div>
                 <AnimatedCounter value={daysLeft} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">days to Dec 20</p>
               </CardContent>
@@ -180,7 +182,9 @@ export default function Dashboard() {
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.15 }}>
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
-                <Flame className="h-5 w-5 mx-auto mb-2" style={{ color: "hsl(var(--streak))" }} />
+                <div className="h-5 flex items-center justify-center mb-2">
+                  <Flame className="h-5 w-5" strokeWidth={1.75} style={{ color: "hsl(var(--streak))" }} />
+                </div>
                 <AnimatedCounter value={streak} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">day streak</p>
                 {streakData.longest > 0 && (
@@ -193,7 +197,9 @@ export default function Dashboard() {
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }}>
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
-                <TrendingUp className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
+                <div className="h-5 flex items-center justify-center mb-2">
+                  <TrendingUp className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
+                </div>
                 <AnimatedCounter value={totalPushups} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">total pushups</p>
               </CardContent>
@@ -203,7 +209,9 @@ export default function Dashboard() {
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }}>
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
-                <TrendingUp className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
+                <div className="h-5 flex items-center justify-center mb-2">
+                  <TrendingUp className="h-5 w-5 text-muted-foreground" strokeWidth={1.75} />
+                </div>
                 <AnimatedCounter value={totalSitups} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">total situps</p>
               </CardContent>
