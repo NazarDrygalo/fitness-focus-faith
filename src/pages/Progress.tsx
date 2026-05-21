@@ -199,7 +199,7 @@ export default function Progress() {
               <Card className="bg-card border-border hover-lift">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <card.icon className="h-4 w-4" style={{ color: card.color }} />
+                    <card.icon className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
                     <span className="text-xs text-muted-foreground">{card.label}</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">{card.value}</p>
