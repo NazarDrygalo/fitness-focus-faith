@@ -160,7 +160,6 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
           onClick={handleFinish}
           disabled={completedCount === 0}
           className="w-full transition-all duration-300 active-scale"
-          variant={percent === 100 ? "default" : "destructive"}
         >
           <Flag className="h-4 w-4 mr-2" />
           {percent === 100 ? "Complete Ladder!" : `Finish Ladder (${percent}%)`}
