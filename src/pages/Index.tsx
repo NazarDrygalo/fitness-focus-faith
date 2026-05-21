@@ -180,7 +180,7 @@ export default function Dashboard() {
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.15 }}>
             <Card className="bg-card border-border">
               <CardContent className="p-4 text-center">
-                <Flame className="h-5 w-5 mx-auto mb-2" style={{ color: "hsl(var(--streak))" }} />
+                <Flame className="h-5 w-5 mx-auto mb-2" strokeWidth={2} style={{ color: "hsl(var(--streak))" }} />
                 <AnimatedCounter value={streak} className="text-3xl font-bold text-foreground" />
                 <p className="text-xs text-muted-foreground mt-1">day streak</p>
                 {streakData.longest > 0 && (
