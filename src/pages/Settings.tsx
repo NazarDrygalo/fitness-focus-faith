@@ -9,7 +9,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Settings as SettingsIcon, Lock, Trash2, FileText, Shield, Sun, Moon, Monitor } from "lucide-react";
+import { Lock, Trash2, FileText, Shield, Sun, Moon, Monitor } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
 import {
