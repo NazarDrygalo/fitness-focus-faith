@@ -143,9 +143,26 @@
 /* Interactive element animations */
 .active-scale {
   @apply transition-transform duration-150;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .active-scale:active {
   transform: scale(0.95);
+}
+
+/* Kill the blue tap highlight on every interactive element on iOS/Android */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe-area helper for fixed bottom nav spacing */
+.pb-safe {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 4.5rem);
+}
+@media (min-width: 640px) {
+  .pb-safe {
+    padding-bottom: 0;
+  }
 }
 
 .hover-lift {
