@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Target, Pencil, Check, X } from "lucide-react";
+import { ActivityRings, type Ring } from "@/components/ActivityRings";
 
 interface Goals {
   pushups: number;
@@ -132,6 +133,27 @@ export function WorkoutGoals({ todayLog }: Props) {
   const activeGoals = goalFields.filter((f) => goals[f.key] > 0);
   const current = todayLog || defaultGoals;
 
+  // iOS-style ring palette — vibrant, distinct, theme-friendly
+  const ringPalette = [
+    "hsl(var(--streak))",   // warm orange
+    "hsl(var(--success))",  // green
+    "hsl(210 90% 60%)",     // blue
+    "hsl(280 70% 65%)",     // purple
+    "hsl(340 80% 60%)",     // pink
+    "hsl(170 70% 50%)",     // teal
+  ];
+
+  const topGoals = activeGoals.slice(0, 3);
+  const rings: Ring[] = topGoals.map((f, i) => ({
+    label: f.label,
+    current: current[f.key],
+    target: goals[f.key],
+    color: ringPalette[i % ringPalette.length],
+    unit: f.unit,
+  }));
+
+  const restGoals = activeGoals.slice(3);
+
   return (
     <Card className="bg-card border-border">
       <CardHeader className="pb-2">
@@ -139,36 +161,43 @@ export function WorkoutGoals({ todayLog }: Props) {
           <CardTitle className="text-lg flex items-center gap-2">
             <Target className="h-5 w-5" style={{ color: "hsl(var(--streak))" }} /> Daily Goals
           </CardTitle>
-          <Button variant="ghost" size="sm" onClick={() => setEditing(true)}>
+          <Button variant="ghost" size="sm" onClick={() => setEditing(true)} className="active-scale">
             <Pencil className="h-3 w-3" />
           </Button>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {activeGoals.map((f) => {
-            const target = goals[f.key];
-            const actual = current[f.key];
-            const pct = Math.min(100, Math.round((actual / target) * 100));
-            const done = pct >= 100;
-            return (
-              <div key={f.key} className="relative">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-muted-foreground">{f.label}</span>
-                  <span className={`text-xs font-semibold ${done ? "text-success" : "text-foreground"}`}>
-                    {actual}/{target}{f.unit || ""}
-                  </span>
+        {rings.length > 0 && (
+          <div className="flex justify-center mb-4">
+            <ActivityRings rings={rings} size={200} strokeWidth={16} gap={4} />
+          </div>
+        )}
+        {restGoals.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pt-2 border-t border-border">
+            {restGoals.map((f) => {
+              const target = goals[f.key];
+              const actual = current[f.key];
+              const pct = Math.min(100, Math.round((actual / target) * 100));
+              const done = pct >= 100;
+              return (
+                <div key={f.key} className="relative">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-muted-foreground">{f.label}</span>
+                    <span className={`text-xs font-semibold ${done ? "text-success" : "text-foreground"}`}>
+                      {actual}/{target}{f.unit || ""}
+                    </span>
+                  </div>
+                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-700 ${done ? "bg-success" : "bg-primary"}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-700 ${done ? "bg-success" : "bg-primary"}`}
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
