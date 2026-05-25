@@ -111,38 +111,43 @@ export function QuickLog({ todayLogged, onLogged }: QuickLogProps) {
                   <label className="text-[10px] text-muted-foreground mb-1 block">Pushups</label>
                   <Input
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     placeholder="0"
                     value={pushups}
                     onChange={(e) => setPushups(e.target.value)}
-                    className="h-9 text-center"
+                    className="h-12 text-center text-base no-spinners"
                   />
                 </div>
                 <div>
                   <label className="text-[10px] text-muted-foreground mb-1 block">Situps</label>
                   <Input
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     placeholder="0"
                     value={situps}
                     onChange={(e) => setSitups(e.target.value)}
-                    className="h-9 text-center"
+                    className="h-12 text-center text-base no-spinners"
                   />
                 </div>
                 <div>
                   <label className="text-[10px] text-muted-foreground mb-1 block">Squats</label>
                   <Input
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     placeholder="0"
                     value={squats}
                     onChange={(e) => setSquats(e.target.value)}
-                    className="h-9 text-center"
+                    className="h-12 text-center text-base no-spinners"
                   />
                 </div>
               </div>
               <Button
                 onClick={handleQuickSave}
                 disabled={saving}
-                size="sm"
-                className="w-full mt-3 active-scale"
+                className="w-full mt-3 h-12 text-base active-scale"
               >
                 {saving ? "Saving..." : "Save Quick Log"}
               </Button>
