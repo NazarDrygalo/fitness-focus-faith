@@ -1,4 +1,5 @@
 import { createRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 import { reportError } from "./lib/analytics";
@@ -10,4 +11,8 @@ window.addEventListener("unhandledrejection", (e) => {
   reportError(e.reason, { source: "unhandledrejection" });
 });
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <HelmetProvider>
+    <App />
+  </HelmetProvider>
+);
