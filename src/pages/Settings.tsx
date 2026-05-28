@@ -71,14 +71,15 @@ export default function Settings() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-16 sm:pb-0">
+    <div className="min-h-screen bg-background pb-safe">
       <Navigation />
       <MobileNav />
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-2xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
-          <h1 className="text-3xl font-bold mb-1">Settings</h1>
-          <p className="text-muted-foreground mb-8">{user?.email}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 tracking-tight">Settings</h1>
+          <p className="text-sm text-muted-foreground mb-5 sm:mb-8">{user?.email}</p>
         </motion.div>
+
 
         {/* Theme */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.05 }}>

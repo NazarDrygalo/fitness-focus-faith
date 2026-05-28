@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Navigation } from "@/components/Navigation";
 import { MobileNav } from "@/components/MobileNav";
@@ -17,12 +16,21 @@ import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Check, Quote, Dumbbell, ArrowUpDown } from "lucide-react";
+import { Check, Quote, Dumbbell, Timer as TimerIcon, Hand, Activity } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { haptic } from "@/lib/haptics";
+import { cn } from "@/lib/utils";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
 type ExerciseMode = "pullup-ladder" | "plank" | "dead-hang" | "squats";
+
+const EXERCISES: { id: ExerciseMode; label: string; Icon: typeof Dumbbell }[] = [
+  { id: "pullup-ladder", label: "Pull-Up", Icon: Dumbbell },
+  { id: "plank", label: "Plank", Icon: TimerIcon },
+  { id: "dead-hang", label: "Dead Hang", Icon: Hand },
+  { id: "squats", label: "Squats", Icon: Activity },
+];
 
 export default function WorkoutTracker() {
   const [pushups, setPushups] = useState("");
@@ -33,12 +41,9 @@ export default function WorkoutTracker() {
 
   const [exerciseMode, setExerciseMode] = useState<ExerciseMode>("pullup-ladder");
 
-  // Pull-up ladder state
   const [ladderDone, setLadderDone] = useState(false);
   const [existingLadder, setExistingLadder] = useState<number>(0);
   const [ladderLoaded, setLadderLoaded] = useState(false);
-
-  // Existing exercise data for today
   const [existingData, setExistingData] = useState<any>(null);
 
   const { user } = useAuth();
@@ -65,6 +70,7 @@ export default function WorkoutTracker() {
     if (p === 0 && s === 0) { toast.error("Enter at least one exercise count."); return; }
 
     setSaving(true);
+    haptic("medium");
     const { data: existing } = await supabase
       .from("workout_logs")
       .select("pushups, situps")
@@ -82,6 +88,7 @@ export default function WorkoutTracker() {
       toast.error("Failed to save workout.");
     } else {
       setSaved(true);
+      haptic("success");
       toast.success(`Workout logged! Today's total: ${newPushups} pushups, ${newSitups} situps`);
       setPushups("");
       setSitups("");
@@ -101,45 +108,38 @@ export default function WorkoutTracker() {
         deadhang_seconds: "Dead hang",
         squat_count: "Squats",
       };
+      haptic("success");
       toast.success(`${labels[field] || "Exercise"} saved!`);
-      // Refresh existing data
       const { data } = await supabase.from("workout_logs").select("*").eq("workout_date", today).maybeSingle();
       if (data) setExistingData(data);
     }
   };
 
-  const exerciseLabels: Record<ExerciseMode, string> = {
-    "pullup-ladder": "Pull-Up Ladder",
-    "plank": "Plank",
-    "dead-hang": "Dead Hang",
-    "squats": "Squats",
-  };
-
   return (
-    <div className="min-h-screen bg-background pb-16 sm:pb-0">
+    <div className="min-h-screen bg-background pb-safe">
       <Navigation />
       <MobileNav />
-      <main className="container mx-auto px-4 py-8 max-w-3xl">
+      <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
-          <h1 className="text-3xl font-bold mb-1">Daily Workout</h1>
-          <p className="text-muted-foreground mb-8">{format(new Date(), "EEEE, MMMM d, yyyy")}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 tracking-tight">Daily Workout</h1>
+          <p className="text-sm text-muted-foreground mb-5 sm:mb-8">{format(new Date(), "EEEE, MMMM d, yyyy")}</p>
         </motion.div>
 
         {/* Workout Input */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
-          <Card className="bg-card border-border mb-6">
+          <Card className="bg-card border-border mb-5 sm:mb-6">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg flex items-center gap-2"><Dumbbell className="h-5 w-5" /> Log Today's Workout</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
                 <div>
                   <Label htmlFor="pushups" className="text-sm text-muted-foreground">Pushups</Label>
-                  <Input id="pushups" type="number" min="0" placeholder="0" value={pushups} onChange={e => setPushups(e.target.value)} className="mt-1 bg-secondary border-border no-spinners" />
+                  <Input id="pushups" type="number" inputMode="numeric" pattern="[0-9]*" min="0" placeholder="0" value={pushups} onChange={e => setPushups(e.target.value)} className="mt-1 h-12 text-base bg-secondary border-border no-spinners" />
                 </div>
                 <div>
                   <Label htmlFor="situps" className="text-sm text-muted-foreground">Situps</Label>
-                  <Input id="situps" type="number" min="0" placeholder="0" value={situps} onChange={e => setSitups(e.target.value)} className="mt-1 bg-secondary border-border no-spinners" />
+                  <Input id="situps" type="number" inputMode="numeric" pattern="[0-9]*" min="0" placeholder="0" value={situps} onChange={e => setSitups(e.target.value)} className="mt-1 h-12 text-base bg-secondary border-border no-spinners" />
                 </div>
               </div>
               <div className="mb-4">
@@ -153,7 +153,7 @@ export default function WorkoutTracker() {
                   rows={2}
                 />
               </div>
-              <Button onClick={handleSave} disabled={saving} className="w-full transition-all duration-300 active-scale">
+              <Button onClick={handleSave} disabled={saving} className="w-full h-12 text-base transition-all duration-300 tap">
                 {saved ? <><Check className="h-4 w-4 mr-2" /> Saved!</> : saving ? "Saving..." : "Log Workout"}
               </Button>
             </CardContent>
@@ -162,9 +162,9 @@ export default function WorkoutTracker() {
 
         {/* Encouragement */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }}>
-          <Card className="bg-card border-border mb-6 hover-lift">
-            <CardContent className="p-6">
-              <p className="text-lg font-medium text-center italic text-foreground leading-relaxed">
+          <Card className="bg-card border-border mb-5 sm:mb-6 hover-lift">
+            <CardContent className="p-5 sm:p-6">
+              <p className="text-base sm:text-lg font-medium text-center italic text-foreground leading-relaxed">
                 "{message}"
               </p>
             </CardContent>
@@ -173,8 +173,8 @@ export default function WorkoutTracker() {
 
         {/* Bible Verse */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }}>
-          <Card className="bg-card border-border mb-6 hover-lift">
-            <CardContent className="p-6">
+          <Card className="bg-card border-border mb-5 sm:mb-6 hover-lift">
+            <CardContent className="p-5 sm:p-6">
               <Quote className="h-5 w-5 text-muted-foreground mb-3" />
               <p className="text-base leading-relaxed text-foreground mb-3">
                 "{verse.verse}"
@@ -184,28 +184,46 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
 
-        {/* Exercise Section with Dropdown */}
+        {/* Exercise Section with Pill Tabs */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
           <Card className="bg-card border-border">
             <CardHeader className="pb-3">
-              <div className="flex items-center justify-between gap-3">
-                <CardTitle className="text-lg flex items-center gap-2 shrink-0">
-                  <ArrowUpDown className="h-5 w-5" /> Exercise
-                </CardTitle>
-                <Select value={exerciseMode} onValueChange={(v) => setExerciseMode(v as ExerciseMode)}>
-                  <SelectTrigger className="w-48 bg-secondary border-border">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pullup-ladder">Pull-Up Ladder</SelectItem>
-                    <SelectItem value="plank">Plank</SelectItem>
-                    <SelectItem value="dead-hang">Dead Hang</SelectItem>
-                    <SelectItem value="squats">Squats</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Activity className="h-5 w-5" /> Exercise
+              </CardTitle>
             </CardHeader>
             <CardContent>
+              {/* Horizontal scrollable pill picker */}
+              <div className="-mx-1 mb-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+                <div className="flex gap-2 px-1 min-w-min">
+                  {EXERCISES.map(({ id, label, Icon }) => {
+                    const active = exerciseMode === id;
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => { if (!active) { haptic("light"); setExerciseMode(id); } }}
+                        className={cn(
+                          "relative shrink-0 snap-start inline-flex items-center gap-2 h-11 px-4 rounded-full text-sm font-medium select-none transition-colors tap",
+                          active ? "text-primary-foreground" : "text-muted-foreground bg-secondary hover:text-foreground"
+                        )}
+                      >
+                        {active && (
+                          <motion.span
+                            layoutId="exercise-pill"
+                            className="absolute inset-0 bg-primary rounded-full"
+                            transition={{ type: "spring", stiffness: 500, damping: 36 }}
+                          />
+                        )}
+                        <span className="relative z-10 flex items-center gap-2">
+                          <Icon className="h-4 w-4" strokeWidth={2} />
+                          {label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <AnimatePresence mode="wait">
                 <motion.div
                   key={exerciseMode}
@@ -223,7 +241,7 @@ export default function WorkoutTracker() {
                         const upsertData: any = { workout_date: today, ladder_percent: percent, user_id: user?.id };
                         const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
                         if (error) toast.error("Failed to save ladder progress.");
-                        else toast.success(`Ladder saved at ${percent}%!`);
+                        else { haptic("success"); toast.success(`Ladder saved at ${percent}%!`); }
                       }}
                     />
                   )}
