@@ -147,14 +147,14 @@ export function WorkoutHistory({ logs, onUpdated }: WorkoutHistoryProps) {
                       </div>
                       {log.notes && <p className="text-xs text-muted-foreground/70 mt-1 truncate">{log.notes}</p>}
                     </div>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => startEdit(log)}>
-                        <Pencil className="h-3 w-3" />
+                    <div className="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity ml-2">
+                      <Button size="icon" variant="ghost" className="h-10 w-10 sm:h-7 sm:w-7 tap" aria-label="Edit workout" onClick={() => startEdit(log)}>
+                        <Pencil className="h-4 w-4 sm:h-3 sm:w-3" />
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                          <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive hover:text-destructive">
-                            <Trash2 className="h-3 w-3" />
+                          <Button size="icon" variant="ghost" className="h-10 w-10 sm:h-7 sm:w-7 tap text-destructive hover:text-destructive" aria-label="Delete workout">
+                            <Trash2 className="h-4 w-4 sm:h-3 sm:w-3" />
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -169,6 +169,7 @@ export function WorkoutHistory({ logs, onUpdated }: WorkoutHistoryProps) {
                         </AlertDialogContent>
                       </AlertDialog>
                     </div>
+
                   </div>
                 )}
               </motion.div>

@@ -167,15 +167,15 @@ export default function Progress() {
   ];
 
   return (
-    <div className="min-h-screen bg-background pb-16 sm:pb-0">
+    <div className="min-h-screen bg-background pb-safe">
       <Navigation />
       <MobileNav />
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-4xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-5 sm:mb-8">
             <div>
-              <h1 className="text-3xl font-bold">Progress</h1>
-              <p className="text-muted-foreground">Track your gains over time</p>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Progress</h1>
+              <p className="text-sm text-muted-foreground">Track your gains over time</p>
             </div>
             <ExportButton logs={logs} />
           </div>
@@ -183,9 +183,9 @@ export default function Progress() {
 
         {!loaded ? <ProgressSkeleton /> : logs.length === 0 ? <EmptyProgress /> : <>
         {/* Range selector */}
-        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }} className="flex gap-1 mb-6 p-1 bg-secondary rounded-lg w-fit">
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }} className="flex gap-1 mb-5 sm:mb-6 p-1 bg-secondary rounded-lg w-fit">
           {([7, 30, 90] as Range[]).map((r) => (
-            <button key={r} onClick={() => setRange(r)} className={`relative px-4 py-1.5 text-sm font-medium rounded-md transition-colors duration-200 ${range === r ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+            <button key={r} onClick={() => setRange(r)} className={`relative px-4 min-h-[40px] text-sm font-medium rounded-md transition-colors duration-200 tap ${range === r ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}>
               {range === r && (<motion.div layoutId="range-indicator" className="absolute inset-0 bg-accent rounded-md" transition={{ type: "spring", stiffness: 400, damping: 30 }} />)}
               <span className="relative z-10">{r}d</span>
             </button>

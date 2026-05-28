@@ -141,13 +141,17 @@
 }
 
 /* Interactive element animations */
-.active-scale {
+.active-scale,
+.tap {
   @apply transition-transform duration-150;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
 .active-scale:active {
   transform: scale(0.95);
+}
+.tap:active {
+  transform: scale(0.97);
 }
 
 /* Kill the blue tap highlight on every interactive element on iOS/Android */
@@ -165,6 +169,15 @@ button, a, [role="button"] {
   }
 }
 
+/* Hide scrollbar on horizontally scrolling pill strips */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 .hover-lift {
   @apply transition-all duration-300;
 }
@@ -180,3 +193,4 @@ button, a, [role="button"] {
 .bg-success {
   background-color: hsl(var(--success));
 }
+

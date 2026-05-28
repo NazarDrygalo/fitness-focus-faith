@@ -14,10 +14,10 @@ export default function BibleStudyPage() {
 
   if (!study) {
     return (
-      <div className="min-h-screen bg-background pb-16 sm:pb-0">
+      <div className="min-h-screen bg-background pb-safe">
         <Navigation />
         <MobileNav />
-        <main className="container mx-auto px-4 py-8 max-w-3xl">
+        <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">
           <p className="text-muted-foreground">No study available for today's verse ({verse.reference}).</p>
         </main>
       </div>
@@ -25,14 +25,15 @@ export default function BibleStudyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-16 sm:pb-0">
+    <div className="min-h-screen bg-background pb-safe">
       <Navigation />
       <MobileNav />
-      <main className="container mx-auto px-4 py-8 max-w-3xl">
+      <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
-          <h1 className="text-3xl font-bold mb-1">Bible Study</h1>
-          <p className="text-muted-foreground mb-8">Today's reading: {study.reference}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 tracking-tight">Bible Study</h1>
+          <p className="text-sm text-muted-foreground mb-5 sm:mb-8">Today's reading: {study.reference}</p>
         </motion.div>
+
 
         {/* Book Overview */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
