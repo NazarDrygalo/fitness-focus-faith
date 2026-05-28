@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Dumbbell, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { lovable } from "@/integrations/lovable";
 import { Separator } from "@/components/ui/separator";
+import { PageMeta } from "@/components/PageMeta";
 
 type Mode = "login" | "signup" | "forgot";
 
@@ -52,6 +53,12 @@ export default function Auth() {
   };
 
   return (
+    <>
+      <PageMeta
+        title="Sign in or sign up · GRIND"
+        description="Sign in to GRIND to log workouts, track streaks, and read your daily Bible verse."
+        path="/auth"
+      />
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }} className="w-full max-w-sm">
         <div className="text-center mb-8">
