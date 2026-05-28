@@ -1,14 +1,21 @@
 import { Navigation } from "@/components/Navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { PageMeta } from "@/components/PageMeta";
 
 export default function Privacy() {
   const { user } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title="Privacy Policy · GRIND"
+        description="How GRIND collects, stores, and protects your account and workout data, plus your rights to access and delete it."
+        path="/privacy"
+      />
       {user && <Navigation />}
       <main className="container mx-auto px-4 py-12 max-w-3xl prose prose-invert">
         <h1 className="text-3xl font-bold text-foreground">Privacy Policy</h1>
+        <p className="text-muted-foreground text-sm">Last updated: April 9, 2026</p>
         <p className="text-muted-foreground text-sm">Last updated: April 9, 2026</p>
 
         <h2 className="text-xl font-semibold text-foreground mt-8">1. Information We Collect</h2>
