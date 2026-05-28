@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
+import { motion, PanInfo } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/Navigation";
@@ -181,7 +181,7 @@ export default function Dashboard() {
     }
   };
 
-  // ----- Section blocks (reused by both mobile tabs and desktop scroll) -----
+  // ----- Reusable block builders -----
   const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} />;
   const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
   const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
@@ -197,19 +197,26 @@ export default function Dashboard() {
   );
   const historyBlock = <WorkoutHistory logs={logs} onUpdated={fetchLogs} />;
 
-  const wrap = (node: JSX.Element) => <div className="mb-5 sm:mb-8">{node}</div>;
-
-
-  const ActivitySection = (
+  const activityBlock = (
     <Card className="bg-card border-border">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">Activity</CardTitle>
           <div className="flex gap-2">
-            <Button size="sm" variant={viewMode === "month" ? "default" : "ghost"} className="tap min-h-[40px]" onClick={() => { setViewMode("month"); setCurrentMonth(new Date()); setSelectedDay(null); }}>
+            <Button
+              size="sm"
+              variant={viewMode === "month" ? "default" : "ghost"}
+              className="tap min-h-[40px]"
+              onClick={() => { setViewMode("month"); setCurrentMonth(new Date()); setSelectedDay(null); }}
+            >
               Today
             </Button>
-            <Button size="sm" variant={viewMode === "year" ? "default" : "ghost"} className="tap min-h-[40px]" onClick={() => setViewMode("year")}>
+            <Button
+              size="sm"
+              variant={viewMode === "year" ? "default" : "ghost"}
+              className="tap min-h-[40px]"
+              onClick={() => setViewMode("year")}
+            >
               Year
             </Button>
           </div>
@@ -327,11 +334,27 @@ export default function Dashboard() {
     </Card>
   );
 
+  const wrap = (node: JSX.Element, key?: string) => (
+    <div key={key} className="mb-5 sm:mb-8">{node}</div>
+  );
+
   const sectionByTab: Record<DashboardTabId, JSX.Element> = {
-    today: <>{TodaySection}</>,
-    stats: <>{StatsSection}</>,
-    history: <>{HistorySection}</>,
-    activity: <>{ActivitySection}</>,
+    today: (
+      <>
+        {wrap(quickLogBlock, "ql")}
+        {wrap(goalsBlock, "g")}
+        {wrap(restBlock, "r")}
+      </>
+    ),
+    stats: (
+      <>
+        {wrap(consistencyBlock, "c")}
+        {wrap(weeklyBlock, "w")}
+        {wrap(milestonesBlock, "m")}
+      </>
+    ),
+    history: wrap(historyBlock, "h"),
+    activity: wrap(activityBlock, "a"),
   };
 
   return (
@@ -343,25 +366,12 @@ export default function Dashboard() {
       {/* Pull-to-refresh indicator (mobile only) */}
       <motion.div
         aria-hidden
-  const sectionByTab: Record<DashboardTabId, JSX.Element> = {
-    today: (
-      <>
-        {wrap(quickLogBlock)}
-        {wrap(goalsBlock)}
-        {wrap(restBlock)}
-      </>
-    ),
-    stats: (
-      <>
-        {wrap(consistencyBlock)}
-        {wrap(weeklyBlock)}
-        {wrap(milestonesBlock)}
-      </>
-    ),
-    history: wrap(historyBlock),
-    activity: wrap(ActivitySection),
-  };
-
+        className="sm:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-center pointer-events-none"
+        style={{ height: pull }}
+        animate={{ opacity: pull > 16 || refreshing ? 1 : 0 }}
+        transition={{ duration: 0.15 }}
+      >
+        <Loader2
           className="h-5 w-5 text-muted-foreground"
           style={{
             animation: refreshing ? "spin 1s linear infinite" : undefined,
@@ -372,7 +382,10 @@ export default function Dashboard() {
 
       <main
         className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-4xl"
-        style={{ transform: pull ? `translateY(${pull * 0.5}px)` : undefined, transition: refreshing ? "transform 0.2s" : undefined }}
+        style={{
+          transform: pull ? `translateY(${pull * 0.5}px)` : undefined,
+          transition: refreshing ? "transform 0.2s" : undefined,
+        }}
       >
         {!loaded ? <DashboardSkeleton /> : <>
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
@@ -459,16 +472,16 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Desktop: single scroll, untouched layout */}
+        {/* Desktop: single scroll layout */}
         <div className="hidden sm:block">
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }}>{TodaySection.props.children[0]}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.30 }}>{StatsSection.props.children[2]}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.33 }}>{StatsSection.props.children[1]}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }}>{StatsSection.props.children[0]}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.37 }}>{TodaySection.props.children[1]}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.39 }}>{TodaySection.props.children[2]}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.41 }}>{HistorySection}</motion.div>
-          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }}>{ActivitySection}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-8">{quickLogBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.30 }} className="mb-8">{milestonesBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.33 }} className="mb-8">{weeklyBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">{consistencyBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.37 }} className="mb-8">{goalsBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.39 }} className="mb-8">{restBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.41 }} className="mb-8">{historyBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }}>{activityBlock}</motion.div>
         </div>
         </>}
       </main>
