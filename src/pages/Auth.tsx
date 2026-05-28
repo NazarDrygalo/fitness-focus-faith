@@ -189,9 +189,9 @@ export default function Auth() {
               )}
             </div>
           </CardContent>
+        </Card>
+      </motion.div>
     </div>
     </>
-  );
-}
   );
 }
