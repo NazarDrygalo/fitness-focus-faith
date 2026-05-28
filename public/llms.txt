@@ -1,0 +1,12 @@
+# GRIND
+
+> A daily workout tracker that helps you build consistency, track progress, and grow in faith through daily Bible study.
+
+GRIND is a mobile-first fitness and devotional web app. Users log pull-ups, push-ups, sit-ups, plank/dead hang times, and squats, set daily goals, view progress charts and personal records, and read a rotating daily NIV Bible verse with context.
+
+## Pages
+
+- [Home](/): Marketing intro and sign-in entry point.
+- [Sign in / Sign up](/auth): Account creation and login.
+- [Terms of Service](/terms): Legal terms for using GRIND.
+- [Privacy Policy](/privacy): How user data is collected and stored.
