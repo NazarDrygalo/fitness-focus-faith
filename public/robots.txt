@@ -4,4 +4,4 @@ Disallow: /auth
 Disallow: /reset-password
 Disallow: /settings
 
-Sitemap: https://grind.lovable.app/sitemap.xml
+Sitemap: https://grindfaith.lovable.app/sitemap.xml
