@@ -343,12 +343,25 @@ export default function Dashboard() {
       {/* Pull-to-refresh indicator (mobile only) */}
       <motion.div
         aria-hidden
-        className="sm:hidden fixed top-0 left-0 right-0 z-30 flex items-center justify-center pointer-events-none"
-        style={{ height: pull }}
-        animate={{ opacity: pull > 16 || refreshing ? 1 : 0 }}
-        transition={{ duration: 0.15 }}
-      >
-        <Loader2
+  const sectionByTab: Record<DashboardTabId, JSX.Element> = {
+    today: (
+      <>
+        {wrap(quickLogBlock)}
+        {wrap(goalsBlock)}
+        {wrap(restBlock)}
+      </>
+    ),
+    stats: (
+      <>
+        {wrap(consistencyBlock)}
+        {wrap(weeklyBlock)}
+        {wrap(milestonesBlock)}
+      </>
+    ),
+    history: wrap(historyBlock),
+    activity: wrap(ActivitySection),
+  };
+
           className="h-5 w-5 text-muted-foreground"
           style={{
             animation: refreshing ? "spin 1s linear infinite" : undefined,
