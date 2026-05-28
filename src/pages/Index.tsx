@@ -181,40 +181,24 @@ export default function Dashboard() {
     }
   };
 
-  // ----- Section blocks (rendered into both mobile tabs and desktop scroll) -----
-  const TodaySection = (
-    <>
-      <div className="mb-5 sm:mb-8">
-        <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} />
-      </div>
-      <div className="mb-5 sm:mb-8">
-        <WorkoutGoals todayLog={logMap.get(todayStr) || null} />
-      </div>
-      <div className="mb-5 sm:mb-8">
-        <RestDayIndicator currentStreak={streakData.current} />
-      </div>
-    </>
+  // ----- Section blocks (reused by both mobile tabs and desktop scroll) -----
+  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} />;
+  const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
+  const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
+  const consistencyBlock = <ConsistencyStats logs={logs} />;
+  const weeklyBlock = <WeeklyRecap logs={logs} />;
+  const milestonesBlock = (
+    <StreakMilestones
+      streak={streakData.current}
+      totalPushups={totalPushups}
+      totalSitups={totalSitups}
+      totalWorkouts={logs.length}
+    />
   );
+  const historyBlock = <WorkoutHistory logs={logs} onUpdated={fetchLogs} />;
 
-  const StatsSection = (
-    <>
-      <div className="mb-5 sm:mb-8">
-        <ConsistencyStats logs={logs} />
-      </div>
-      <div className="mb-5 sm:mb-8">
-        <WeeklyRecap logs={logs} />
-      </div>
-      <div className="mb-5 sm:mb-8">
-        <StreakMilestones streak={streakData.current} totalPushups={totalPushups} totalSitups={totalSitups} totalWorkouts={logs.length} />
-      </div>
-    </>
-  );
+  const wrap = (node: JSX.Element) => <div className="mb-5 sm:mb-8">{node}</div>;
 
-  const HistorySection = (
-    <div className="mb-5 sm:mb-8">
-      <WorkoutHistory logs={logs} onUpdated={fetchLogs} />
-    </div>
-  );
 
   const ActivitySection = (
     <Card className="bg-card border-border">
