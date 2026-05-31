@@ -11,6 +11,8 @@ import { PullUpLadder } from "@/components/PullUpLadder";
 import { PlankTimer } from "@/components/PlankTimer";
 import { DeadHangTimer } from "@/components/DeadHangTimer";
 import { SquatCounter } from "@/components/SquatCounter";
+import { StickyActionBar } from "@/components/StickyActionBar";
+import { Button as UIButton } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
