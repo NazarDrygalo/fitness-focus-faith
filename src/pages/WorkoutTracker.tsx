@@ -11,6 +11,8 @@ import { PullUpLadder } from "@/components/PullUpLadder";
 import { PlankTimer } from "@/components/PlankTimer";
 import { DeadHangTimer } from "@/components/DeadHangTimer";
 import { SquatCounter } from "@/components/SquatCounter";
+import { StickyActionBar } from "@/components/StickyActionBar";
+import { Button as UIButton } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
@@ -275,6 +277,16 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
       </main>
+
+      <StickyActionBar show={(parseInt(pushups) || 0) + (parseInt(situps) || 0) > 0 && !saved}>
+        <UIButton
+          onClick={handleSave}
+          disabled={saving}
+          className="w-full h-12 text-base tap"
+        >
+          {saving ? "Saving..." : `Log Workout`}
+        </UIButton>
+      </StickyActionBar>
     </div>
   );
 }
