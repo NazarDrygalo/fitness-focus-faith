@@ -277,6 +277,16 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
       </main>
+
+      <StickyActionBar show={(parseInt(pushups) || 0) + (parseInt(situps) || 0) > 0 && !saved}>
+        <UIButton
+          onClick={handleSave}
+          disabled={saving}
+          className="w-full h-12 text-base tap"
+        >
+          {saving ? "Saving..." : `Log Workout`}
+        </UIButton>
+      </StickyActionBar>
     </div>
   );
 }
