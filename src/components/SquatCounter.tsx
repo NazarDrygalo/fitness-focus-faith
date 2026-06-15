@@ -106,7 +106,7 @@ export function SquatCounter({ onFinish, disabled = false, initialData }: SquatC
         </motion.div>
       )}
 
-      <Button onClick={handleSave} disabled={!count || parseInt(count) <= 0} className="w-full active-scale gap-2">
+      <Button onClick={handleSave} disabled={!count || parseInt(count) <= 0} className="w-full h-12 text-base tap gap-2">
         <Check className="h-4 w-4" /> Log Squats
       </Button>
     </div>
