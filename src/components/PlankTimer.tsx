@@ -126,6 +126,7 @@ export function PlankTimer({ onFinish, disabled = false, initialSeconds = 0 }: P
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
     setFinished(true);
+    haptic("success");
     const totalSec = mode === "stopwatch"
       ? Math.round(elapsed / 1000)
       : Math.round((timerTotal - timerRemaining) / 1000);
