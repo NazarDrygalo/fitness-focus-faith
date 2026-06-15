@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, Flag } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 
 interface SquatCounterProps {
   onFinish: (count: number, weight: number, unit: string) => void;
