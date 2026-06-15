@@ -100,7 +100,7 @@ export default function Settings() {
                   <Button
                     key={opt.value}
                     variant={theme === opt.value ? "default" : "outline"}
-                    className="flex-1 gap-2"
+                    className="flex-1 gap-2 h-11 tap"
                     onClick={() => setTheme(opt.value)}
                   >
                     <opt.icon className="h-4 w-4" />
