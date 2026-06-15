@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Play, Pause, RotateCcw, Timer, Flag, Clock } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 
 interface PlankTimerProps {
   onFinish: (totalSeconds: number) => void;
