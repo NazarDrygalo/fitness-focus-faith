@@ -36,6 +36,7 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
   }, []);
 
   const startStopwatch = () => {
+    haptic("light");
     startTimeRef.current = Date.now();
     intervalRef.current = setInterval(() => {
       setElapsed(accumulatedRef.current + (Date.now() - startTimeRef.current));
