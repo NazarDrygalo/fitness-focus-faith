@@ -194,7 +194,7 @@ export default function Settings() {
             <CardContent>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="destructive" className="w-full">
+                  <Button variant="destructive" className="w-full h-12 text-base tap">
                     Delete Account
                   </Button>
                 </AlertDialogTrigger>
