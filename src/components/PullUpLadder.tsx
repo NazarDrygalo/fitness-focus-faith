@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Flag } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 
 interface PullUpLadderProps {
   onFinish: (percent: number) => void;
