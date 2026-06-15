@@ -144,7 +144,7 @@ export default function Settings() {
                   className="mt-1 bg-secondary border-border"
                 />
               </div>
-              <Button onClick={handleChangePassword} disabled={changingPassword} className="w-full">
+              <Button onClick={handleChangePassword} disabled={changingPassword} className="w-full h-12 text-base tap">
                 {changingPassword ? "Updating..." : "Update Password"}
               </Button>
             </CardContent>
