@@ -38,22 +38,24 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
 
   const handleUpClick = (step: number) => {
     if (isLocked) return;
-    // Must complete in order
     const idx = UP_STEPS.indexOf(step);
     if (idx !== completedUp.length) return;
+    haptic("light");
     setCompletedUp(prev => [...prev, step]);
   };
 
   const handleDownClick = (step: number) => {
     if (isLocked) return;
-    if (completedUp.length < UP_STEPS.length) return; // must finish up first
+    if (completedUp.length < UP_STEPS.length) return;
     const idx = DOWN_STEPS.indexOf(step);
     if (idx !== completedDown.length) return;
+    haptic("light");
     setCompletedDown(prev => [...prev, step]);
   };
 
   const handleFinish = () => {
     setFinished(true);
+    haptic(percent === 100 ? "success" : "medium");
     onFinish(percent);
   };
 
