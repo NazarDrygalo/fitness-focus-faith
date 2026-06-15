@@ -162,7 +162,7 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
         <Button
           onClick={handleFinish}
           disabled={completedCount === 0}
-          className="w-full transition-all duration-300 active-scale"
+          className="w-full h-12 text-base transition-all duration-300 tap"
         >
           <Flag className="h-4 w-4 mr-2" />
           {percent === 100 ? "Complete Ladder!" : `Finish Ladder (${percent}%)`}
