@@ -23,6 +23,7 @@ export function SquatCounter({ onFinish, disabled = false, initialData }: SquatC
     const c = parseInt(count) || 0;
     if (c <= 0) return;
     const w = weightMode === "bodyweight" ? 0 : (parseFloat(weight) || 0);
+    haptic("success");
     setFinished(true);
     onFinish(c, w, unit);
   };
