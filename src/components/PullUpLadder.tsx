@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Check, Flag } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 
 interface PullUpLadderProps {
   onFinish: (percent: number) => void;
@@ -37,22 +38,24 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
 
   const handleUpClick = (step: number) => {
     if (isLocked) return;
-    // Must complete in order
     const idx = UP_STEPS.indexOf(step);
     if (idx !== completedUp.length) return;
+    haptic("light");
     setCompletedUp(prev => [...prev, step]);
   };
 
   const handleDownClick = (step: number) => {
     if (isLocked) return;
-    if (completedUp.length < UP_STEPS.length) return; // must finish up first
+    if (completedUp.length < UP_STEPS.length) return;
     const idx = DOWN_STEPS.indexOf(step);
     if (idx !== completedDown.length) return;
+    haptic("light");
     setCompletedDown(prev => [...prev, step]);
   };
 
   const handleFinish = () => {
     setFinished(true);
+    haptic(percent === 100 ? "success" : "medium");
     onFinish(percent);
   };
 
@@ -90,7 +93,7 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
                 onClick={() => handleUpClick(step)}
                 disabled={isLocked || !isNext}
                 className={`
-                  w-10 h-8 rounded-md text-xs font-bold transition-all duration-200 flex items-center justify-center
+                  w-11 h-10 rounded-md tap text-xs font-bold transition-all duration-200 flex items-center justify-center
                   ${done ? "bg-success text-success-foreground" : isNext ? "bg-primary text-primary-foreground ring-2 ring-ring" : "bg-secondary text-muted-foreground"}
                   ${isLocked && !done ? "opacity-50 cursor-not-allowed" : ""}
                 `}
@@ -142,7 +145,7 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
                 onClick={() => handleDownClick(step)}
                 disabled={isLocked || !isNext}
                 className={`
-                  w-10 h-8 rounded-md text-xs font-bold transition-all duration-200 flex items-center justify-center
+                  w-11 h-10 rounded-md tap text-xs font-bold transition-all duration-200 flex items-center justify-center
                   ${done ? "bg-success text-success-foreground" : isNext ? "bg-primary text-primary-foreground ring-2 ring-ring" : "bg-secondary text-muted-foreground"}
                   ${isLocked && !done ? "opacity-50 cursor-not-allowed" : ""}
                 `}
@@ -159,7 +162,7 @@ export function PullUpLadder({ onFinish, initialPercent = 0, disabled = false }:
         <Button
           onClick={handleFinish}
           disabled={completedCount === 0}
-          className="w-full transition-all duration-300 active-scale"
+          className="w-full h-12 text-base transition-all duration-300 tap"
         >
           <Flag className="h-4 w-4 mr-2" />
           {percent === 100 ? "Complete Ladder!" : `Finish Ladder (${percent}%)`}

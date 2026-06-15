@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Check, Flag } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 
 interface SquatCounterProps {
   onFinish: (count: number, weight: number, unit: string) => void;
@@ -22,6 +23,7 @@ export function SquatCounter({ onFinish, disabled = false, initialData }: SquatC
     const c = parseInt(count) || 0;
     if (c <= 0) return;
     const w = weightMode === "bodyweight" ? 0 : (parseFloat(weight) || 0);
+    haptic("success");
     setFinished(true);
     onFinish(c, w, unit);
   };
@@ -104,7 +106,7 @@ export function SquatCounter({ onFinish, disabled = false, initialData }: SquatC
         </motion.div>
       )}
 
-      <Button onClick={handleSave} disabled={!count || parseInt(count) <= 0} className="w-full active-scale gap-2">
+      <Button onClick={handleSave} disabled={!count || parseInt(count) <= 0} className="w-full h-12 text-base tap gap-2">
         <Check className="h-4 w-4" /> Log Squats
       </Button>
     </div>

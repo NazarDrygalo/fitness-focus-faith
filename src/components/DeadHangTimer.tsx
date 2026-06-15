@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Play, Pause, RotateCcw, Timer, Flag, Clock } from "lucide-react";
+import { haptic } from "@/lib/haptics";
 
 interface DeadHangTimerProps {
   onFinish: (totalSeconds: number) => void;
@@ -35,6 +36,7 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
   }, []);
 
   const startStopwatch = () => {
+    haptic("light");
     startTimeRef.current = Date.now();
     intervalRef.current = setInterval(() => {
       setElapsed(accumulatedRef.current + (Date.now() - startTimeRef.current));
@@ -112,6 +114,7 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
     if (intervalRef.current) clearInterval(intervalRef.current);
     setRunning(false);
     setFinished(true);
+    haptic("success");
     const totalSec = mode === "stopwatch"
       ? Math.round(elapsed / 1000)
       : Math.round((timerTotal - timerRemaining) / 1000);
@@ -157,21 +160,21 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
           <p className="text-4xl font-mono font-bold text-foreground tabular-nums">{formatTime(elapsed)}</p>
           <div className="flex gap-2">
             {!running ? (
-              <Button onClick={startStopwatch} className="gap-2 active-scale">
+              <Button onClick={startStopwatch} className="gap-2 h-11 tap">
                 <Play className="h-4 w-4" /> {elapsed > 0 ? "Resume" : "Start"}
               </Button>
             ) : (
               <>
-                <Button onClick={pauseStopwatch} variant="secondary" className="gap-2 active-scale">
+                <Button onClick={pauseStopwatch} variant="secondary" className="gap-2 h-11 tap">
                   <Pause className="h-4 w-4" /> Pause
                 </Button>
-                <Button onClick={addLap} variant="outline" className="gap-2 active-scale">
+                <Button onClick={addLap} variant="outline" className="gap-2 h-11 tap">
                   <Flag className="h-4 w-4" /> Lap
                 </Button>
               </>
             )}
             {elapsed > 0 && !running && (
-              <Button onClick={resetStopwatch} variant="ghost" className="gap-2 active-scale">
+              <Button onClick={resetStopwatch} variant="ghost" className="gap-2 h-11 tap">
                 <RotateCcw className="h-4 w-4" /> Reset
               </Button>
             )}
@@ -187,7 +190,7 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
             </div>
           )}
           {elapsed > 0 && !running && (
-            <Button onClick={handleFinish} className="w-full active-scale gap-2">
+            <Button onClick={handleFinish} className="w-full h-12 text-base tap gap-2">
               <Flag className="h-4 w-4" /> Save Dead Hang
             </Button>
           )}
@@ -216,18 +219,18 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
           )}
           <div className="flex gap-2">
             {!timerStarted ? (
-              <Button onClick={startTimer} className="gap-2 active-scale"><Play className="h-4 w-4" /> Start Timer</Button>
+              <Button onClick={startTimer} className="gap-2 h-11 tap"><Play className="h-4 w-4" /> Start Timer</Button>
             ) : !running ? (
               <>
-                {timerRemaining > 0 && <Button onClick={resumeTimer} className="gap-2 active-scale"><Play className="h-4 w-4" /> Resume</Button>}
-                <Button onClick={resetTimer} variant="ghost" className="gap-2 active-scale"><RotateCcw className="h-4 w-4" /> Reset</Button>
+                {timerRemaining > 0 && <Button onClick={resumeTimer} className="gap-2 h-11 tap"><Play className="h-4 w-4" /> Resume</Button>}
+                <Button onClick={resetTimer} variant="ghost" className="gap-2 h-11 tap"><RotateCcw className="h-4 w-4" /> Reset</Button>
               </>
             ) : (
-              <Button onClick={pauseTimer} variant="secondary" className="gap-2 active-scale"><Pause className="h-4 w-4" /> Pause</Button>
+              <Button onClick={pauseTimer} variant="secondary" className="gap-2 h-11 tap"><Pause className="h-4 w-4" /> Pause</Button>
             )}
           </div>
           {timerStarted && !running && (timerRemaining === 0 || timerRemaining < timerTotal) && (
-            <Button onClick={handleFinish} className="w-full active-scale gap-2"><Flag className="h-4 w-4" /> Save Dead Hang</Button>
+            <Button onClick={handleFinish} className="w-full h-12 text-base tap gap-2"><Flag className="h-4 w-4" /> Save Dead Hang</Button>
           )}
         </div>
       )}
