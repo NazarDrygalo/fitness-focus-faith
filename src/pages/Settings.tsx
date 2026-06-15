@@ -159,12 +159,24 @@ export default function Settings() {
                 <FileText className="h-5 w-5" /> Legal
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <Link to="/terms" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2">
-                <FileText className="h-4 w-4" /> Terms of Service
+            <CardContent className="space-y-1">
+              <Link
+                to="/terms"
+                className="flex items-center justify-between gap-2 min-h-[52px] px-3 -mx-3 rounded-md text-sm text-foreground/90 hover:bg-secondary/60 transition-colors tap"
+              >
+                <span className="flex items-center gap-3">
+                  <FileText className="h-4 w-4 text-muted-foreground" /> Terms of Service
+                </span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </Link>
-              <Link to="/privacy" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors py-2">
-                <Shield className="h-4 w-4" /> Privacy Policy
+              <Link
+                to="/privacy"
+                className="flex items-center justify-between gap-2 min-h-[52px] px-3 -mx-3 rounded-md text-sm text-foreground/90 hover:bg-secondary/60 transition-colors tap"
+              >
+                <span className="flex items-center gap-3">
+                  <Shield className="h-4 w-4 text-muted-foreground" /> Privacy Policy
+                </span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </Link>
             </CardContent>
           </Card>
