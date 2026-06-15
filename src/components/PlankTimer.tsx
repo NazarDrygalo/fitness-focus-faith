@@ -37,6 +37,7 @@ export function PlankTimer({ onFinish, disabled = false, initialSeconds = 0 }: P
   }, []);
 
   const startStopwatch = () => {
+    haptic("light");
     startTimeRef.current = Date.now();
     intervalRef.current = setInterval(() => {
       setElapsed(accumulatedRef.current + (Date.now() - startTimeRef.current));
