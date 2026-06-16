@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      notification_preferences: {
+        Row: {
+          created_at: string
+          last_streak_sent_on: string | null
+          last_verse_sent_on: string | null
+          last_workout_sent_on: string | null
+          streak_at_risk_enabled: boolean
+          streak_at_risk_time: string
+          timezone: string
+          updated_at: string
+          user_id: string
+          verse_enabled: boolean
+          verse_time: string
+          workout_reminder_enabled: boolean
+          workout_reminder_time: string
+        }
+        Insert: {
+          created_at?: string
+          last_streak_sent_on?: string | null
+          last_verse_sent_on?: string | null
+          last_workout_sent_on?: string | null
+          streak_at_risk_enabled?: boolean
+          streak_at_risk_time?: string
+          timezone?: string
+          updated_at?: string
+          user_id: string
+          verse_enabled?: boolean
+          verse_time?: string
+          workout_reminder_enabled?: boolean
+          workout_reminder_time?: string
+        }
+        Update: {
+          created_at?: string
+          last_streak_sent_on?: string | null
+          last_verse_sent_on?: string | null
+          last_workout_sent_on?: string | null
+          streak_at_risk_enabled?: boolean
+          streak_at_risk_time?: string
+          timezone?: string
+          updated_at?: string
+          user_id?: string
+          verse_enabled?: boolean
+          verse_time?: string
+          workout_reminder_enabled?: boolean
+          workout_reminder_time?: string
+        }
+        Relationships: []
+      }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       weight_logs: {
         Row: {
           created_at: string
