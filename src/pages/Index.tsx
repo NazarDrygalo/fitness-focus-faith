@@ -22,6 +22,7 @@ import { StickyHeader } from "@/components/StickyHeader";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { haptic } from "@/lib/haptics";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
+import { PageMeta } from "@/components/PageMeta";
 
 interface WorkoutLog {
   workout_date: string;
@@ -359,6 +360,7 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background pb-safe">
+      <PageMeta title="GRIND · Daily strength & scripture" description="Track pull-ups, planks, dead hangs, and squats with daily Bible verses. Build streaks that stick." path="/" />
       <WelcomeOnboarding />
       <Navigation />
       <StickyHeader streak={streak} />

@@ -22,6 +22,7 @@ import { Check, Quote, Dumbbell, Timer as TimerIcon, Hand, Activity } from "luci
 import { useAuth } from "@/hooks/useAuth";
 import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
+import { PageMeta } from "@/components/PageMeta";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -119,6 +120,7 @@ export default function WorkoutTracker() {
 
   return (
     <div className="min-h-screen bg-background pb-safe">
+      <PageMeta title="Workout · GRIND" description="Log pull-ups, planks, dead hangs, and squats with one-tap tracking." path="/workout" />
       <Navigation />
       <MobileNav />
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">

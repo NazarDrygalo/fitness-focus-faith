@@ -5,6 +5,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyStudy } from "@/data/bibleStudy";
 import { BookOpen, Lightbulb, Info, ScrollText } from "lucide-react";
+import { PageMeta } from "@/components/PageMeta";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -26,6 +27,7 @@ export default function BibleStudyPage() {
 
   return (
     <div className="min-h-screen bg-background pb-safe">
+      <PageMeta title="Bible Study · GRIND" description="Today's NIV verse with context and core teachings, refreshed daily." path="/bible" />
       <Navigation />
       <MobileNav />
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">
