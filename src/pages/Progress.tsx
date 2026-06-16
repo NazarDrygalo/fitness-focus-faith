@@ -12,6 +12,7 @@ import { ExportButton } from "@/components/ExportButton";
 import { ProgressSkeleton } from "@/components/ProgressSkeleton";
 import { EmptyProgress } from "@/components/EmptyProgress";
 import { format, subDays } from "date-fns";
+import { PageMeta } from "@/components/PageMeta";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -168,6 +169,7 @@ export default function Progress() {
 
   return (
     <div className="min-h-screen bg-background pb-safe">
+      <PageMeta title="Progress · GRIND" description="Charts, PRs, and body-weight trends from your daily workouts." path="/progress" />
       <Navigation />
       <MobileNav />
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-4xl">

@@ -39,8 +39,8 @@ export function trackEvent(name: string, props?: Props) {
 export function reportError(error: unknown, context?: Props) {
   try {
     console.error("[error]", error, context);
-    // Hook for Sentry when DSN is configured later:
-    // (window as any).Sentry?.captureException?.(error, { extra: context });
+    // Lazy import to avoid pulling Sentry into the boot critical path.
+    import("./sentry").then(({ captureError }) => captureError(error, context));
     trackEvent("client_error", {
       message: error instanceof Error ? error.message : String(error),
       ...context,

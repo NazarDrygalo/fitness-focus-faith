@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { Lock, Trash2, FileText, Shield, Sun, Moon, Monitor, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
+import { NotificationsCard } from "@/components/NotificationsCard";
+import { PageMeta } from "@/components/PageMeta";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -72,6 +74,7 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-background pb-safe">
+      <PageMeta title="Settings · GRIND" description="Manage notifications, theme, password, and account." path="/settings" />
       <Navigation />
       <MobileNav />
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-2xl">
@@ -80,6 +83,11 @@ export default function Settings() {
           <p className="text-sm text-muted-foreground mb-5 sm:mb-8">{user?.email}</p>
         </motion.div>
 
+
+        {/* Notifications */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.03 }}>
+          <NotificationsCard />
+        </motion.div>
 
         {/* Theme */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.05 }}>
