@@ -1,98 +1,114 @@
-## Mobile optimization pass
 
-Builds on the existing MobileNav + ActivityRings + safe-area work. All changes are mobile-only (`sm:` resets keep desktop unchanged).
+# GrindFaith – Next Expansion Plan
 
-### 1. Tighter spacing & typography (mobile)
+A prioritized roadmap of high-impact features and fixes for the next release, based on the current app (mobile-first PWA with workout tracker, dashboard, Bible study, progress analytics, Lovable AI tips) and patterns from the leading faith+fitness apps (Centr, Strong, Hevy, YouVersion, Glorify, Pray.com).
 
-- Page padding `px-3 py-5` on mobile, `sm:px-4 sm:py-8` on desktop. Applied to `Index`, `WorkoutTracker`, `Progress`, `BibleStudy`, `Settings`.
-- H1: `text-2xl sm:text-3xl`, tighter line height; greeting subtitle `text-sm`.
-- Section gaps: `mb-5 sm:mb-8`.
-- Stat cards: 2-col grid stays, but `p-3 sm:p-4`, value `text-2xl sm:text-3xl`, icon row tightened.
-
-### 2. Sectioned/collapsible Dashboard
-
-Replace the long single scroll with a sticky **segmented tab bar** under the greeting:
+## Priorities at a glance
 
 ```text
-[ Today ] [ Stats ] [ History ] [ Activity ]
+P0 — Ship next (high impact, low/medium effort)
+  1. Push notifications & smart reminders
+  2. Custom exercises + custom routines
+  3. Share cards (workout + verse) for social loops
+  4. Prayer / reflection journal tied to daily verse
+
+P1 — Build after P0
+  5. AI Coach chat (Lovable AI Gateway) — programs, form Q&A, scripture Q&A
+  6. Rest timer + per-set logging upgrade for WorkoutTracker
+  7. Weekly programs / plans (4-, 8-, 12-week)
+  8. Friends + accountability (lightweight)
+
+P2 — Nice to have
+  9. Widgets / lock-screen quick log (PWA shortcuts)
+ 10. Audio Bible / read-along for daily verse
+ 11. Wearable / Health Connect import (steps, HR)
+ 12. Gamified seasons & shareable badges
 ```
 
-- `Today` → QuickLog + WorkoutGoals (rings) + RestDayIndicator
-- `Stats` → ConsistencyStats + WeeklyRecap + StreakMilestones
-- `History` → WorkoutHistory
-- `Activity` → calendar (month/year)
+## P0 — Ship next
 
-Built with framer-motion `layoutId` for the active pill (matches MobileNav style). State stored in `useState` (no URL change). Tab content swaps with a 200ms fade/slide. Stat cards (countdown/streak/totals) stay at the top, always visible.
+### 1. Push notifications & smart reminders
+Re-engagement is the #1 retention lever for habit apps. The PWA already has a service worker; add Web Push.
+- Daily workout reminder (user-set time, default 07:00 local).
+- Daily verse notification (default 06:00).
+- Streak-at-risk ping at 20:00 if no log today and streak ≥ 3.
+- Settings page: per-channel toggles + time pickers.
 
-On `sm:` and up, the tabs collapse back into the current single scroll so desktop is untouched.
+### 2. Custom exercises + custom routines
+Today the tracker is fixed (pull-up / plank / dead hang / squats). Power users churn without flexibility.
+- `exercises` table (system + user-created), `routines` + `routine_items`.
+- Pick from a starter library (push-ups, rows, lunges, burpees, running, cycling, etc.).
+- "Today's Routine" card on Dashboard.
 
-### 3. Thumb-zone CTAs
+### 3. Share cards
+Drives organic growth. Generate a branded PNG from a workout or daily verse.
+- "Share" button on completed workout and on Bible Study page.
+- Canvas-rendered card (brand colors, streak badge, verse/stats), Web Share API with PNG fallback download.
 
-- New `<StickyActionBar>` component: `fixed bottom-[68px] left-0 right-0` (sits above MobileNav), `pb-safe`, blurred `bg-background/85 backdrop-blur`, top border. Slides up via framer-motion when mounted.
-- `WorkoutTracker`: when the user types a count or selects an exercise, the bar shows the relevant Save/Log button full-width `h-12`. Inline buttons inside cards stay for desktop.
-- Hidden `sm:hidden`.
-- `QuickLog` on Dashboard already has a full-width `h-12` Save inside the card — keep it (it's already in the visible Today section).
+### 4. Prayer / reflection journal
+Deepens the faith side and gives a reason to return between workouts.
+- Free-text entry attached to the day's verse, private by default.
+- Calendar view in Bible Study showing days with entries.
+- Optional "Gratitude" prompt + tags.
 
-### 4. Workout page: pill tabs replace dropdown
+## P1 — After P0
 
-Replace the `<Select>` for exercise mode with a horizontal scrollable strip:
+### 5. AI Coach (chat)
+Use Lovable AI Gateway (already enabled). A single chat surface that can:
+- Suggest a routine based on history and goals.
+- Answer form/technique questions.
+- Provide a short devotional reflection on the day's verse.
+- Streamed responses, persisted thread per user.
 
-```text
-[ 🏋 Pull-Up ] [ ⏱ Plank ] [ ✋ Dead Hang ] [ 🦵 Squats ]
-```
+### 6. Workout tracker upgrades
+- Rest timer (start automatically when a set is logged, configurable 30/60/90/120s, vibration on complete).
+- Per-set reps & RPE for strength exercises (replaces single count input where it makes sense).
+- "Last time" hint under each exercise (last reps/time/PR).
 
-- `overflow-x-auto snap-x snap-mandatory` strip, each pill `h-10 px-4 rounded-full` with icon + label, `snap-start`.
-- Active pill: solid `bg-primary text-primary-foreground`, framer-motion `layoutId="exercise-pill"` for a springy slide.
-- Inactive: `bg-secondary text-muted-foreground`.
-- Strip is sticky under the header on mobile so users can switch without scrolling back up.
+### 7. Programs / plans
+4-, 8-, and 12-week structured plans (e.g., "Pull-Up Foundations", "Daily 10", "Lent 40"). Each day pre-loads a routine; progress bar across the program.
 
-### 5. Native-feel gestures & motion
+### 8. Friends & accountability (lightweight)
+- Invite by link → mutual follow.
+- Shared feed of completed workouts (opt-in, no metrics required).
+- 🔥 reactions only — no comments to keep moderation surface zero.
 
-- **Swipe between Dashboard tabs**: framer-motion `drag="x"` on the active panel with `dragConstraints={{ left: 0, right: 0 }}` and `onDragEnd` that moves to prev/next tab when `offset.x` > 60 or velocity > 500.
-- **Pull-to-refresh on Dashboard**: lightweight implementation using `useMotionValue` on the scroll container. When `scrollY === 0` and the user drags down >70px, trigger `fetchLogs()` and show a spinning `Loader2` that animates in from the top. No external lib.
-- **Spring tap feedback**: replace the existing `.active-scale` with a `.tap` utility (`transition-transform duration-150 active:scale-[0.97]`) and apply broadly to Cards that act as buttons (history rows, calendar days, exercise pills, MobileNav items).
-- **Sticky scroll header**: the greeting + stat-card row stays at top; once scrolled past, a compact 56px header slides in showing just "GRIND · {streak}d 🔥" with a subtle blur.
+## P2 — Later
 
-### 6. Touch-target audit
+- PWA app shortcuts (`manifest.json` `shortcuts`) for "Log Workout" / "Today's Verse".
+- Audio playback of the daily verse (Web Speech API; later a real audio CDN).
+- Health Connect / Apple Health import via a future native shell.
+- Seasons (monthly themes) with shareable badges.
 
-Bump everything under 44×44 on mobile:
+## Research-backed fixes & improvements
 
-- Calendar month nav arrows (`←`/`→`) → `h-10 w-10`.
-- `WorkoutHistory` edit/delete icon buttons → `h-10 w-10`.
-- Progress range selector (7d/30d/90d) → `h-10 px-4`.
-- Settings rows: full-row tap targets with chevrons.
-- Min `min-h-[44px]` on every interactive `<button>` in shared components.
+Based on a review of the current code and standard PWA/health-app pitfalls:
 
-### 7. New / changed files
+- **Auth UX**: add "magic link" option in addition to password + Google; reduces password reset support load.
+- **Offline write queue**: Dashboard re-fetches on focus, but workout logs fail silently if offline. Queue inserts in IndexedDB and replay on reconnect (the SW is already there).
+- **Time-zone correctness**: streaks/daily counts should use the user's local day boundary, not UTC, for users traveling.
+- **Error monitoring**: wire Sentry (or similar) to `ErrorBoundary` so production crashes are visible.
+- **Analytics**: lightweight event analytics (PostHog/Plausible) for funnel insight on the new features.
+- **Lighthouse pass**: run a mobile audit; likely wins are preloading the brand font, deferring Three.js viewers on Dashboard, and adding `width`/`height` on images to fix CLS.
+- **Accessibility**: add visible focus rings on the new `.tap` utility, ensure pill tabs are reachable via keyboard with `role="tablist"`, and add `aria-live` to the streak/stat counters.
+- **SEO**: verify `PageMeta` is mounted on every route (Progress / BibleStudy still rely on defaults from `index.html`).
+- **Email**: weekly summary email is still blocked by the paid-domain requirement — re-confirm scope before building.
 
-**New**
+## Technical notes
 
-- `src/components/StickyActionBar.tsx` — fixed bottom CTA wrapper.
-- `src/components/DashboardTabs.tsx` — segmented control with framer-motion layoutId.
-- `src/components/StickyHeader.tsx` — compact scrolled header with IntersectionObserver trigger.
-- `src/hooks/usePullToRefresh.ts` — scroll-position + drag handler.
-- `src/hooks/useSwipeNav.ts` — generic left/right swipe → callback.
-- Inlcude hapitcs when needed, for example a vibration or some haptic when submitting a workout or starting a workout.
+- All new tables: enable RLS + GRANT block per project rules; user-scoped policies via `auth.uid()`.
+- Push notifications need a VAPID keypair stored as secrets and a Supabase edge function to send.
+- AI Coach uses the existing Lovable AI Gateway — no extra keys.
+- Share cards rendered fully client-side (no server image pipeline).
+- No new heavy deps: Canvas API for share cards, Web Push API for notifications, existing `framer-motion` for any new motion.
 
-**Edited**
+## Suggested first sprint
 
-- `src/pages/Index.tsx` — wire tabs, swipe, pull-to-refresh, sticky header, tighter padding.
-- `src/pages/WorkoutTracker.tsx` — pill tabs for exercises, StickyActionBar for Save, tighter padding.
-- `src/pages/Progress.tsx` / `BibleStudy.tsx` / `Settings.tsx` — tighter mobile padding/typography, bigger tap targets.
-- `src/components/WorkoutHistory.tsx`, `PullUpLadder.tsx`, `PlankTimer.tsx`, `DeadHangTimer.tsx`, `SquatCounter.tsx` — wire to StickyActionBar on mobile, bump icon-button sizes.
-- `src/index.css` — add `.tap` utility, refine `.pb-safe`, add `.scrollbar-hide` for pill strip.
-- `src/components/MobileNav.tsx` — verify it stays clear of the new sticky action bar (z-index ordering).
+Pick **P0 items 1–3** for the next release. They are independent, each ~1–2 builds, and together they noticeably move retention (reminders), flexibility (custom routines), and growth (share cards). Prayer journal (#4) follows immediately after as it reuses the Bible Study surface.
 
-### Technical notes
+## Open questions before implementing
 
-- `framer-motion` is already installed — no new deps.
-- Sticky elements use `z-30` (sticky header), `z-40` (StickyActionBar), `z-50` (MobileNav) — no overlap.
-- All mobile-only styles use Tailwind `sm:` resets so desktop layouts are byte-identical to today.
-- Drag handlers respect `prefers-reduced-motion` (skip swipe/pull-to-refresh transitions, keep instant state changes).
-- No DB / RLS / auth changes.
-
-### Out of scope
-
-- No new analytics events, no Sentry wiring, no PWA manifest changes.
-- Bible Study and Settings get only spacing/tap-target tweaks, not restructured.
-  &nbsp;
+1. Which P0 item should I start with — push reminders, custom routines, share cards, or the prayer journal?
+2. For custom routines, do you want a curated starter exercise library or only user-defined entries to start?
+3. For share cards, should the design lean "minimal monochrome verse card" or "stat-heavy workout receipt"?
+4. Are you open to adding Sentry + PostHog as part of the production-readiness pass?
