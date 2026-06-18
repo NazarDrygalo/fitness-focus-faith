@@ -1,8 +1,17 @@
 import { supabase } from "@/integrations/supabase/client";
 
-// Public VAPID key (safe to ship in the client).
-export const VAPID_PUBLIC_KEY =
+const FALLBACK_VAPID_PUBLIC_KEY =
   "BAAPEjVP2UqZtdbeJuOf-ZQwMaCLadFVsztJHN8VRtR3Xqs6rWX5O8gavY-M2ZkxoRAdsyUc_ypvc09pwH9Bii0";
+
+let vapidPublicKeyPromise: Promise<string> | null = null;
+
+async function getVapidPublicKey() {
+  vapidPublicKeyPromise ??= supabase.functions
+    .invoke("public-config")
+    .then(({ data }) => (data as { vapidPublicKey?: string } | null)?.vapidPublicKey || FALLBACK_VAPID_PUBLIC_KEY)
+    .catch(() => FALLBACK_VAPID_PUBLIC_KEY);
+  return vapidPublicKeyPromise;
+}
 
 function urlBase64ToUint8Array(base64: string) {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
@@ -44,7 +53,7 @@ export async function enablePush(userId: string): Promise<PushSubscription> {
   if (perm !== "granted") throw new Error("Notification permission denied.");
 
   const reg = await navigator.serviceWorker.ready;
-  const vapidBytes = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+  const vapidBytes = urlBase64ToUint8Array(await getVapidPublicKey());
   let sub = await reg.pushManager.getSubscription();
   // If an existing subscription was made with a different VAPID key, replace it.
   if (sub) {
