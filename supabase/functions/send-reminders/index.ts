@@ -67,7 +67,8 @@ async function sendToUser(userId: string, payload: Record<string, unknown>) {
       ok++;
     } catch (e: any) {
       const code = e?.statusCode;
-      if (code === 404 || code === 410) {
+      const body = typeof e?.body === "string" ? e.body : "";
+      if (code === 404 || code === 410 || (code === 400 && body.includes("VapidPkHashMismatch"))) {
         await admin.from("push_subscriptions").delete().eq("id", s.id);
       } else {
         console.error("push error", code, e?.body ?? e?.message);
