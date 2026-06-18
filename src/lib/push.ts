@@ -13,6 +13,16 @@ async function getVapidPublicKey() {
   return vapidPublicKeyPromise;
 }
 
+export async function clearPushRegistration(userId: string) {
+  await supabase.from("push_subscriptions").delete().eq("user_id", userId);
+  if (!pushSupported()) return;
+  const reg = await navigator.serviceWorker.ready;
+  const sub = await reg.pushManager.getSubscription();
+  if (sub) {
+    try { await sub.unsubscribe(); } catch { /* ignore */ }
+  }
+}
+
 function urlBase64ToUint8Array(base64: string) {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
   const b64 = (base64 + padding).replace(/-/g, "+").replace(/_/g, "/");
