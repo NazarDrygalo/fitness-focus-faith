@@ -54,6 +54,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
+              <ScrollToTop />
               <PageTracker />
               <InstallPrompt />
               <Suspense fallback={<Fallback />}>
