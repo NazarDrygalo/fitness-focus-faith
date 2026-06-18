@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { enablePush, disablePush, hasActiveSubscription, pushSupported } from "@/lib/push";
+import { clearPushRegistration, enablePush, disablePush, hasActiveSubscription, pushSupported } from "@/lib/push";
 
 type Prefs = {
   workout_reminder_enabled: boolean;
@@ -113,7 +113,13 @@ export function NotificationsCard() {
         return;
       }
       if ((data as any)?.sent > 0) toast.success("Test sent — check your device");
-      else toast.message("No active devices subscribed. Try toggling Enable off and on again.");
+      else {
+        await clearPushRegistration(user.id);
+        await enablePush(user.id);
+        const { data: retryData, error: retryError } = await supabase.functions.invoke("send-test-push");
+        if (!retryError && (retryData as any)?.sent > 0) toast.success("Test sent — check your device");
+        else toast.message("Device registration refreshed. Tap Send test notification once more.");
+      }
     } catch (e: any) {
       toast.error(e?.message ?? "Test failed");
     } finally {

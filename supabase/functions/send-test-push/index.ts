@@ -44,8 +44,12 @@ Deno.serve(async (req) => {
         );
         ok++;
       } catch (e: any) {
-        if (e?.statusCode === 404 || e?.statusCode === 410) {
+        const code = e?.statusCode;
+        const body = typeof e?.body === "string" ? e.body : "";
+        if (code === 404 || code === 410 || (code === 400 && body.includes("VapidPkHashMismatch"))) {
           await admin.from("push_subscriptions").delete().eq("id", s.id);
+        } else {
+          console.error("test push error", code, e?.body ?? e?.message);
         }
       }
     }

@@ -13,6 +13,13 @@ const items = [
 
 export function MobileNav() {
   const location = useLocation();
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+    document.scrollingElement?.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    document.getElementById("root")?.scrollTo(0, 0);
+  };
 
   return (
     <nav
@@ -28,6 +35,7 @@ export function MobileNav() {
               key={item.to}
               to={item.to}
               end={item.to === "/"}
+              onClick={scrollToTop}
               className="relative flex-1 flex flex-col items-center justify-center gap-0.5 py-1.5 px-1 min-h-[52px] rounded-xl text-[10px] font-medium select-none active:opacity-70"
             >
               {isActive && (

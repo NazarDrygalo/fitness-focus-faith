@@ -1,18 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 /** Scrolls window (and the main scroll container, if any) to the top on route change. */
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
-    // Run after paint so lazy-loaded routes don't reset our scroll.
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, left: 0 });
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    const scrollTop = () => {
+      window.scrollTo(0, 0);
+      document.scrollingElement?.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-    });
-  }, [pathname]);
+      document.getElementById("root")?.scrollTo(0, 0);
+    };
+
+    scrollTop();
+    requestAnimationFrame(scrollTop);
+    const timers = [0, 75, 200].map((delay) => window.setTimeout(scrollTop, delay));
+    return () => timers.forEach(window.clearTimeout);
+  }, [pathname, search]);
 
   return null;
 };
