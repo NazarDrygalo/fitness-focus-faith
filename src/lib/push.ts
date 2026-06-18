@@ -30,17 +30,36 @@ export function pushSupported() {
   );
 }
 
+function keysMatch(a: ArrayBuffer | null, b: Uint8Array) {
+  if (!a) return false;
+  const av = new Uint8Array(a);
+  if (av.length !== b.length) return false;
+  for (let i = 0; i < av.length; i++) if (av[i] !== b[i]) return false;
+  return true;
+}
+
 export async function enablePush(userId: string): Promise<PushSubscription> {
   if (!pushSupported()) throw new Error("Push not supported on this device.");
   const perm = await Notification.requestPermission();
   if (perm !== "granted") throw new Error("Notification permission denied.");
 
   const reg = await navigator.serviceWorker.ready;
+  const vapidBytes = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
   let sub = await reg.pushManager.getSubscription();
+  // If an existing subscription was made with a different VAPID key, replace it.
+  if (sub) {
+    const existingKey = (sub.options as PushSubscriptionOptions)?.applicationServerKey ?? null;
+    if (!keysMatch(existingKey as ArrayBuffer | null, vapidBytes)) {
+      const staleEndpoint = sub.endpoint;
+      try { await sub.unsubscribe(); } catch { /* ignore */ }
+      try { await supabase.from("push_subscriptions").delete().eq("endpoint", staleEndpoint); } catch { /* ignore */ }
+      sub = null;
+    }
+  }
   if (!sub) {
     sub = await reg.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      applicationServerKey: vapidBytes,
     });
   }
   const json = sub.toJSON() as { endpoint?: string; keys?: { p256dh?: string; auth?: string } };

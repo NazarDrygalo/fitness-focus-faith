@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
 import { InstallPrompt } from "./components/InstallPrompt.tsx";
 import { PageTracker } from "./hooks/usePageTracking.tsx";
+import ScrollToTop from "./components/ScrollToTop.tsx";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
 const WorkoutTracker = lazy(() => import("./pages/WorkoutTracker.tsx"));
@@ -53,6 +54,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <AuthProvider>
+              <ScrollToTop />
               <PageTracker />
               <InstallPrompt />
               <Suspense fallback={<Fallback />}>
