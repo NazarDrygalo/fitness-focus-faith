@@ -101,12 +101,24 @@ export function NotificationsCard() {
   };
 
   const sendTest = async () => {
+    if (!user) return;
     setBusy(true);
-    const { data, error } = await supabase.functions.invoke("send-test-push");
-    setBusy(false);
-    if (error) return toast.error("Test failed");
-    if ((data as any)?.sent > 0) toast.success("Test sent — check your device");
-    else toast.message("No active devices subscribed");
+    try {
+      // Make sure this device has an up-to-date subscription registered for the user.
+      await enablePush(user.id);
+      setEnabled(true);
+      const { data, error } = await supabase.functions.invoke("send-test-push");
+      if (error) {
+        toast.error("Test failed");
+        return;
+      }
+      if ((data as any)?.sent > 0) toast.success("Test sent — check your device");
+      else toast.message("No active devices subscribed. Try toggling Enable off and on again.");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Test failed");
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (!supported) {
