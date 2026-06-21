@@ -183,7 +183,20 @@ export default function Dashboard() {
   };
 
   // ----- Reusable block builders -----
-  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} />;
+  const lastLog = useMemo(() => {
+    const sorted = [...logs]
+      .filter((l) => l.workout_date !== todayStr)
+      .sort((a, b) => b.workout_date.localeCompare(a.workout_date));
+    const recent = sorted[0];
+    if (!recent) return null;
+    return {
+      pushups: recent.pushups || 0,
+      situps: recent.situps || 0,
+      squats: recent.squat_count || 0,
+    };
+  }, [logs, todayStr]);
+
+  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} />;
   const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
   const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
   const consistencyBlock = <ConsistencyStats logs={logs} />;

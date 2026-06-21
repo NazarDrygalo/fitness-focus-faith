@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navigation } from "@/components/Navigation";
@@ -13,6 +13,7 @@ import { ProgressSkeleton } from "@/components/ProgressSkeleton";
 import { EmptyProgress } from "@/components/EmptyProgress";
 import { format, subDays } from "date-fns";
 import { PageMeta } from "@/components/PageMeta";
+import { PullToRefresh } from "@/components/PullToRefresh";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -89,16 +90,22 @@ export default function Progress() {
   const [loaded, setLoaded] = useState(false);
   const [range, setRange] = useState<Range>(7);
 
+  const fetchLogs = useCallback(
+    () =>
+      new Promise<void>((resolve) => {
+        supabase
+          .from("workout_logs")
+          .select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit")
+          .then(({ data }) => {
+            if (data) setLogs(data as WorkoutLog[]);
+            setLoaded(true);
+            resolve();
+          });
+      }),
+    [],
+  );
+
   useEffect(() => {
-    const fetchLogs = () => {
-      supabase
-        .from("workout_logs")
-        .select("workout_date, pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count, squat_weight, squat_unit")
-        .then(({ data }) => {
-          if (data) setLogs(data as WorkoutLog[]);
-          setLoaded(true);
-        });
-    };
     fetchLogs();
     const onFocus = () => fetchLogs();
     const onVis = () => { if (document.visibilityState === "visible") fetchLogs(); };
@@ -108,7 +115,7 @@ export default function Progress() {
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, []);
+  }, [fetchLogs]);
 
   const chartData = useMemo(() => {
     const today = new Date();
@@ -172,6 +179,7 @@ export default function Progress() {
       <PageMeta title="Progress · GRIND" description="Charts, PRs, and body-weight trends from your daily workouts." path="/progress" />
       <Navigation />
       <MobileNav />
+      <PullToRefresh onRefresh={fetchLogs}>
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-4xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <div className="flex items-center justify-between mb-5 sm:mb-8">
@@ -296,6 +304,7 @@ export default function Progress() {
         </motion.div>
         </>}
       </main>
+      </PullToRefresh>
     </div>
   );
 }
