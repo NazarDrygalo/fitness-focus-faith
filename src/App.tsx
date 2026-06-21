@@ -11,6 +11,7 @@ import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
 import { InstallPrompt } from "./components/InstallPrompt.tsx";
 import { PageTracker } from "./hooks/usePageTracking.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
+import { LogFAB } from "./components/LogFAB.tsx";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
 const WorkoutTracker = lazy(() => import("./pages/WorkoutTracker.tsx"));
@@ -57,6 +58,7 @@ const App = () => (
               <ScrollToTop />
               <PageTracker />
               <InstallPrompt />
+              <LogFAB />
               <Suspense fallback={<Fallback />}>
                 <Routes>
                   <Route path="/auth" element={<PublicRoute><Auth /></PublicRoute>} />
