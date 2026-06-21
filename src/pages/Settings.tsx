@@ -155,10 +155,23 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
+                <Label htmlFor="current-password" className="text-sm text-muted-foreground">Current Password</Label>
+                <Input
+                  id="current-password"
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
+              <div>
                 <Label htmlFor="new-password" className="text-sm text-muted-foreground">New Password</Label>
                 <Input
                   id="new-password"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="••••••••"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
