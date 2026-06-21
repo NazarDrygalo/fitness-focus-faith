@@ -179,6 +179,7 @@ export default function Progress() {
       <PageMeta title="Progress · GRIND" description="Charts, PRs, and body-weight trends from your daily workouts." path="/progress" />
       <Navigation />
       <MobileNav />
+      <PullToRefresh onRefresh={fetchLogs}>
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-4xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <div className="flex items-center justify-between mb-5 sm:mb-8">
@@ -303,6 +304,7 @@ export default function Progress() {
         </motion.div>
         </>}
       </main>
+      </PullToRefresh>
     </div>
   );
 }
