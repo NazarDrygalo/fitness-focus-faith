@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Navigation } from "@/components/Navigation";
@@ -6,10 +7,19 @@ import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyStudy } from "@/data/bibleStudy";
 import { BookOpen, Lightbulb, Info, ScrollText } from "lucide-react";
 import { PageMeta } from "@/components/PageMeta";
+import { PullToRefresh } from "@/components/PullToRefresh";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
 export default function BibleStudyPage() {
+  // Bumping this key forces the daily verse/study to re-evaluate on pull-to-refresh.
+  const [, setRefreshKey] = useState(0);
+  const refresh = () =>
+    new Promise<void>((resolve) => {
+      setRefreshKey((k) => k + 1);
+      setTimeout(resolve, 200);
+    });
+
   const verse = getDailyVerse();
   const study = getDailyStudy(verse.reference);
 
@@ -30,6 +40,7 @@ export default function BibleStudyPage() {
       <PageMeta title="Bible Study · GRIND" description="Today's NIV verse with context and core teachings, refreshed daily." path="/bible" />
       <Navigation />
       <MobileNav />
+      <PullToRefresh onRefresh={refresh}>
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 tracking-tight">Bible Study</h1>
@@ -94,6 +105,7 @@ export default function BibleStudyPage() {
           </Card>
         </motion.div>
       </main>
+      </PullToRefresh>
     </div>
   );
 }
