@@ -32,27 +32,51 @@ export default function Settings() {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const handleChangePassword = async () => {
+    if (!currentPassword) {
+      toast.error("Please enter your current password.");
+      return;
+    }
     if (newPassword.length < 6) {
       toast.error("Password must be at least 6 characters.");
+      return;
+    }
+    if (newPassword === currentPassword) {
+      toast.error("New password must be different from current password.");
       return;
     }
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match.");
       return;
     }
+    if (!user?.email) {
+      toast.error("Missing account email.");
+      return;
+    }
     setChangingPassword(true);
+    // Re-authenticate with the current password before allowing the change.
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    });
+    if (signInError) {
+      setChangingPassword(false);
+      toast.error("Current password is incorrect.");
+      return;
+    }
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setChangingPassword(false);
     if (error) {
       toast.error(error.message);
     } else {
       toast.success("Password updated successfully!");
+      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     }
@@ -131,10 +155,23 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
+                <Label htmlFor="current-password" className="text-sm text-muted-foreground">Current Password</Label>
+                <Input
+                  id="current-password"
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="mt-1 bg-secondary border-border"
+                />
+              </div>
+              <div>
                 <Label htmlFor="new-password" className="text-sm text-muted-foreground">New Password</Label>
                 <Input
                   id="new-password"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="••••••••"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
