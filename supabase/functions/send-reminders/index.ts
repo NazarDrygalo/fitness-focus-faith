@@ -87,8 +87,31 @@ async function loggedToday(userId: string, localDate: string) {
   return (count ?? 0) > 0;
 }
 
+const CRON_SECRET_LOCAL = Deno.env.get("CRON_SECRET");
+
+async function isAuthorized(req: Request): Promise<boolean> {
+  const auth = req.headers.get("Authorization") ?? "";
+  if (!auth.startsWith("Bearer ")) return false;
+  const token = auth.slice(7).trim();
+  if (!token) return false;
+  if (CRON_SECRET_LOCAL && token === CRON_SECRET_LOCAL) return true;
+  try {
+    const { data, error } = await admin.rpc("get_cron_secret");
+    if (!error && typeof data === "string" && data.length > 0 && token === data) return true;
+  } catch {
+    // ignore
+  }
+  return false;
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (!(await isAuthorized(req))) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
   try {
     const { data: prefs, error } = await admin
       .from("notification_preferences")
