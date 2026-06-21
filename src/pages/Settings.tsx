@@ -32,27 +32,51 @@ export default function Settings() {
   const { user, signOut } = useAuth();
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changingPassword, setChangingPassword] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   const handleChangePassword = async () => {
+    if (!currentPassword) {
+      toast.error("Please enter your current password.");
+      return;
+    }
     if (newPassword.length < 6) {
       toast.error("Password must be at least 6 characters.");
+      return;
+    }
+    if (newPassword === currentPassword) {
+      toast.error("New password must be different from current password.");
       return;
     }
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match.");
       return;
     }
+    if (!user?.email) {
+      toast.error("Missing account email.");
+      return;
+    }
     setChangingPassword(true);
+    // Re-authenticate with the current password before allowing the change.
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: currentPassword,
+    });
+    if (signInError) {
+      setChangingPassword(false);
+      toast.error("Current password is incorrect.");
+      return;
+    }
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     setChangingPassword(false);
     if (error) {
       toast.error(error.message);
     } else {
       toast.success("Password updated successfully!");
+      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     }
