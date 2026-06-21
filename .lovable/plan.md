@@ -1,114 +1,89 @@
+# Mobile Roadmap: Next 50 Features
 
-# GrindFaith – Next Expansion Plan
+Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its own. Order is suggested by impact ÷ effort for a mobile-first PWA / Capacitor audience.
 
-A prioritized roadmap of high-impact features and fixes for the next release, based on the current app (mobile-first PWA with workout tracker, dashboard, Bible study, progress analytics, Lovable AI tips) and patterns from the leading faith+fitness apps (Centr, Strong, Hevy, YouVersion, Glorify, Pray.com).
+## Wave 1 — Mobile Polish & Input Speed
+1. One-tap "Repeat last workout" button on the dashboard QuickLog
+2. Haptic-confirmed swipe-to-log on workout cards (left = skip, right = log)
+3. Large-thumb numeric keypad sheet for reps/weight (replaces native numeric input)
+4. Pull-to-refresh on Dashboard, Progress, and Bible pages
+5. Persistent bottom "Log workout" FAB visible across all main routes
 
-## Priorities at a glance
+## Wave 2 — Streak & Motivation Mechanics
+6. Streak freeze tokens (earn 1 per 7-day streak, auto-spend on missed days)
+7. Weekly goal ring (M–S) with end-of-week celebration animation
+8. Personal best (PR) push notification when a new record is set
+9. Streak comeback flow: smaller "get back on track" target after a missed week
+10. Shareable streak card (image export) for Stories / iMessage
 
-```text
-P0 — Ship next (high impact, low/medium effort)
-  1. Push notifications & smart reminders
-  2. Custom exercises + custom routines
-  3. Share cards (workout + verse) for social loops
-  4. Prayer / reflection journal tied to daily verse
+## Wave 3 — Bible Study Depth
+11. Verse of the day lock-screen widget (iOS/Android via Capacitor)
+12. Save verses to a personal "Highlights" collection
+13. Reading plans: 7-day, 30-day, and 1-year tracks with progress
+14. Audio playback of the daily verse (Lovable AI TTS)
+15. Reflection journal: short prompt + private note attached to each day
 
-P1 — Build after P0
-  5. AI Coach chat (Lovable AI Gateway) — programs, form Q&A, scripture Q&A
-  6. Rest timer + per-set logging upgrade for WorkoutTracker
-  7. Weekly programs / plans (4-, 8-, 12-week)
-  8. Friends + accountability (lightweight)
+## Wave 4 — Coaching & Personalization
+16. AI workout suggestion based on last 14 days (Lovable AI)
+17. Adaptive daily targets that scale with rolling 7-day average
+18. Personalized verse selection tied to current struggle tags
+19. Weekly AI recap: "What you crushed, what to focus on next"
+20. Onboarding fitness assessment (3-min) to seed initial goals
 
-P2 — Nice to have
-  9. Widgets / lock-screen quick log (PWA shortcuts)
- 10. Audio Bible / read-along for daily verse
- 11. Wearable / Health Connect import (steps, HR)
- 12. Gamified seasons & shareable badges
-```
+## Wave 5 — Social & Accountability
+21. Accountability partner: invite by link, see each other's streaks
+22. Small groups (max 8) with shared weekly leaderboard
+23. Cheer reactions on partner's logged workouts (haptic + push)
+24. Public profile page with stats, badges, favorite verse
+25. Optional weekly "check-in" message sent to your partner
 
-## P0 — Ship next
+## Wave 6 — Native Mobile Capabilities (Capacitor)
+26. Apple Health / Google Fit import (steps, weight, HR)
+27. Background workout timer that survives screen lock
+28. Live Activity / Dynamic Island for active timers (iOS)
+29. App shortcuts / quick actions on long-press of icon
+30. Biometric (Face ID / fingerprint) app lock
 
-### 1. Push notifications & smart reminders
-Re-engagement is the #1 retention lever for habit apps. The PWA already has a service worker; add Web Push.
-- Daily workout reminder (user-set time, default 07:00 local).
-- Daily verse notification (default 06:00).
-- Streak-at-risk ping at 20:00 if no log today and streak ≥ 3.
-- Settings page: per-channel toggles + time pickers.
+## Wave 7 — Data, Insights, Exports
+31. Body measurements tracker (chest, waist, arms, thigh)
+32. Progress photo timeline with side-by-side compare
+33. Heatmap calendar (GitHub-style) of workout intensity
+34. Monthly PDF report emailed/shared from the app
+35. Apple Watch / Wear OS companion: log a set, see streak
 
-### 2. Custom exercises + custom routines
-Today the tracker is fixed (pull-up / plank / dead hang / squats). Power users churn without flexibility.
-- `exercises` table (system + user-created), `routines` + `routine_items`.
-- Pick from a starter library (push-ups, rows, lunges, burpees, running, cycling, etc.).
-- "Today's Routine" card on Dashboard.
+## Wave 8 — Workout Library Expansion
+36. Custom exercise builder (name, unit, target type)
+37. Programmed routines: multi-day templates with rest days
+38. Video form guides per exercise (short MP4, lazy-loaded)
+39. Warmup & cooldown timers built into a session
+40. Rest-day active recovery suggestions (mobility, stretch)
 
-### 3. Share cards
-Drives organic growth. Generate a branded PNG from a workout or daily verse.
-- "Share" button on completed workout and on Bible Study page.
-- Canvas-rendered card (brand colors, streak badge, verse/stats), Web Share API with PNG fallback download.
+## Wave 9 — Retention & Re-engagement
+41. Smart re-engagement push (only when actually inactive, ML-lite)
+42. "Last chance" streak-save reminder 90 min before midnight local
+43. Milestone badges with full-screen celebration (100 days, 1000 reps)
+44. Year-in-review wrapped experience (annual share card)
+45. Referral program: gift a freeze token per friend who logs week 1
 
-### 4. Prayer / reflection journal
-Deepens the faith side and gives a reason to return between workouts.
-- Free-text entry attached to the day's verse, private by default.
-- Calendar view in Bible Study showing days with entries.
-- Optional "Gratitude" prompt + tags.
+## Wave 10 — Trust, Settings, Monetization
+46. In-app subscription (Pro) via RevenueCat (Capacitor)
+47. Family / accountability bundle pricing
+48. Granular notification controls (per-channel, per-day quiet hours)
+49. Data export bundle (CSV + JSON + photos) on demand
+50. In-app feedback widget with screenshot + auto-attached logs
 
-## P1 — After P0
+## Technical Notes
+- Waves 1–5 are deliverable as PWA-only and ship fastest.
+- Waves 6, 30, 35, 46–47 require Capacitor wrap; recommend pairing with App Store submission milestone.
+- AI-driven items (16, 17, 19, 41) use the existing Lovable AI Gateway — no new keys.
+- Social features (Wave 5) need a new `friendships`, `groups`, `group_members`, and `reactions` schema with strict RLS; budget one migration per feature.
+- Health integrations (26) need Capacitor plugins (`@capacitor-community/health` or equivalent) and per-platform permission prompts.
+- Live Activities (28), widgets (11), and Watch app (35) require native Swift/Kotlin targets added after `npx cap add ios|android`.
+- Subscriptions (46) should go through RevenueCat to stay store-compliant; gate Pro features behind a `is_pro` flag synced from RC webhooks to a `subscriptions` table.
 
-### 5. AI Coach (chat)
-Use Lovable AI Gateway (already enabled). A single chat surface that can:
-- Suggest a routine based on history and goals.
-- Answer form/technique questions.
-- Provide a short devotional reflection on the day's verse.
-- Streamed responses, persisted thread per user.
-
-### 6. Workout tracker upgrades
-- Rest timer (start automatically when a set is logged, configurable 30/60/90/120s, vibration on complete).
-- Per-set reps & RPE for strength exercises (replaces single count input where it makes sense).
-- "Last time" hint under each exercise (last reps/time/PR).
-
-### 7. Programs / plans
-4-, 8-, and 12-week structured plans (e.g., "Pull-Up Foundations", "Daily 10", "Lent 40"). Each day pre-loads a routine; progress bar across the program.
-
-### 8. Friends & accountability (lightweight)
-- Invite by link → mutual follow.
-- Shared feed of completed workouts (opt-in, no metrics required).
-- 🔥 reactions only — no comments to keep moderation surface zero.
-
-## P2 — Later
-
-- PWA app shortcuts (`manifest.json` `shortcuts`) for "Log Workout" / "Today's Verse".
-- Audio playback of the daily verse (Web Speech API; later a real audio CDN).
-- Health Connect / Apple Health import via a future native shell.
-- Seasons (monthly themes) with shareable badges.
-
-## Research-backed fixes & improvements
-
-Based on a review of the current code and standard PWA/health-app pitfalls:
-
-- **Auth UX**: add "magic link" option in addition to password + Google; reduces password reset support load.
-- **Offline write queue**: Dashboard re-fetches on focus, but workout logs fail silently if offline. Queue inserts in IndexedDB and replay on reconnect (the SW is already there).
-- **Time-zone correctness**: streaks/daily counts should use the user's local day boundary, not UTC, for users traveling.
-- **Error monitoring**: wire Sentry (or similar) to `ErrorBoundary` so production crashes are visible.
-- **Analytics**: lightweight event analytics (PostHog/Plausible) for funnel insight on the new features.
-- **Lighthouse pass**: run a mobile audit; likely wins are preloading the brand font, deferring Three.js viewers on Dashboard, and adding `width`/`height` on images to fix CLS.
-- **Accessibility**: add visible focus rings on the new `.tap` utility, ensure pill tabs are reachable via keyboard with `role="tablist"`, and add `aria-live` to the streak/stat counters.
-- **SEO**: verify `PageMeta` is mounted on every route (Progress / BibleStudy still rely on defaults from `index.html`).
-- **Email**: weekly summary email is still blocked by the paid-domain requirement — re-confirm scope before building.
-
-## Technical notes
-
-- All new tables: enable RLS + GRANT block per project rules; user-scoped policies via `auth.uid()`.
-- Push notifications need a VAPID keypair stored as secrets and a Supabase edge function to send.
-- AI Coach uses the existing Lovable AI Gateway — no extra keys.
-- Share cards rendered fully client-side (no server image pipeline).
-- No new heavy deps: Canvas API for share cards, Web Push API for notifications, existing `framer-motion` for any new motion.
-
-## Suggested first sprint
-
-Pick **P0 items 1–3** for the next release. They are independent, each ~1–2 builds, and together they noticeably move retention (reminders), flexibility (custom routines), and growth (share cards). Prayer journal (#4) follows immediately after as it reuses the Bible Study surface.
-
-## Open questions before implementing
-
-1. Which P0 item should I start with — push reminders, custom routines, share cards, or the prayer journal?
-2. For custom routines, do you want a curated starter exercise library or only user-defined entries to start?
-3. For share cards, should the design lean "minimal monochrome verse card" or "stat-heavy workout receipt"?
-4. Are you open to adding Sentry + PostHog as part of the production-readiness pass?
+## Suggested Sequencing
+- Months 1–2: Waves 1–3 (polish, retention, content depth) — pure PWA.
+- Months 3–4: Waves 4–5 (AI coaching, social) — still PWA.
+- Month 5: Capacitor wrap + Wave 6.
+- Months 6–7: Waves 7–8 (data depth, library).
+- Months 8–9: Waves 9–10 (re-engagement + monetization, store launch).
