@@ -140,6 +140,18 @@ export default function Dashboard() {
   const streak = streakData.current;
   const daysLeft = getDaysUntilTarget();
 
+  // Award freeze tokens as streak grows.
+  useEffect(() => {
+    if (!user?.id || !loaded) return;
+    const state = syncFreezeAwards(user.id, streak);
+    setFreezeAvailable(state.available);
+  }, [user?.id, streak, loaded]);
+
+  const lastWorkoutDate = useMemo(() => {
+    if (!logs.length) return null;
+    return [...logs].sort((a, b) => b.workout_date.localeCompare(a.workout_date))[0].workout_date;
+  }, [logs]);
+
   const logDates = useMemo(() => new Set(logs.map(l => l.workout_date)), [logs]);
   const logMap = useMemo(() => {
     const map = new Map<string, WorkoutLog>();
@@ -203,7 +215,13 @@ export default function Dashboard() {
     };
   }, [logs, todayStr]);
 
-  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} />;
+  const priorLogsForPR = useMemo(
+    () => logs.filter((l) => l.workout_date !== todayStr),
+    [logs, todayStr]
+  );
+  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} priorLogs={priorLogsForPR} />;
+  const weeklyRingBlock = <WeeklyGoalRing logs={logs} />;
+  const comebackBlock = <ComebackBanner lastWorkoutDate={lastWorkoutDate} />;
   const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
   const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
   const consistencyBlock = <ConsistencyStats logs={logs} />;
