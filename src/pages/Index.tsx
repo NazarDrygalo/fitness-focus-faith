@@ -380,7 +380,9 @@ export default function Dashboard() {
   const sectionByTab: Record<DashboardTabId, JSX.Element> = {
     today: (
       <>
+        {wrap(comebackBlock, "cb")}
         {wrap(quickLogBlock, "ql")}
+        {wrap(weeklyRingBlock, "wr")}
         {wrap(goalsBlock, "g")}
         {wrap(restBlock, "r")}
       </>
@@ -457,6 +459,11 @@ export default function Dashboard() {
                 {streakData.longest > 0 && (
                   <p className="text-[10px] text-muted-foreground mt-0.5">best: {streakData.longest}d</p>
                 )}
+                {freezeAvailable > 0 && (
+                  <p className="text-[10px] mt-0.5" style={{ color: "hsl(210 90% 60%)" }}>
+                    ❄ {freezeAvailable} freeze{freezeAvailable === 1 ? "" : "s"}
+                  </p>
+                )}
               </CardContent>
             </Card>
           </motion.div>
@@ -489,6 +496,18 @@ export default function Dashboard() {
         {loaded && logs.length === 0 && (
           <div className="mb-5 sm:mb-8">
             <EmptyDashboard />
+          </div>
+        )}
+
+        {/* Comeback banner — desktop (mobile renders inside tab) */}
+        <div className="hidden sm:block mb-6">
+          <ComebackBanner lastWorkoutDate={lastWorkoutDate} />
+        </div>
+
+        {/* Share streak action */}
+        {streak > 0 && (
+          <div className="flex justify-end mb-4">
+            <ShareStreakCard streak={streak} longest={streakData.longest} totalWorkouts={logs.length} />
           </div>
         )}
 
