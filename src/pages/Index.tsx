@@ -19,8 +19,13 @@ import { EmptyDashboard } from "@/components/EmptyDashboard";
 import { DashboardSkeleton } from "@/components/DashboardSkeleton";
 import { DashboardTabs, DASHBOARD_TAB_ORDER, type DashboardTabId } from "@/components/DashboardTabs";
 import { StickyHeader } from "@/components/StickyHeader";
+import { WeeklyGoalRing } from "@/components/WeeklyGoalRing";
+import { ComebackBanner } from "@/components/ComebackBanner";
+import { ShareStreakCard } from "@/components/ShareStreakCard";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { haptic } from "@/lib/haptics";
+import { syncFreezeAwards } from "@/lib/freezeTokens";
+import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 import { PageMeta } from "@/components/PageMeta";
 
@@ -93,12 +98,14 @@ function calculateStreak(logs: WorkoutLog[]): { current: number; longest: number
 }
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [logs, setLogs] = useState<WorkoutLog[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
   const [tab, setTab] = useState<DashboardTabId>("today");
+  const [freezeAvailable, setFreezeAvailable] = useState(0);
 
   const fetchLogs = () =>
     new Promise<void>((resolve) => {
@@ -132,6 +139,18 @@ export default function Dashboard() {
   const streakData = useMemo(() => calculateStreak(logs), [logs]);
   const streak = streakData.current;
   const daysLeft = getDaysUntilTarget();
+
+  // Award freeze tokens as streak grows.
+  useEffect(() => {
+    if (!user?.id || !loaded) return;
+    const state = syncFreezeAwards(user.id, streak);
+    setFreezeAvailable(state.available);
+  }, [user?.id, streak, loaded]);
+
+  const lastWorkoutDate = useMemo(() => {
+    if (!logs.length) return null;
+    return [...logs].sort((a, b) => b.workout_date.localeCompare(a.workout_date))[0].workout_date;
+  }, [logs]);
 
   const logDates = useMemo(() => new Set(logs.map(l => l.workout_date)), [logs]);
   const logMap = useMemo(() => {
@@ -196,7 +215,13 @@ export default function Dashboard() {
     };
   }, [logs, todayStr]);
 
-  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} />;
+  const priorLogsForPR = useMemo(
+    () => logs.filter((l) => l.workout_date !== todayStr),
+    [logs, todayStr]
+  );
+  const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} priorLogs={priorLogsForPR} />;
+  const weeklyRingBlock = <WeeklyGoalRing logs={logs} />;
+  const comebackBlock = <ComebackBanner lastWorkoutDate={lastWorkoutDate} />;
   const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
   const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
   const consistencyBlock = <ConsistencyStats logs={logs} />;
@@ -355,7 +380,9 @@ export default function Dashboard() {
   const sectionByTab: Record<DashboardTabId, JSX.Element> = {
     today: (
       <>
+        {wrap(comebackBlock, "cb")}
         {wrap(quickLogBlock, "ql")}
+        {wrap(weeklyRingBlock, "wr")}
         {wrap(goalsBlock, "g")}
         {wrap(restBlock, "r")}
       </>
@@ -432,6 +459,11 @@ export default function Dashboard() {
                 {streakData.longest > 0 && (
                   <p className="text-[10px] text-muted-foreground mt-0.5">best: {streakData.longest}d</p>
                 )}
+                {freezeAvailable > 0 && (
+                  <p className="text-[10px] mt-0.5" style={{ color: "hsl(210 90% 60%)" }}>
+                    ❄ {freezeAvailable} freeze{freezeAvailable === 1 ? "" : "s"}
+                  </p>
+                )}
               </CardContent>
             </Card>
           </motion.div>
@@ -467,6 +499,18 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* Comeback banner — desktop (mobile renders inside tab) */}
+        <div className="hidden sm:block mb-6">
+          <ComebackBanner lastWorkoutDate={lastWorkoutDate} />
+        </div>
+
+        {/* Share streak action */}
+        {streak > 0 && (
+          <div className="flex justify-end mb-4">
+            <ShareStreakCard streak={streak} longest={streakData.longest} totalWorkouts={logs.length} />
+          </div>
+        )}
+
         {/* Mobile: tabbed view with swipe */}
         <div className="sm:hidden">
           <DashboardTabs value={tab} onChange={setTab} />
@@ -490,6 +534,7 @@ export default function Dashboard() {
         {/* Desktop: single scroll layout */}
         <div className="hidden sm:block">
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-8">{quickLogBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.29 }} className="mb-8">{weeklyRingBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.30 }} className="mb-8">{milestonesBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.33 }} className="mb-8">{weeklyBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">{consistencyBlock}</motion.div>
