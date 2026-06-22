@@ -7,9 +7,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { Plus, Check, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { celebrate } from "@/lib/celebrate";
+import { celebrate, bigCelebrate } from "@/lib/celebrate";
 import { haptic } from "@/lib/haptics";
 import { NumberPadSheet } from "@/components/NumberPadSheet";
+import { detectPRs, type PRLog } from "@/lib/prDetect";
 
 export interface QuickLogLast {
   pushups: number;
@@ -22,11 +23,13 @@ interface QuickLogProps {
   onLogged: () => void;
   /** Most recent prior workout — enables one-tap "Repeat" and swipe-to-log. */
   lastLog?: QuickLogLast | null;
+  /** Prior log history for PR detection. */
+  priorLogs?: PRLog[];
 }
 
 type PadField = "pushups" | "situps" | "squats" | null;
 
-export function QuickLog({ todayLogged, onLogged, lastLog }: QuickLogProps) {
+export function QuickLog({ todayLogged, onLogged, lastLog, priorLogs = [] }: QuickLogProps) {
   const { session } = useAuth();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -64,9 +67,26 @@ export function QuickLog({ todayLogged, onLogged, lastLog }: QuickLogProps) {
       haptic("warning");
       return false;
     }
-    toast.success(source === "repeat" ? "Repeated yesterday's workout!" : "Quick log saved!");
-    celebrate();
-    haptic("success");
+    // PR detection
+    const todayStrPr = format(new Date(), "yyyy-MM-dd");
+    const prs = detectPRs(
+      priorLogs.filter((l) => l.workout_date !== todayStrPr),
+      { workout_date: todayStrPr, pushups: p, situps: si, squat_count: sq }
+    );
+
+    if (prs.length > 0) {
+      bigCelebrate();
+      haptic("success");
+      toast.success(
+        `🏆 New PR! ${prs.map((r) => `${r.label} ${r.value}`).join(" · ")}`,
+        { duration: 5000 }
+      );
+    } else {
+      toast.success(source === "repeat" ? "Repeated yesterday's workout!" : "Quick log saved!");
+      celebrate();
+      haptic("success");
+    }
+
     setPushups("");
     setSitups("");
     setSquats("");
