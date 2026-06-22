@@ -19,8 +19,13 @@ import { EmptyDashboard } from "@/components/EmptyDashboard";
 import { DashboardSkeleton } from "@/components/DashboardSkeleton";
 import { DashboardTabs, DASHBOARD_TAB_ORDER, type DashboardTabId } from "@/components/DashboardTabs";
 import { StickyHeader } from "@/components/StickyHeader";
+import { WeeklyGoalRing } from "@/components/WeeklyGoalRing";
+import { ComebackBanner } from "@/components/ComebackBanner";
+import { ShareStreakCard } from "@/components/ShareStreakCard";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { haptic } from "@/lib/haptics";
+import { syncFreezeAwards } from "@/lib/freezeTokens";
+import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 import { PageMeta } from "@/components/PageMeta";
 
@@ -93,12 +98,14 @@ function calculateStreak(logs: WorkoutLog[]): { current: number; longest: number
 }
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [logs, setLogs] = useState<WorkoutLog[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"month" | "year">("month");
   const [tab, setTab] = useState<DashboardTabId>("today");
+  const [freezeAvailable, setFreezeAvailable] = useState(0);
 
   const fetchLogs = () =>
     new Promise<void>((resolve) => {
