@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
-import { tap } from "@/lib/haptics";
+import { haptic } from "@/lib/haptics";
 
 interface Props {
   reference: string;
@@ -37,7 +37,7 @@ export function VerseHighlightButton({ reference, verseText }: Props) {
       return;
     }
     setLoading(true);
-    tap();
+    haptic("light");
     try {
       if (saved) {
         await supabase

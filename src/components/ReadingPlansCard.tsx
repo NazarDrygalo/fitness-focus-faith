@@ -8,7 +8,7 @@ import { readingPlans } from "@/data/readingPlans";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
-import { tap } from "@/lib/haptics";
+import { haptic } from "@/lib/haptics";
 
 export function ReadingPlansCard() {
   const { user } = useAuth();
@@ -37,7 +37,7 @@ export function ReadingPlansCard() {
       toast({ title: "Sign in to track plans" });
       return;
     }
-    tap();
+    haptic("light");
     const set = new Set(completedDays[active.id] ?? []);
     const wasDone = set.has(dayIndex);
     if (wasDone) {
