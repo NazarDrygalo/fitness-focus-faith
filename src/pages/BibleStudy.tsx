@@ -8,6 +8,11 @@ import { getDailyStudy } from "@/data/bibleStudy";
 import { BookOpen, Lightbulb, Info, ScrollText } from "lucide-react";
 import { PageMeta } from "@/components/PageMeta";
 import { PullToRefresh } from "@/components/PullToRefresh";
+import { VerseHighlightButton } from "@/components/VerseHighlightButton";
+import { VerseAudioButton } from "@/components/VerseAudioButton";
+import { ReflectionJournal } from "@/components/ReflectionJournal";
+import { ReadingPlansCard } from "@/components/ReadingPlansCard";
+import { HighlightsList } from "@/components/HighlightsList";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -44,7 +49,11 @@ export default function BibleStudyPage() {
       <main className="container mx-auto px-3 py-5 sm:px-4 sm:py-8 max-w-3xl">
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 tracking-tight">Bible Study</h1>
-          <p className="text-sm text-muted-foreground mb-5 sm:mb-8">Today's reading: {study.reference}</p>
+          <p className="text-sm text-muted-foreground mb-3 sm:mb-4">Today's reading: {study.reference}</p>
+          <div className="flex flex-wrap gap-2 mb-5 sm:mb-8">
+            <VerseHighlightButton reference={verse.reference} verseText={verse.verse} />
+            <VerseAudioButton text={`${verse.verse} — ${verse.reference}`} />
+          </div>
         </motion.div>
 
 
@@ -104,6 +113,10 @@ export default function BibleStudyPage() {
             </CardContent>
           </Card>
         </motion.div>
+
+        <ReflectionJournal reference={verse.reference} />
+        <ReadingPlansCard />
+        <HighlightsList />
       </main>
       </PullToRefresh>
     </div>
