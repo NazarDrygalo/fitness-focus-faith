@@ -113,6 +113,10 @@ export default function BibleStudyPage() {
             </CardContent>
           </Card>
         </motion.div>
+
+        <ReflectionJournal reference={verse.reference} />
+        <ReadingPlansCard />
+        <HighlightsList />
       </main>
       </PullToRefresh>
     </div>
