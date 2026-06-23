@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      bible_highlights: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          reference: string
+          user_id: string
+          verse_text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          reference: string
+          user_id: string
+          verse_text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          reference?: string
+          user_id?: string
+          verse_text?: string
+        }
+        Relationships: []
+      }
+      bible_reflections: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          prompt: string | null
+          reference: string
+          reflection_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          prompt?: string | null
+          reference: string
+          reflection_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          prompt?: string | null
+          reference?: string
+          reflection_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notification_preferences: {
         Row: {
           created_at: string
@@ -91,6 +151,33 @@ export type Database = {
           p256dh?: string
           updated_at?: string
           user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reading_plan_progress: {
+        Row: {
+          completed_on: string
+          created_at: string
+          day_index: number
+          id: string
+          plan_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_on?: string
+          created_at?: string
+          day_index: number
+          id?: string
+          plan_id: string
+          user_id: string
+        }
+        Update: {
+          completed_on?: string
+          created_at?: string
+          day_index?: number
+          id?: string
+          plan_id?: string
           user_id?: string
         }
         Relationships: []
