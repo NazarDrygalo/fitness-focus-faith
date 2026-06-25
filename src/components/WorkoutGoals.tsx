@@ -32,6 +32,7 @@ const goalFields: { key: keyof Goals; label: string; unit?: string }[] = [
 
 interface Props {
   todayLog?: { pushups: number; situps: number; ladder_percent: number; plank_seconds: number; deadhang_seconds: number; squat_count: number } | null;
+  recentLogs?: { workout_date: string; pushups: number; situps: number; squat_count: number }[];
 }
 
 export function WorkoutGoals({ todayLog }: Props) {
