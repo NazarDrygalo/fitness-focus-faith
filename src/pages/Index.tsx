@@ -238,6 +238,8 @@ export default function Dashboard() {
     />
   );
   const historyBlock = <WorkoutHistory logs={logs} onUpdated={fetchLogs} />;
+  const aiCoachBlock = <AICoachCard logs={logs} />;
+  const aiRecapBlock = <AIWeeklyRecap logs={logs} />;
 
   const activityBlock = (
     <Card className="bg-card border-border">
