@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Target, Pencil, Check, X } from "lucide-react";
 import { ActivityRings, type Ring } from "@/components/ActivityRings";
+import { AdaptiveTargetSuggestion } from "@/components/AdaptiveTargetSuggestion";
 
 interface Goals {
   pushups: number;
