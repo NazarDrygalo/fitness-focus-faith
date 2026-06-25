@@ -216,5 +216,6 @@ export function WorkoutGoals({ todayLog, recentLogs = [] }: Props) {
         )}
       </CardContent>
     </Card>
+    </div>
   );
 }
