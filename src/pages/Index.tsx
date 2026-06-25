@@ -387,6 +387,7 @@ export default function Dashboard() {
       <>
         {wrap(comebackBlock, "cb")}
         {wrap(quickLogBlock, "ql")}
+        {wrap(aiCoachBlock, "ai")}
         {wrap(weeklyRingBlock, "wr")}
         {wrap(goalsBlock, "g")}
         {wrap(restBlock, "r")}
@@ -395,6 +396,7 @@ export default function Dashboard() {
     stats: (
       <>
         {wrap(consistencyBlock, "c")}
+        {wrap(aiRecapBlock, "air")}
         {wrap(weeklyBlock, "w")}
         {wrap(milestonesBlock, "m")}
       </>
