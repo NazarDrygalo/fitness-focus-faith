@@ -22,6 +22,9 @@ import { StickyHeader } from "@/components/StickyHeader";
 import { WeeklyGoalRing } from "@/components/WeeklyGoalRing";
 import { ComebackBanner } from "@/components/ComebackBanner";
 import { ShareStreakCard } from "@/components/ShareStreakCard";
+import { AICoachCard } from "@/components/AICoachCard";
+import { AIWeeklyRecap } from "@/components/AIWeeklyRecap";
+import { FitnessAssessment } from "@/components/FitnessAssessment";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { haptic } from "@/lib/haptics";
 import { syncFreezeAwards } from "@/lib/freezeTokens";
@@ -222,7 +225,7 @@ export default function Dashboard() {
   const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} priorLogs={priorLogsForPR} />;
   const weeklyRingBlock = <WeeklyGoalRing logs={logs} />;
   const comebackBlock = <ComebackBanner lastWorkoutDate={lastWorkoutDate} />;
-  const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
+  const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} recentLogs={logs} />;
   const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
   const consistencyBlock = <ConsistencyStats logs={logs} />;
   const weeklyBlock = <WeeklyRecap logs={logs} />;
@@ -235,6 +238,8 @@ export default function Dashboard() {
     />
   );
   const historyBlock = <WorkoutHistory logs={logs} onUpdated={fetchLogs} />;
+  const aiCoachBlock = <AICoachCard logs={logs} />;
+  const aiRecapBlock = <AIWeeklyRecap logs={logs} />;
 
   const activityBlock = (
     <Card className="bg-card border-border">
@@ -382,6 +387,7 @@ export default function Dashboard() {
       <>
         {wrap(comebackBlock, "cb")}
         {wrap(quickLogBlock, "ql")}
+        {wrap(aiCoachBlock, "ai")}
         {wrap(weeklyRingBlock, "wr")}
         {wrap(goalsBlock, "g")}
         {wrap(restBlock, "r")}
@@ -390,6 +396,7 @@ export default function Dashboard() {
     stats: (
       <>
         {wrap(consistencyBlock, "c")}
+        {wrap(aiRecapBlock, "air")}
         {wrap(weeklyBlock, "w")}
         {wrap(milestonesBlock, "m")}
       </>
@@ -402,6 +409,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background pb-safe">
       <PageMeta title="GRIND · Daily strength & scripture" description="Track pull-ups, planks, dead hangs, and squats with daily Bible verses. Build streaks that stick." path="/" />
       <WelcomeOnboarding />
+      <FitnessAssessment />
       <Navigation />
       <StickyHeader streak={streak} />
 
@@ -534,7 +542,9 @@ export default function Dashboard() {
         {/* Desktop: single scroll layout */}
         <div className="hidden sm:block">
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-8">{quickLogBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.285 }} className="mb-8">{aiCoachBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.29 }} className="mb-8">{weeklyRingBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.295 }} className="mb-8">{aiRecapBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.30 }} className="mb-8">{milestonesBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.33 }} className="mb-8">{weeklyBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">{consistencyBlock}</motion.div>

@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { Target, Pencil, Check, X } from "lucide-react";
 import { ActivityRings, type Ring } from "@/components/ActivityRings";
+import { AdaptiveTargetSuggestion } from "@/components/AdaptiveTargetSuggestion";
 
 interface Goals {
   pushups: number;
@@ -31,9 +32,10 @@ const goalFields: { key: keyof Goals; label: string; unit?: string }[] = [
 
 interface Props {
   todayLog?: { pushups: number; situps: number; ladder_percent: number; plank_seconds: number; deadhang_seconds: number; squat_count: number } | null;
+  recentLogs?: { workout_date: string; pushups: number; situps: number; squat_count: number }[];
 }
 
-export function WorkoutGoals({ todayLog }: Props) {
+export function WorkoutGoals({ todayLog, recentLogs = [] }: Props) {
   const { user } = useAuth();
   const [goals, setGoals] = useState<Goals>(defaultGoals);
   const [editing, setEditing] = useState(false);
@@ -155,6 +157,20 @@ export function WorkoutGoals({ todayLog }: Props) {
   const restGoals = activeGoals.slice(3);
 
   return (
+    <div>
+      <AdaptiveTargetSuggestion
+        logs={recentLogs}
+        goals={{ pushups: goals.pushups, situps: goals.situps, squat_count: goals.squat_count }}
+        onApplied={() => {
+          if (!user) return;
+          supabase
+            .from("workout_goals")
+            .select("pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count")
+            .eq("user_id", user.id)
+            .maybeSingle()
+            .then(({ data }) => { if (data) { setGoals(data as Goals); setDraft(data as Goals); } });
+        }}
+      />
     <Card className="bg-card border-border">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
@@ -200,5 +216,6 @@ export function WorkoutGoals({ todayLog }: Props) {
         )}
       </CardContent>
     </Card>
+    </div>
   );
 }
