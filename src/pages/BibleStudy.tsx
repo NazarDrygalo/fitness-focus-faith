@@ -116,6 +116,7 @@ export default function BibleStudyPage() {
         </motion.div>
 
         <ReflectionJournal reference={verse.reference} />
+        <PersonalizedVerseCard />
         <ReadingPlansCard />
         <HighlightsList />
       </main>
