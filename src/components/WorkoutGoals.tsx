@@ -35,7 +35,7 @@ interface Props {
   recentLogs?: { workout_date: string; pushups: number; situps: number; squat_count: number }[];
 }
 
-export function WorkoutGoals({ todayLog }: Props) {
+export function WorkoutGoals({ todayLog, recentLogs = [] }: Props) {
   const { user } = useAuth();
   const [goals, setGoals] = useState<Goals>(defaultGoals);
   const [editing, setEditing] = useState(false);
