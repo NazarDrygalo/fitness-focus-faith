@@ -225,7 +225,7 @@ export default function Dashboard() {
   const quickLogBlock = <QuickLog todayLogged={todayLogged} onLogged={fetchLogs} lastLog={lastLog} priorLogs={priorLogsForPR} />;
   const weeklyRingBlock = <WeeklyGoalRing logs={logs} />;
   const comebackBlock = <ComebackBanner lastWorkoutDate={lastWorkoutDate} />;
-  const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} />;
+  const goalsBlock = <WorkoutGoals todayLog={logMap.get(todayStr) || null} recentLogs={logs} />;
   const restBlock = <RestDayIndicator currentStreak={streakData.current} />;
   const consistencyBlock = <ConsistencyStats logs={logs} />;
   const weeklyBlock = <WeeklyRecap logs={logs} />;
