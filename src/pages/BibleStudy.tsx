@@ -13,6 +13,7 @@ import { VerseAudioButton } from "@/components/VerseAudioButton";
 import { ReflectionJournal } from "@/components/ReflectionJournal";
 import { ReadingPlansCard } from "@/components/ReadingPlansCard";
 import { HighlightsList } from "@/components/HighlightsList";
+import { PersonalizedVerseCard } from "@/components/PersonalizedVerseCard";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
