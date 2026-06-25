@@ -409,6 +409,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background pb-safe">
       <PageMeta title="GRIND · Daily strength & scripture" description="Track pull-ups, planks, dead hangs, and squats with daily Bible verses. Build streaks that stick." path="/" />
       <WelcomeOnboarding />
+      <FitnessAssessment />
       <Navigation />
       <StickyHeader streak={streak} />
 
