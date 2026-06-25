@@ -157,6 +157,20 @@ export function WorkoutGoals({ todayLog, recentLogs = [] }: Props) {
   const restGoals = activeGoals.slice(3);
 
   return (
+    <div>
+      <AdaptiveTargetSuggestion
+        logs={recentLogs}
+        goals={{ pushups: goals.pushups, situps: goals.situps, squat_count: goals.squat_count }}
+        onApplied={() => {
+          if (!user) return;
+          supabase
+            .from("workout_goals")
+            .select("pushups, situps, ladder_percent, plank_seconds, deadhang_seconds, squat_count")
+            .eq("user_id", user.id)
+            .maybeSingle()
+            .then(({ data }) => { if (data) { setGoals(data as Goals); setDraft(data as Goals); } });
+        }}
+      />
     <Card className="bg-card border-border">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
