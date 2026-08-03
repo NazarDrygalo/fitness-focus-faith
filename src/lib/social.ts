@@ -61,10 +61,9 @@ export async function syncUserStats(userId: string) {
 export async function ensureProfile(userId: string, fallbackName: string) {
   const { data } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
   if (data) return data;
-  const { data: created } = await supabase
+  await supabase
     .from("profiles")
-    .insert({ id: userId, display_name: fallbackName })
-    .select()
-    .maybeSingle();
+    .upsert({ id: userId, display_name: fallbackName }, { onConflict: "id", ignoreDuplicates: true });
+  const { data: created } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
   return created;
 }
