@@ -22,6 +22,8 @@ const Terms = lazy(() => import("./pages/Terms.tsx"));
 const Privacy = lazy(() => import("./pages/Privacy.tsx"));
 const Auth = lazy(() => import("./pages/Auth.tsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
+const Social = lazy(() => import("./pages/Social.tsx"));
+const PublicProfile = lazy(() => import("./pages/PublicProfile.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
 const queryClient = new QueryClient();
@@ -65,7 +67,9 @@ const App = () => (
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/u/:id" element={<PublicProfile />} />
                   <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+                  <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
                   <Route path="/workout" element={<ProtectedRoute><WorkoutTracker /></ProtectedRoute>} />
                   <Route path="/progress" element={<ProtectedRoute><Progress /></ProtectedRoute>} />
                   <Route path="/bible" element={<ProtectedRoute><BibleStudy /></ProtectedRoute>} />

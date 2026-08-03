@@ -1,3 +1,4 @@
+import { syncUserStats } from "@/lib/social";
 import { useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -67,6 +68,7 @@ export function QuickLog({ todayLogged, onLogged, lastLog, priorLogs = [] }: Qui
       haptic("warning");
       return false;
     }
+    void syncUserStats(session.user.id);
     // PR detection
     const todayStrPr = format(new Date(), "yyyy-MM-dd");
     const prs = detectPRs(

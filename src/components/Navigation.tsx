@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Dumbbell, BookOpen, BarChart3, Settings, LogOut } from "lucide-react";
+import { Home, Dumbbell, BookOpen, BarChart3, Settings, LogOut, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
@@ -32,6 +32,10 @@ export function Navigation() {
           <NavLink to="/bible" className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}>
             <BookOpen className="h-4 w-4" />
             <span className="hidden sm:inline">Bible Study</span>
+          </NavLink>
+          <NavLink to="/social" className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}>
+            <Users className="h-4 w-4" />
+            <span className="hidden sm:inline">Partners</span>
           </NavLink>
           <NavLink to="/settings" className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}>
             <Settings className="h-4 w-4" />

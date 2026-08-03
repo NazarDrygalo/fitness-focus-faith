@@ -1,3 +1,4 @@
+import { syncUserStats } from "@/lib/social";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -91,6 +92,7 @@ export default function WorkoutTracker() {
       toast.error("Failed to save workout.");
     } else {
       setSaved(true);
+      if (user?.id) void syncUserStats(user.id);
       haptic("success");
       toast.success(`Workout logged! Today's total: ${newPushups} pushups, ${newSitups} situps`);
       setPushups("");
