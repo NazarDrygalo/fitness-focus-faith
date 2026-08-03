@@ -74,6 +74,124 @@ export type Database = {
         }
         Relationships: []
       }
+      check_ins: {
+        Row: {
+          created_at: string
+          from_user_id: string
+          id: string
+          message: string
+          to_user_id: string
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          from_user_id: string
+          id?: string
+          message: string
+          to_user_id: string
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          message?: string
+          to_user_id?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
+      cheers: {
+        Row: {
+          created_at: string
+          emoji: string
+          from_user_id: string
+          id: string
+          to_user_id: string
+          workout_log_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string
+          from_user_id: string
+          id?: string
+          to_user_id: string
+          workout_log_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          from_user_id?: string
+          id?: string
+          to_user_id?: string
+          workout_log_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cheers_workout_log_id_fkey"
+            columns: ["workout_log_id"]
+            isOneToOne: false
+            referencedRelation: "workout_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_members: {
+        Row: {
+          created_at: string
+          group_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          group_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string
+          id: string
+          invite_code: string
+          name: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invite_code: string
+          name: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invite_code?: string
+          name?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       notification_preferences: {
         Row: {
           created_at: string
@@ -119,6 +237,66 @@ export type Database = {
           verse_time?: string
           workout_reminder_enabled?: boolean
           workout_reminder_time?: string
+        }
+        Relationships: []
+      }
+      partnerships: {
+        Row: {
+          created_at: string
+          id: string
+          invite_code: string
+          invitee_id: string | null
+          inviter_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invite_code: string
+          invitee_id?: string | null
+          inviter_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invite_code?: string
+          invitee_id?: string | null
+          inviter_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          favorite_verse: string | null
+          id: string
+          is_public: boolean
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          favorite_verse?: string | null
+          id: string
+          is_public?: boolean
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          favorite_verse?: string | null
+          id?: string
+          is_public?: boolean
+          updated_at?: string
         }
         Relationships: []
       }
@@ -308,6 +486,10 @@ export type Database = {
     }
     Functions: {
       get_cron_secret: { Args: never; Returns: string }
+      is_group_member: {
+        Args: { _group_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
