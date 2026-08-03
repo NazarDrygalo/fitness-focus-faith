@@ -515,12 +515,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_partner_invite: { Args: { _code: string }; Returns: string }
       get_cron_secret: { Args: never; Returns: string }
       is_group_member: {
         Args: { _group_id: string; _user_id: string }
         Returns: boolean
       }
       is_partner_of: { Args: { _a: string; _b: string }; Returns: boolean }
+      join_group_by_code: { Args: { _code: string }; Returns: string }
       shares_group_with: { Args: { _a: string; _b: string }; Returns: boolean }
     }
     Enums: {
