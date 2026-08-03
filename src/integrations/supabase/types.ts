@@ -360,6 +360,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_stats: {
+        Row: {
+          created_at: string
+          current_streak: number
+          last_workout_date: string | null
+          total_workouts: number
+          updated_at: string
+          user_id: string
+          weekly_workouts: number
+        }
+        Insert: {
+          created_at?: string
+          current_streak?: number
+          last_workout_date?: string | null
+          total_workouts?: number
+          updated_at?: string
+          user_id: string
+          weekly_workouts?: number
+        }
+        Update: {
+          created_at?: string
+          current_streak?: number
+          last_workout_date?: string | null
+          total_workouts?: number
+          updated_at?: string
+          user_id?: string
+          weekly_workouts?: number
+        }
+        Relationships: []
+      }
       weight_logs: {
         Row: {
           created_at: string
@@ -490,6 +520,8 @@ export type Database = {
         Args: { _group_id: string; _user_id: string }
         Returns: boolean
       }
+      is_partner_of: { Args: { _a: string; _b: string }; Returns: boolean }
+      shares_group_with: { Args: { _a: string; _b: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
