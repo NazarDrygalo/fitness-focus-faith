@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Dumbbell, BookOpen, BarChart3, Settings, LogOut } from "lucide-react";
+import { Home, Dumbbell, BookOpen, BarChart3, Settings, LogOut, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
