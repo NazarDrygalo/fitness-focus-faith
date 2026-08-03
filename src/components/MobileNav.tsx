@@ -1,14 +1,15 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Home, Dumbbell, BarChart3, BookOpen, Settings } from "lucide-react";
+import { Home, Dumbbell, BarChart3, BookOpen, Users, Settings } from "lucide-react";
 
 const items = [
   { to: "/", icon: Home, label: "Home" },
   { to: "/workout", icon: Dumbbell, label: "Workout" },
   { to: "/progress", icon: BarChart3, label: "Progress" },
   { to: "/bible", icon: BookOpen, label: "Bible" },
-  { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/social", icon: Users, label: "Partners" },
+  { to: "/settings", icon: Settings, label: "More" },
 ];
 
 export function MobileNav() {
