@@ -91,6 +91,7 @@ export default function WorkoutTracker() {
       toast.error("Failed to save workout.");
     } else {
       setSaved(true);
+      if (user?.id) void syncUserStats(user.id);
       haptic("success");
       toast.success(`Workout logged! Today's total: ${newPushups} pushups, ${newSitups} situps`);
       setPushups("");
