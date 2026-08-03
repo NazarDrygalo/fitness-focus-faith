@@ -67,6 +67,7 @@ export function QuickLog({ todayLogged, onLogged, lastLog, priorLogs = [] }: Qui
       haptic("warning");
       return false;
     }
+    void syncUserStats(session.user.id);
     // PR detection
     const todayStrPr = format(new Date(), "yyyy-MM-dd");
     const prs = detectPRs(
