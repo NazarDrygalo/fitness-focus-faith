@@ -33,6 +33,10 @@ export function Navigation() {
             <BookOpen className="h-4 w-4" />
             <span className="hidden sm:inline">Bible Study</span>
           </NavLink>
+          <NavLink to="/social" className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}>
+            <Users className="h-4 w-4" />
+            <span className="hidden sm:inline">Partners</span>
+          </NavLink>
           <NavLink to="/settings" className={({ isActive }) => cn(linkClass, isActive ? activeClass : inactiveClass)}>
             <Settings className="h-4 w-4" />
             <span className="hidden sm:inline">Settings</span>
