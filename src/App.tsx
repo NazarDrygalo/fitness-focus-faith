@@ -12,6 +12,8 @@ import { InstallPrompt } from "./components/InstallPrompt.tsx";
 import { PageTracker } from "./hooks/usePageTracking.tsx";
 import ScrollToTop from "./components/ScrollToTop.tsx";
 import { LogFAB } from "./components/LogFAB.tsx";
+import { NativeBridge } from "./components/NativeBridge.tsx";
+import { AppLock } from "./components/AppLock.tsx";
 
 const Index = lazy(() => import("./pages/Index.tsx"));
 const WorkoutTracker = lazy(() => import("./pages/WorkoutTracker.tsx"));
