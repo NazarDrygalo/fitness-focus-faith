@@ -37,7 +37,7 @@ Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its 
 24. Public profile page with stats, badges, favorite verse
 25. Optional weekly "check-in" message sent to your partner
 
-## Wave 6 — Native Mobile Capabilities (Capacitor)
+## Wave 6 — Native Mobile Capabilities (Capacitor) — SHIPPED (26, 28 deferred)
 26. Apple Health / Google Fit import (steps, weight, HR)
 27. Background workout timer that survives screen lock
 28. Live Activity / Dynamic Island for active timers (iOS)

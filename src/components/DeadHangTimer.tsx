@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Play, Pause, RotateCcw, Timer, Flag, Clock } from "lucide-react";
 import { haptic } from "@/lib/haptics";
+import { useKeepAwake } from "@/hooks/useKeepAwake";
 
 interface DeadHangTimerProps {
   onFinish: (totalSeconds: number) => void;
@@ -26,6 +27,9 @@ export function DeadHangTimer({ onFinish, disabled = false, initialSeconds = 0 }
   const [timerTotal, setTimerTotal] = useState(0);
   const [timerRemaining, setTimerRemaining] = useState(0);
   const [timerStarted, setTimerStarted] = useState(false);
+
+  // Keep the screen alive while a timer is running so it survives screen lock.
+  useKeepAwake(running);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef(0);
