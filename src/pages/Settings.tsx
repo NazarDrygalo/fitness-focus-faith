@@ -13,6 +13,7 @@ import { Lock, Trash2, FileText, Shield, Sun, Moon, Monitor, ChevronRight } from
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
 import { NotificationsCard } from "@/components/NotificationsCard";
+import { AppLockCard } from "@/components/AppLockCard";
 import { PageMeta } from "@/components/PageMeta";
 import {
   AlertDialog,
@@ -111,6 +112,11 @@ export default function Settings() {
         {/* Notifications */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.03 }}>
           <NotificationsCard />
+        </motion.div>
+
+        {/* App lock (native app only) */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.04 }}>
+          <AppLockCard />
         </motion.div>
 
         {/* Theme */}
