@@ -60,6 +60,8 @@ const App = () => (
           <BrowserRouter>
             <AuthProvider>
               <ScrollToTop />
+              <NativeBridge />
+              <AppLock />
               <PageTracker />
               <InstallPrompt />
               <LogFAB />
