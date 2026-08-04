@@ -51,7 +51,6 @@ export async function authenticate(): Promise<boolean> {
       iosFallbackTitle: "Use passcode",
       androidTitle: "Unlock GRIND",
       androidSubtitle: "Confirm it's you to continue",
-availableTitle: "Unavailable",
     });
     return true;
   } catch {
