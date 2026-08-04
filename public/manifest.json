@@ -7,6 +7,26 @@
   "background_color": "#161a22",
   "theme_color": "#161a22",
   "orientation": "portrait-primary",
+  "shortcuts": [
+    {
+      "name": "Log a workout",
+      "short_name": "Log",
+      "url": "/workout?quick=1",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Today's verse",
+      "short_name": "Verse",
+      "url": "/bible",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Progress",
+      "short_name": "Progress",
+      "url": "/progress",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-192.png",
