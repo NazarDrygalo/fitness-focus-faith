@@ -74,6 +74,45 @@ export type Database = {
         }
         Relationships: []
       }
+      body_measurements: {
+        Row: {
+          arms: number | null
+          chest: number | null
+          created_at: string
+          id: string
+          log_date: string
+          thigh: number | null
+          unit: string
+          updated_at: string
+          user_id: string
+          waist: number | null
+        }
+        Insert: {
+          arms?: number | null
+          chest?: number | null
+          created_at?: string
+          id?: string
+          log_date?: string
+          thigh?: number | null
+          unit?: string
+          updated_at?: string
+          user_id: string
+          waist?: number | null
+        }
+        Update: {
+          arms?: number | null
+          chest?: number | null
+          created_at?: string
+          id?: string
+          log_date?: string
+          thigh?: number | null
+          unit?: string
+          updated_at?: string
+          user_id?: string
+          waist?: number | null
+        }
+        Relationships: []
+      }
       check_ins: {
         Row: {
           created_at: string
@@ -297,6 +336,33 @@ export type Database = {
           id?: string
           is_public?: boolean
           updated_at?: string
+        }
+        Relationships: []
+      }
+      progress_photos: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          photo_date: string
+          storage_path: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          photo_date?: string
+          storage_path: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          photo_date?: string
+          storage_path?: string
+          user_id?: string
         }
         Relationships: []
       }
