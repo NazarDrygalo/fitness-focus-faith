@@ -8,6 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart3, TrendingUp, Zap, Calendar, Target, Timer, Hand, Dumbbell as DumbbellIcon } from "lucide-react";
 import { PersonalRecords } from "@/components/PersonalRecords";
 import { BodyWeightTracker } from "@/components/BodyWeightTracker";
+import { BodyMeasurements } from "@/components/BodyMeasurements";
+import { ProgressPhotos } from "@/components/ProgressPhotos";
+import { WorkoutHeatmap } from "@/components/WorkoutHeatmap";
+import { MonthlyReport } from "@/components/MonthlyReport";
 import { ExportButton } from "@/components/ExportButton";
 import { ProgressSkeleton } from "@/components/ProgressSkeleton";
 import { EmptyProgress } from "@/components/EmptyProgress";
@@ -228,6 +232,28 @@ export default function Progress() {
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.25 }} className="mb-6">
           <BodyWeightTracker />
         </motion.div>
+
+        {/* Heatmap */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.26 }} className="mb-6">
+          <WorkoutHeatmap logs={logs} />
+        </motion.div>
+
+        {/* Body Measurements */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.27 }} className="mb-6">
+          <BodyMeasurements />
+        </motion.div>
+
+        {/* Progress Photos */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-6">
+          <ProgressPhotos />
+        </motion.div>
+
+        {/* Monthly Report */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.29 }} className="mb-6">
+          <MonthlyReport logs={logs} />
+        </motion.div>
+
+
 
         {/* Time-based exercises chart */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-6">

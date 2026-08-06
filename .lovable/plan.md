@@ -44,7 +44,7 @@ Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its 
 29. App shortcuts / quick actions on long-press of icon
 30. Biometric (Face ID / fingerprint) app lock
 
-## Wave 7 — Data, Insights, Exports
+## Wave 7 — Data, Insights, Exports — SHIPPED (35 deferred)
 31. Body measurements tracker (chest, waist, arms, thigh)
 32. Progress photo timeline with side-by-side compare
 33. Heatmap calendar (GitHub-style) of workout intensity
