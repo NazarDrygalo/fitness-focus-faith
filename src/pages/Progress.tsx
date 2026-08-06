@@ -233,6 +233,28 @@ export default function Progress() {
           <BodyWeightTracker />
         </motion.div>
 
+        {/* Heatmap */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.26 }} className="mb-6">
+          <WorkoutHeatmap logs={logs} />
+        </motion.div>
+
+        {/* Body Measurements */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.27 }} className="mb-6">
+          <BodyMeasurements />
+        </motion.div>
+
+        {/* Progress Photos */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.28 }} className="mb-6">
+          <ProgressPhotos />
+        </motion.div>
+
+        {/* Monthly Report */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.29 }} className="mb-6">
+          <MonthlyReport logs={logs} />
+        </motion.div>
+
+
+
         {/* Time-based exercises chart */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }} className="mb-6">
           <Card className="bg-card border-border overflow-hidden">
