@@ -24,6 +24,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
 import { PageMeta } from "@/components/PageMeta";
+import { FormGuideButton } from "@/components/FormGuideButton";
+import { CustomExercises } from "@/components/CustomExercises";
+import { RoutinesCard } from "@/components/RoutinesCard";
+import { WarmupCooldown } from "@/components/WarmupCooldown";
+import { RecoverySuggestions } from "@/components/RecoverySuggestions";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
