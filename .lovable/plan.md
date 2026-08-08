@@ -51,7 +51,7 @@ Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its 
 34. Monthly PDF report emailed/shared from the app
 35. Apple Watch / Wear OS companion: log a set, see streak
 
-## Wave 8 — Workout Library Expansion
+## Wave 8 — Workout Library Expansion — SHIPPED
 36. Custom exercise builder (name, unit, target type)
 37. Programmed routines: multi-day templates with rest days
 38. Video form guides per exercise (short MP4, lazy-loaded)
