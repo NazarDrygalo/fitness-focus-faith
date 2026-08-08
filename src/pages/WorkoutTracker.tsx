@@ -198,10 +198,11 @@ export default function WorkoutTracker() {
         {/* Exercise Section with Pill Tabs */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}>
           <Card className="bg-card border-border">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 flex-row items-center justify-between space-y-0">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Activity className="h-5 w-5" /> Exercise
               </CardTitle>
+              <FormGuideButton exerciseKey={exerciseMode} />
             </CardHeader>
             <CardContent>
               {/* Horizontal scrollable pill picker */}
@@ -284,6 +285,22 @@ export default function WorkoutTracker() {
               </AnimatePresence>
             </CardContent>
           </Card>
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }} className="mt-5 sm:mt-6">
+          <WarmupCooldown />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.5 }} className="mt-5 sm:mt-6">
+          <CustomExercises />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.55 }} className="mt-5 sm:mt-6">
+          <RoutinesCard />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.6 }} className="mt-5 sm:mt-6">
+          <RecoverySuggestions />
         </motion.div>
       </main>
 
