@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Flame, Trophy, Target, Zap, Crown, Star } from "lucide-react";
+import { computeBadges } from "@/lib/badges";
 
 interface StreakMilestonesProps {
   streak: number;
@@ -10,59 +10,11 @@ interface StreakMilestonesProps {
   totalWorkouts: number;
 }
 
-interface Badge {
-  icon: React.ReactNode;
-  label: string;
-  description: string;
-  earned: boolean;
-  progress: number;
-}
-
 export function StreakMilestones({ streak, totalPushups, totalSitups, totalWorkouts }: StreakMilestonesProps) {
-  const badges = useMemo<Badge[]>(() => [
-    {
-      icon: <Flame className="h-5 w-5" />,
-      label: "7-Day Streak",
-      description: `${Math.min(streak, 7)}/7 days`,
-      earned: streak >= 7,
-      progress: Math.min(streak / 7, 1),
-    },
-    {
-      icon: <Zap className="h-5 w-5" />,
-      label: "30-Day Streak",
-      description: `${Math.min(streak, 30)}/30 days`,
-      earned: streak >= 30,
-      progress: Math.min(streak / 30, 1),
-    },
-    {
-      icon: <Crown className="h-5 w-5" />,
-      label: "100-Day Streak",
-      description: `${Math.min(streak, 100)}/100 days`,
-      earned: streak >= 100,
-      progress: Math.min(streak / 100, 1),
-    },
-    {
-      icon: <Target className="h-5 w-5" />,
-      label: "1K Pushups",
-      description: `${Math.min(totalPushups, 1000).toLocaleString()}/1,000`,
-      earned: totalPushups >= 1000,
-      progress: Math.min(totalPushups / 1000, 1),
-    },
-    {
-      icon: <Trophy className="h-5 w-5" />,
-      label: "1K Situps",
-      description: `${Math.min(totalSitups, 1000).toLocaleString()}/1,000`,
-      earned: totalSitups >= 1000,
-      progress: Math.min(totalSitups / 1000, 1),
-    },
-    {
-      icon: <Star className="h-5 w-5" />,
-      label: "50 Workouts",
-      description: `${Math.min(totalWorkouts, 50)}/50`,
-      earned: totalWorkouts >= 50,
-      progress: Math.min(totalWorkouts / 50, 1),
-    },
-  ], [streak, totalPushups, totalSitups, totalWorkouts]);
+  const badges = useMemo(
+    () => computeBadges({ streak, totalPushups, totalSitups, totalWorkouts }),
+    [streak, totalPushups, totalSitups, totalWorkouts]
+  );
 
   const earned = badges.filter(b => b.earned);
   const inProgress = badges.filter(b => !b.earned);
@@ -86,7 +38,7 @@ export function StreakMilestones({ streak, totalPushups, totalSitups, totalWorko
               >
                 <div className="relative">
                   <div className={`transition-colors ${badge.earned ? "text-success" : "text-muted-foreground"}`}>
-                    {badge.icon}
+                    <badge.icon className="h-5 w-5" strokeWidth={1.75} />
                   </div>
                   {badge.earned && (
                     <motion.div
