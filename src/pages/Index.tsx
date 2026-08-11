@@ -22,12 +22,15 @@ import { StickyHeader } from "@/components/StickyHeader";
 import { WeeklyGoalRing } from "@/components/WeeklyGoalRing";
 import { ComebackBanner } from "@/components/ComebackBanner";
 import { ShareStreakCard } from "@/components/ShareStreakCard";
+import { MilestoneCelebration } from "@/components/MilestoneCelebration";
+import { YearWrapped } from "@/components/YearWrapped";
 import { AICoachCard } from "@/components/AICoachCard";
 import { AIWeeklyRecap } from "@/components/AIWeeklyRecap";
 import { FitnessAssessment } from "@/components/FitnessAssessment";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { haptic } from "@/lib/haptics";
 import { syncFreezeAwards } from "@/lib/freezeTokens";
+import { maybeMarkReferralEarned } from "@/lib/referrals";
 import { useAuth } from "@/hooks/useAuth";
 import { format, differenceInDays, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday } from "date-fns";
 import { PageMeta } from "@/components/PageMeta";
@@ -150,6 +153,12 @@ export default function Dashboard() {
     setFreezeAvailable(state.available);
   }, [user?.id, streak, loaded]);
 
+  // Referral reward: flag my referral once I've logged a full first week.
+  useEffect(() => {
+    if (!user?.id || !loaded) return;
+    maybeMarkReferralEarned(user.id, logs.length);
+  }, [user?.id, loaded, logs.length]);
+
   const lastWorkoutDate = useMemo(() => {
     if (!logs.length) return null;
     return [...logs].sort((a, b) => b.workout_date.localeCompare(a.workout_date))[0].workout_date;
@@ -240,6 +249,7 @@ export default function Dashboard() {
   const historyBlock = <WorkoutHistory logs={logs} onUpdated={fetchLogs} />;
   const aiCoachBlock = <AICoachCard logs={logs} />;
   const aiRecapBlock = <AIWeeklyRecap logs={logs} />;
+  const wrappedBlock = <YearWrapped logs={logs} />;
 
   const activityBlock = (
     <Card className="bg-card border-border">
@@ -399,6 +409,7 @@ export default function Dashboard() {
         {wrap(aiRecapBlock, "air")}
         {wrap(weeklyBlock, "w")}
         {wrap(milestonesBlock, "m")}
+        {wrap(wrappedBlock, "yw")}
       </>
     ),
     history: wrap(historyBlock, "h"),
@@ -409,6 +420,14 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background pb-safe">
       <PageMeta title="GRIND · Daily strength & scripture" description="Track pull-ups, planks, dead hangs, and squats with daily Bible verses. Build streaks that stick." path="/" />
       <WelcomeOnboarding />
+      <MilestoneCelebration
+        userId={user?.id}
+        ready={loaded}
+        streak={streak}
+        totalPushups={totalPushups}
+        totalSitups={totalSitups}
+        totalWorkouts={logs.length}
+      />
       <FitnessAssessment />
       <Navigation />
       <StickyHeader streak={streak} />
@@ -546,6 +565,7 @@ export default function Dashboard() {
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.29 }} className="mb-8">{weeklyRingBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.295 }} className="mb-8">{aiRecapBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.30 }} className="mb-8">{milestonesBlock}</motion.div>
+          <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.32 }} className="mb-8">{wrappedBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.33 }} className="mb-8">{weeklyBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.35 }} className="mb-8">{consistencyBlock}</motion.div>
           <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.37 }} className="mb-8">{goalsBlock}</motion.div>
