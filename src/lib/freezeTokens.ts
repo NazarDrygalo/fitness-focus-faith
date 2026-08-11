@@ -73,4 +73,12 @@ export function consumeFreeze(uid: string, date: string) {
   return true;
 }
 
+/** Grant freeze tokens outside the streak ladder (e.g. referral rewards). */
+export function grantFreeze(uid: string, count = 1) {
+  const state = read(uid);
+  state.available = Math.min(MAX_TOKENS, state.available + count);
+  write(uid, state);
+  return state.available;
+}
+
 export const FREEZE_MAX = MAX_TOKENS;
