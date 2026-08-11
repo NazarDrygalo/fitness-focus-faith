@@ -58,7 +58,7 @@ Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its 
 39. Warmup & cooldown timers built into a session
 40. Rest-day active recovery suggestions (mobility, stretch)
 
-## Wave 9 — Retention & Re-engagement
+## Wave 9 — Retention & Re-engagement — SHIPPED
 41. Smart re-engagement push (only when actually inactive, ML-lite)
 42. "Last chance" streak-save reminder 90 min before midnight local
 43. Milestone badges with full-screen celebration (100 days, 1000 reps)

@@ -17,6 +17,8 @@ type Prefs = {
   verse_time: string;
   streak_at_risk_enabled: boolean;
   streak_at_risk_time: string;
+  last_chance_enabled: boolean;
+  reengagement_enabled: boolean;
   timezone: string;
 };
 
@@ -27,6 +29,8 @@ const DEFAULTS: Prefs = {
   verse_time: "06:00",
   streak_at_risk_enabled: true,
   streak_at_risk_time: "20:00",
+  last_chance_enabled: true,
+  reengagement_enabled: true,
   timezone: typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC",
 };
 
@@ -56,6 +60,8 @@ export function NotificationsCard() {
           verse_time: data.verse_time?.slice(0, 5) ?? DEFAULTS.verse_time,
           streak_at_risk_enabled: data.streak_at_risk_enabled,
           streak_at_risk_time: data.streak_at_risk_time?.slice(0, 5) ?? DEFAULTS.streak_at_risk_time,
+          last_chance_enabled: data.last_chance_enabled ?? DEFAULTS.last_chance_enabled,
+          reengagement_enabled: data.reengagement_enabled ?? DEFAULTS.reengagement_enabled,
           timezone: data.timezone ?? DEFAULTS.timezone,
         });
       }
@@ -192,6 +198,19 @@ export function NotificationsCard() {
             onTime={(t) => updatePref({ streak_at_risk_time: t })}
           />
 
+          <ToggleRow
+            label="Last chance save"
+            sub="90 minutes before midnight if you haven't logged"
+            checked={prefs.last_chance_enabled}
+            onChecked={(v) => updatePref({ last_chance_enabled: v })}
+          />
+          <ToggleRow
+            label="Come-back nudge"
+            sub="Only when you've been inactive for a few days"
+            checked={prefs.reengagement_enabled}
+            onChecked={(v) => updatePref({ reengagement_enabled: v })}
+          />
+
           <Button variant="outline" onClick={sendTest} disabled={busy || !enabled} className="w-full h-11 gap-2 tap">
             <Send className="h-4 w-4" /> Send test notification
           </Button>
@@ -221,6 +240,22 @@ function Row({
         className="w-[110px] h-10 bg-secondary border-border"
         disabled={!checked}
       />
+      <Switch checked={checked} onCheckedChange={onChecked} />
+    </div>
+  );
+}
+
+function ToggleRow({
+  label, sub, checked, onChecked,
+}: {
+  label: string; sub: string; checked: boolean; onChecked: (v: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <div className="min-w-0 flex-1">
+        <Label className="text-sm font-medium">{label}</Label>
+        <p className="text-xs text-muted-foreground">{sub}</p>
+      </div>
       <Switch checked={checked} onCheckedChange={onChecked} />
     </div>
   );

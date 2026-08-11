@@ -26,7 +26,16 @@ type Pref = {
   last_workout_sent_on: string | null;
   last_verse_sent_on: string | null;
   last_streak_sent_on: string | null;
+  reengagement_enabled: boolean;
+  last_chance_enabled: boolean;
+  last_reengagement_sent_on: string | null;
+  last_chance_sent_on: string | null;
 };
+
+// 22:30 local — 90 minutes before midnight.
+const LAST_CHANCE_MIN = 22 * 60 + 30;
+// 18:00 local — evening slot for re-engagement nudges.
+const REENGAGE_MIN = 18 * 60;
 
 type Sub = { id: string; endpoint: string; p256dh: string; auth: string };
 
@@ -85,6 +94,23 @@ async function loggedToday(userId: string, localDate: string) {
     .eq("user_id", userId)
     .eq("workout_date", localDate);
   return (count ?? 0) > 0;
+}
+
+/** Most recent workout date (yyyy-mm-dd) or null. */
+async function lastWorkoutDate(userId: string): Promise<string | null> {
+  const { data } = await admin
+    .from("workout_logs")
+    .select("workout_date")
+    .eq("user_id", userId)
+    .order("workout_date", { ascending: false })
+    .limit(1);
+  return data?.[0]?.workout_date ?? null;
+}
+
+function daysBetween(aIso: string, bIso: string) {
+  const a = Date.parse(aIso + "T00:00:00Z");
+  const b = Date.parse(bIso + "T00:00:00Z");
+  return Math.round((a - b) / 86400000);
 }
 
 const CRON_SECRET_LOCAL = Deno.env.get("CRON_SECRET");
@@ -184,6 +210,53 @@ Deno.serve(async (req) => {
             sent += c;
             await admin.from("notification_preferences")
               .update({ last_streak_sent_on: local.date })
+              .eq("user_id", p.user_id);
+          }
+        }
+      }
+
+      // Last-chance streak save — 90 minutes before local midnight (22:30).
+      if (
+        p.last_chance_enabled !== false &&
+        p.last_chance_sent_on !== local.date &&
+        Math.abs(nowMin - LAST_CHANCE_MIN) <= WINDOW
+      ) {
+        const did = await loggedToday(p.user_id, local.date);
+        if (!did) {
+          const c = await sendToUser(p.user_id, {
+            title: "90 minutes left ⏳",
+            body: "Last chance to save your streak today. Even one set counts.",
+            tag: "last-chance",
+            url: "/workout",
+          });
+          if (c) {
+            sent += c;
+            await admin.from("notification_preferences")
+              .update({ last_chance_sent_on: local.date })
+              .eq("user_id", p.user_id);
+          }
+        }
+      }
+
+      // Smart re-engagement — only when genuinely inactive, at most once a week.
+      if (
+        p.reengagement_enabled !== false &&
+        Math.abs(nowMin - REENGAGE_MIN) <= WINDOW &&
+        (!p.last_reengagement_sent_on || daysBetween(local.date, p.last_reengagement_sent_on) >= 7)
+      ) {
+        const last = await lastWorkoutDate(p.user_id);
+        const inactiveDays = last ? daysBetween(local.date, last) : null;
+        if (last && inactiveDays !== null && inactiveDays >= 4 && inactiveDays <= 45) {
+          const c = await sendToUser(p.user_id, {
+            title: "It's been a minute 👋",
+            body: `${inactiveDays} days since your last session. Start small — one set today.`,
+            tag: "reengagement",
+            url: "/",
+          });
+          if (c) {
+            sent += c;
+            await admin.from("notification_preferences")
+              .update({ last_reengagement_sent_on: local.date })
               .eq("user_id", p.user_id);
           }
         }

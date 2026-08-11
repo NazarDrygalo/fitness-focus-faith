@@ -8,8 +8,10 @@ import { PullToRefresh } from "@/components/PullToRefresh";
 import { PartnerCard } from "@/components/social/PartnerCard";
 import { GroupsCard } from "@/components/social/GroupsCard";
 import { ProfileCard } from "@/components/social/ProfileCard";
+import { ReferralCard } from "@/components/social/ReferralCard";
 import { useAuth } from "@/hooks/useAuth";
 import { ensureProfile, syncUserStats } from "@/lib/social";
+import { recordReferral } from "@/lib/referrals";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -19,11 +21,17 @@ export default function SocialPage() {
   const [key, setKey] = useState(0);
   const joinCode = params.get("join");
   const groupCode = params.get("group");
+  const refCode = params.get("ref");
 
   useEffect(() => {
     if (!user) return;
     ensureProfile(user.id, user.email?.split("@")[0] ?? "Athlete").then(() => syncUserStats(user.id));
   }, [user, key]);
+
+  useEffect(() => {
+    if (!user || !refCode) return;
+    recordReferral(user.id, refCode);
+  }, [user, refCode]);
 
   const refresh = async () => {
     if (user) await syncUserStats(user.id);
@@ -49,6 +57,7 @@ export default function SocialPage() {
           <div className="space-y-4" key={key}>
             <PartnerCard joinCode={joinCode} />
             <GroupsCard joinCode={groupCode} />
+            <ReferralCard />
             <ProfileCard />
           </div>
         </main>
