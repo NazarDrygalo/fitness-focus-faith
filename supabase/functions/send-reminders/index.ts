@@ -87,6 +87,23 @@ async function loggedToday(userId: string, localDate: string) {
   return (count ?? 0) > 0;
 }
 
+/** Most recent workout date (yyyy-mm-dd) or null. */
+async function lastWorkoutDate(userId: string): Promise<string | null> {
+  const { data } = await admin
+    .from("workout_logs")
+    .select("workout_date")
+    .eq("user_id", userId)
+    .order("workout_date", { ascending: false })
+    .limit(1);
+  return data?.[0]?.workout_date ?? null;
+}
+
+function daysBetween(aIso: string, bIso: string) {
+  const a = Date.parse(aIso + "T00:00:00Z");
+  const b = Date.parse(bIso + "T00:00:00Z");
+  return Math.round((a - b) / 86400000);
+}
+
 const CRON_SECRET_LOCAL = Deno.env.get("CRON_SECRET");
 
 async function isAuthorized(req: Request): Promise<boolean> {
