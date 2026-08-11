@@ -305,9 +305,13 @@ export type Database = {
       notification_preferences: {
         Row: {
           created_at: string
+          last_chance_enabled: boolean
+          last_chance_sent_on: string | null
+          last_reengagement_sent_on: string | null
           last_streak_sent_on: string | null
           last_verse_sent_on: string | null
           last_workout_sent_on: string | null
+          reengagement_enabled: boolean
           streak_at_risk_enabled: boolean
           streak_at_risk_time: string
           timezone: string
@@ -320,9 +324,13 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          last_chance_enabled?: boolean
+          last_chance_sent_on?: string | null
+          last_reengagement_sent_on?: string | null
           last_streak_sent_on?: string | null
           last_verse_sent_on?: string | null
           last_workout_sent_on?: string | null
+          reengagement_enabled?: boolean
           streak_at_risk_enabled?: boolean
           streak_at_risk_time?: string
           timezone?: string
@@ -335,9 +343,13 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          last_chance_enabled?: boolean
+          last_chance_sent_on?: string | null
+          last_reengagement_sent_on?: string | null
           last_streak_sent_on?: string | null
           last_verse_sent_on?: string | null
           last_workout_sent_on?: string | null
+          reengagement_enabled?: boolean
           streak_at_risk_enabled?: boolean
           streak_at_risk_time?: string
           timezone?: string
@@ -494,6 +506,36 @@ export type Database = {
           id?: string
           plan_id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          referred_id: string
+          referrer_id: string
+          rewarded: boolean
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          referred_id: string
+          referrer_id: string
+          rewarded?: boolean
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          referred_id?: string
+          referrer_id?: string
+          rewarded?: boolean
+          updated_at?: string
         }
         Relationships: []
       }
