@@ -264,7 +264,7 @@ export function NotificationsCard() {
                 const on = prefs.active_days.includes(i);
                 return (
                   <button
-                    key={d}
+                    key={i}
                     type="button"
                     onClick={() =>
                       updatePref({
