@@ -246,6 +246,36 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback: {
+        Row: {
+          category: string
+          created_at: string
+          diagnostics: Json | null
+          id: string
+          message: string
+          screenshot_data_url: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          diagnostics?: Json | null
+          id?: string
+          message: string
+          screenshot_data_url?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          diagnostics?: Json | null
+          id?: string
+          message?: string
+          screenshot_data_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       group_members: {
         Row: {
           created_at: string
@@ -304,6 +334,7 @@ export type Database = {
       }
       notification_preferences: {
         Row: {
+          active_days: number[]
           created_at: string
           last_chance_enabled: boolean
           last_chance_sent_on: string | null
@@ -311,6 +342,9 @@ export type Database = {
           last_streak_sent_on: string | null
           last_verse_sent_on: string | null
           last_workout_sent_on: string | null
+          quiet_end: string
+          quiet_hours_enabled: boolean
+          quiet_start: string
           reengagement_enabled: boolean
           streak_at_risk_enabled: boolean
           streak_at_risk_time: string
@@ -323,6 +357,7 @@ export type Database = {
           workout_reminder_time: string
         }
         Insert: {
+          active_days?: number[]
           created_at?: string
           last_chance_enabled?: boolean
           last_chance_sent_on?: string | null
@@ -330,6 +365,9 @@ export type Database = {
           last_streak_sent_on?: string | null
           last_verse_sent_on?: string | null
           last_workout_sent_on?: string | null
+          quiet_end?: string
+          quiet_hours_enabled?: boolean
+          quiet_start?: string
           reengagement_enabled?: boolean
           streak_at_risk_enabled?: boolean
           streak_at_risk_time?: string
@@ -342,6 +380,7 @@ export type Database = {
           workout_reminder_time?: string
         }
         Update: {
+          active_days?: number[]
           created_at?: string
           last_chance_enabled?: boolean
           last_chance_sent_on?: string | null
@@ -349,6 +388,9 @@ export type Database = {
           last_streak_sent_on?: string | null
           last_verse_sent_on?: string | null
           last_workout_sent_on?: string | null
+          quiet_end?: string
+          quiet_hours_enabled?: boolean
+          quiet_start?: string
           reengagement_enabled?: boolean
           streak_at_risk_enabled?: boolean
           streak_at_risk_time?: string
