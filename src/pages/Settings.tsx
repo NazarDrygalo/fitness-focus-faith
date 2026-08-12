@@ -14,6 +14,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/hooks/useTheme";
 import { NotificationsCard } from "@/components/NotificationsCard";
 import { AppLockCard } from "@/components/AppLockCard";
+import { DataExportCard } from "@/components/DataExportCard";
+import { FeedbackCard } from "@/components/FeedbackCard";
 import { PageMeta } from "@/components/PageMeta";
 import {
   AlertDialog,
@@ -117,6 +119,16 @@ export default function Settings() {
         {/* App lock (native app only) */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.04 }}>
           <AppLockCard />
+        </motion.div>
+
+        {/* Data export */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.045 }}>
+          <DataExportCard />
+        </motion.div>
+
+        {/* Feedback */}
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.05 }}>
+          <FeedbackCard />
         </motion.div>
 
         {/* Theme */}
