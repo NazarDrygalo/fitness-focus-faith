@@ -51,7 +51,7 @@ export function DataExportCard() {
         setStatus(`Exporting ${table.replace(/_/g, " ")}…`);
         const { data, error } = await supabase.from(table as any).select("*");
         if (error) continue;
-        const rows = (data ?? []) as Record<string, unknown>[];
+        const rows = ((data ?? []) as unknown) as Record<string, unknown>[];
         all[table] = rows;
         if (rows.length) zip.file(`csv/${table}.csv`, toCsv(rows));
       }
