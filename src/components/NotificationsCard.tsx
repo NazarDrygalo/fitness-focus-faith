@@ -19,6 +19,10 @@ type Prefs = {
   streak_at_risk_time: string;
   last_chance_enabled: boolean;
   reengagement_enabled: boolean;
+  quiet_hours_enabled: boolean;
+  quiet_start: string;
+  quiet_end: string;
+  active_days: number[];
   timezone: string;
 };
 
@@ -31,8 +35,14 @@ const DEFAULTS: Prefs = {
   streak_at_risk_time: "20:00",
   last_chance_enabled: true,
   reengagement_enabled: true,
+  quiet_hours_enabled: false,
+  quiet_start: "22:00",
+  quiet_end: "07:00",
+  active_days: [0, 1, 2, 3, 4, 5, 6],
   timezone: typeof Intl !== "undefined" ? Intl.DateTimeFormat().resolvedOptions().timeZone : "UTC",
 };
+
+const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
 export function NotificationsCard() {
   const { user } = useAuth();
@@ -62,6 +72,10 @@ export function NotificationsCard() {
           streak_at_risk_time: data.streak_at_risk_time?.slice(0, 5) ?? DEFAULTS.streak_at_risk_time,
           last_chance_enabled: data.last_chance_enabled ?? DEFAULTS.last_chance_enabled,
           reengagement_enabled: data.reengagement_enabled ?? DEFAULTS.reengagement_enabled,
+          quiet_hours_enabled: (data as any).quiet_hours_enabled ?? DEFAULTS.quiet_hours_enabled,
+          quiet_start: (data as any).quiet_start?.slice(0, 5) ?? DEFAULTS.quiet_start,
+          quiet_end: (data as any).quiet_end?.slice(0, 5) ?? DEFAULTS.quiet_end,
+          active_days: (data as any).active_days ?? DEFAULTS.active_days,
           timezone: data.timezone ?? DEFAULTS.timezone,
         });
       }
@@ -210,6 +224,68 @@ export function NotificationsCard() {
             checked={prefs.reengagement_enabled}
             onChecked={(v) => updatePref({ reengagement_enabled: v })}
           />
+
+          <div className="pt-1 border-t border-border" />
+
+          <ToggleRow
+            label="Quiet hours"
+            sub="Pause every reminder during this window"
+            checked={prefs.quiet_hours_enabled}
+            onChecked={(v) => updatePref({ quiet_hours_enabled: v })}
+          />
+          {prefs.quiet_hours_enabled && (
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <Label className="text-xs text-muted-foreground">From</Label>
+                <Input
+                  type="time"
+                  value={prefs.quiet_start}
+                  onChange={(e) => updatePref({ quiet_start: e.target.value })}
+                  className="mt-1 h-10 bg-secondary border-border"
+                />
+              </div>
+              <div className="flex-1">
+                <Label className="text-xs text-muted-foreground">To</Label>
+                <Input
+                  type="time"
+                  value={prefs.quiet_end}
+                  onChange={(e) => updatePref({ quiet_end: e.target.value })}
+                  className="mt-1 h-10 bg-secondary border-border"
+                />
+              </div>
+            </div>
+          )}
+
+          <div>
+            <Label className="text-sm font-medium">Reminder days</Label>
+            <p className="text-xs text-muted-foreground mb-2">Tap to mute whole days.</p>
+            <div className="flex gap-1.5">
+              {DAY_LABELS.map((d, i) => {
+                const on = prefs.active_days.includes(i);
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() =>
+                      updatePref({
+                        active_days: on
+                          ? prefs.active_days.filter((x) => x !== i)
+                          : [...prefs.active_days, i].sort((a, b) => a - b),
+                      })
+                    }
+                    className={`flex-1 h-10 rounded-md text-xs font-medium border transition-colors tap ${
+                      on
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-secondary text-muted-foreground border-border"
+                    }`}
+                    aria-pressed={on}
+                  >
+                    {d}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           <Button variant="outline" onClick={sendTest} disabled={busy || !enabled} className="w-full h-11 gap-2 tap">
             <Send className="h-4 w-4" /> Send test notification

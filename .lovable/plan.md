@@ -65,7 +65,7 @@ Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its 
 44. Year-in-review wrapped experience (annual share card)
 45. Referral program: gift a freeze token per friend who logs week 1
 
-## Wave 10 — Trust, Settings, Monetization
+## Wave 10 — Trust, Settings, Monetization — SHIPPED (46/47 deferred: needs RevenueCat + store accounts)
 46. In-app subscription (Pro) via RevenueCat (Capacitor)
 47. Family / accountability bundle pricing
 48. Granular notification controls (per-channel, per-day quiet hours)

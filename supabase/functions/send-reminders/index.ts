@@ -30,6 +30,10 @@ type Pref = {
   last_chance_enabled: boolean;
   last_reengagement_sent_on: string | null;
   last_chance_sent_on: string | null;
+  quiet_hours_enabled: boolean | null;
+  quiet_start: string | null;
+  quiet_end: string | null;
+  active_days: number[] | null;
 };
 
 // 22:30 local — 90 minutes before midnight.
@@ -44,12 +48,13 @@ function localParts(tz: string) {
     const fmt = new Intl.DateTimeFormat("en-CA", {
       timeZone: tz,
       year: "numeric", month: "2-digit", day: "2-digit",
-      hour: "2-digit", minute: "2-digit", hour12: false,
+      hour: "2-digit", minute: "2-digit", hour12: false, weekday: "short",
     });
     const parts = Object.fromEntries(fmt.formatToParts(new Date()).map(p => [p.type, p.value]));
     return {
       date: `${parts.year}-${parts.month}-${parts.day}`,
       minutes: Number(parts.hour) * 60 + Number(parts.minute),
+      weekday: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(String(parts.weekday)),
     };
   } catch {
     return null;
@@ -58,6 +63,23 @@ function localParts(tz: string) {
 function timeToMinutes(t: string) {
   const [h, m] = t.split(":").map(Number);
   return h * 60 + (m || 0);
+}
+
+/** True when the local time falls inside the user's quiet window (may wrap midnight). */
+function inQuietHours(p: Pref, nowMin: number) {
+  if (!p.quiet_hours_enabled) return false;
+  const start = timeToMinutes((p.quiet_start ?? "22:00").slice(0, 5));
+  const end = timeToMinutes((p.quiet_end ?? "07:00").slice(0, 5));
+  if (start === end) return false;
+  return start < end ? nowMin >= start && nowMin < end : nowMin >= start || nowMin < end;
+}
+
+/** True when reminders are allowed on this local weekday (0 = Sunday). */
+function dayAllowed(p: Pref, weekday: number) {
+  const days = p.active_days;
+  if (!days || !days.length) return true;
+  if (weekday < 0) return true;
+  return days.map(Number).includes(weekday);
 }
 
 async function sendToUser(userId: string, payload: Record<string, unknown>) {
@@ -151,6 +173,8 @@ Deno.serve(async (req) => {
       const local = localParts(p.timezone);
       if (!local) continue;
       const nowMin = local.minutes;
+      if (!dayAllowed(p, local.weekday)) continue;
+      if (inQuietHours(p, nowMin)) continue;
 
       // Workout reminder
       if (
