@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788288385300,
+      "tag": "0000_revoke_internal_definer_functions",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788288403452,
+      "tag": "0001_restore_rls_helper_execute",
+      "breakpoints": true
+    }
+  ]
+}

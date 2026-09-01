@@ -77,9 +77,11 @@ export default function WorkoutTracker() {
     const p = parseInt(pushups) || 0;
     const s = parseInt(situps) || 0;
     if (p === 0 && s === 0) { toast.error("Enter at least one exercise count."); return; }
+    if (!user?.id) { toast.error("Please sign in first."); return; }
 
     setSaving(true);
     haptic("medium");
+
     const { data: existing } = await supabase
       .from("workout_logs")
       .select("pushups, situps")
@@ -108,7 +110,9 @@ export default function WorkoutTracker() {
   };
 
   const handleSaveExercise = async (field: string, value: number, extras?: Record<string, any>) => {
-    const upsertData: any = { workout_date: today, [field]: value, ...extras, user_id: user?.id };
+    if (!user?.id) { toast.error("Please sign in first."); return; }
+    const upsertData: any = { workout_date: today, [field]: value, ...extras, user_id: user.id };
+
     const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
     if (error) {
       toast.error("Failed to save.");

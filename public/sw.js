@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grind-v3';
+const CACHE_NAME = 'grind-v4';
 const STATIC_ASSETS = ['/', '/index.html', '/offline.html', '/manifest.json'];
 
 self.addEventListener('install', (event) => {
@@ -17,17 +17,27 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Only same-origin static assets are cached. API/auth traffic must never be stored.
+function isCacheableAsset(url) {
+  if (url.origin !== self.location.origin) return false;
+  return /\.(js|css|woff2?|ttf|png|jpe?g|svg|webp|ico|json)$/i.test(url.pathname);
+}
+
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
 
-  // Network-first for navigation, falling back to offline page
+  const url = new URL(req.url);
+
+  // Network-first for navigation, falling back to the offline page.
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          if (res.ok && url.origin === self.location.origin) {
+            const clone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          }
           return res;
         })
         .catch(() => caches.match(req).then((c) => c || caches.match('/offline.html')))
@@ -35,16 +45,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  if (!isCacheableAsset(url)) return; // let the network handle API/auth/cross-origin
+
   event.respondWith(
     fetch(req)
       .then((res) => {
-        const clone = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+        if (res.ok && res.type === 'basic') {
+          const clone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+        }
         return res;
       })
       .catch(() => caches.match(req))
   );
 });
+
 
 // ---- Web push ----
 self.addEventListener('push', (event) => {
