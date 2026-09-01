@@ -128,15 +128,17 @@ export default function Dashboard() {
   useEffect(() => {
     fetchLogs();
     const handleFocus = () => fetchLogs();
-    window.addEventListener("focus", handleFocus);
-    document.addEventListener("visibilitychange", () => {
+    const handleVisibility = () => {
       if (document.visibilityState === "visible") fetchLogs();
-    });
+    };
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibility);
     return () => {
       window.removeEventListener("focus", handleFocus);
-      document.removeEventListener("visibilitychange", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
+
 
   const { pull, refreshing } = usePullToRefresh({ onRefresh: fetchLogs });
 
