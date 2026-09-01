@@ -77,9 +77,11 @@ export default function WorkoutTracker() {
     const p = parseInt(pushups) || 0;
     const s = parseInt(situps) || 0;
     if (p === 0 && s === 0) { toast.error("Enter at least one exercise count."); return; }
+    if (!user?.id) { toast.error("Please sign in first."); return; }
 
     setSaving(true);
     haptic("medium");
+
     const { data: existing } = await supabase
       .from("workout_logs")
       .select("pushups, situps")
