@@ -15,6 +15,13 @@
       "when": 1788288403452,
       "tag": "0001_restore_rls_helper_execute",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788464265940,
+      "tag": "0002_unique_bible_highlights",
+      "breakpoints": true
     }
   ]
 }
