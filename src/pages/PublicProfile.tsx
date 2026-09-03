@@ -9,6 +9,8 @@ import { Loader2, Flame } from "lucide-react";
 type Profile = { display_name: string; favorite_verse: string | null; is_public: boolean };
 type Stats = { current_streak: number; weekly_workouts: number; total_workouts: number };
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export default function PublicProfilePage() {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,13 @@ export default function PublicProfilePage() {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    // Guard against malformed ids — querying with a non-uuid throws a 400.
+    if (!id || !UUID_RE.test(id)) {
+      setProfile(null);
+      setStats(null);
+      setLoading(false);
+      return;
+    }
     (async () => {
       const [{ data: p }, { data: s }] = await Promise.all([
         supabase.from("profiles").select("display_name, favorite_verse, is_public").eq("id", id).maybeSingle(),
@@ -27,6 +35,7 @@ export default function PublicProfilePage() {
       setLoading(false);
     })();
   }, [id]);
+
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-10">
