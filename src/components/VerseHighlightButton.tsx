@@ -48,11 +48,11 @@ export function VerseHighlightButton({ reference, verseText }: Props) {
         setSaved(false);
         toast({ title: "Removed from highlights" });
       } else {
-        const { error } = await supabase.from("bible_highlights").insert({
+        const { error } = await supabase.from("bible_highlights").upsert({
           user_id: user.id,
           reference,
           verse_text: verseText,
-        });
+        }, { onConflict: "user_id,reference" });
         if (error) throw error;
         setSaved(true);
         toast({ title: "Saved to highlights" });
