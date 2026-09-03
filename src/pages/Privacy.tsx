@@ -16,7 +16,7 @@ export default function Privacy() {
       <main className="container mx-auto px-4 py-12 max-w-3xl prose prose-invert">
         <h1 className="text-3xl font-bold text-foreground">Privacy Policy</h1>
         <p className="text-muted-foreground text-sm">Last updated: April 9, 2026</p>
-        <p className="text-muted-foreground text-sm">Last updated: April 9, 2026</p>
+
 
         <h2 className="text-xl font-semibold text-foreground mt-8">1. Information We Collect</h2>
         <p className="text-foreground/80"><strong>Account Data:</strong> When you sign up, we collect your email address and password (stored securely via hashing).</p>

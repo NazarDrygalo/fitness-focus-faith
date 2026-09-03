@@ -2,22 +2,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dumbbell } from "lucide-react";
 import { haptic } from "@/lib/haptics";
+import { useAuth } from "@/hooks/useAuth";
 
-const HIDDEN_ROUTES = ["/workout", "/auth", "/reset-password"];
+const HIDDEN_ROUTES = ["/workout", "/auth", "/reset-password", "/terms", "/privacy", "/u/"];
 
 /**
  * Persistent bottom-right Log Workout button. Hidden on the workout
- * tracker itself, auth screens, and public legal pages. Positioned
- * above the mobile bottom nav.
+ * tracker itself, auth screens, public pages, and for signed-out visitors.
+ * Positioned above the mobile bottom nav.
  */
 export function LogFAB() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
 
   const hidden =
-    HIDDEN_ROUTES.some((r) => location.pathname.startsWith(r)) ||
-    location.pathname === "/terms" ||
-    location.pathname === "/privacy";
+    !user || HIDDEN_ROUTES.some((r) => location.pathname.startsWith(r));
+
 
   return (
     <AnimatePresence>
