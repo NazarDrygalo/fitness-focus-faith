@@ -9,7 +9,14 @@ export async function initSentry() {
   try {
     const { data } = await supabase.functions.invoke("public-config");
     const dsn = (data as { sentryDsn?: string } | null)?.sentryDsn;
-    if (!dsn) return;
+    // A valid DSN looks like https://<key>@<org>.ingest.sentry.io/<project>.
+    // Anything else (e.g. a bare public key) would make Sentry.init throw.
+    if (!dsn || !/^https?:\/\/.+@.+\/\d+$/.test(dsn)) {
+      if (!dsn) return;
+      console.warn("[sentry] SENTRY_DSN is not a full DSN URL — error reporting disabled.");
+      return;
+    }
+
     Sentry.init({
       dsn,
       tracesSampleRate: 0.1,
