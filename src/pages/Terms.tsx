@@ -16,7 +16,7 @@ export default function Terms() {
       <main className="container mx-auto px-4 py-12 max-w-3xl prose prose-invert">
         <h1 className="text-3xl font-bold text-foreground">Terms of Service</h1>
         <p className="text-muted-foreground text-sm">Last updated: April 9, 2026</p>
-        <p className="text-muted-foreground text-sm">Last updated: April 9, 2026</p>
+
 
         <h2 className="text-xl font-semibold text-foreground mt-8">1. Acceptance of Terms</h2>
         <p className="text-foreground/80">By accessing or using GRIND ("the App"), you agree to be bound by these Terms of Service. If you do not agree, do not use the App.</p>
