@@ -19,7 +19,7 @@ import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Check, Quote, Dumbbell, Timer as TimerIcon, Hand, Activity } from "lucide-react";
+import { Check, Quote, Dumbbell, Timer as TimerIcon, Hand, Activity, Copy } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,10 @@ import { CustomExercises } from "@/components/CustomExercises";
 import { RoutinesCard } from "@/components/RoutinesCard";
 import { WarmupCooldown } from "@/components/WarmupCooldown";
 import { RecoverySuggestions } from "@/components/RecoverySuggestions";
+import { RestTimer } from "@/components/RestTimer";
+import { RepSchemes } from "@/components/RepSchemes";
+import { CircuitBuilder } from "@/components/CircuitBuilder";
+import { SetLogger } from "@/components/SetLogger";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -54,6 +58,7 @@ export default function WorkoutTracker() {
   const [existingLadder, setExistingLadder] = useState<number>(0);
   const [ladderLoaded, setLadderLoaded] = useState(false);
   const [existingData, setExistingData] = useState<any>(null);
+  const [lastLog, setLastLog] = useState<any>(null);
 
   const { user } = useAuth();
   const verse = getDailyVerse();
@@ -71,7 +76,20 @@ export default function WorkoutTracker() {
       }
       setLadderLoaded(true);
     });
+    // Most recent prior workout — powers "copy from a past day"
+    supabase.from("workout_logs").select("*").lt("workout_date", today)
+      .order("workout_date", { ascending: false }).limit(1).maybeSingle()
+      .then(({ data }) => { if (data) setLastLog(data); });
   }, [today]);
+
+  const copyLastDay = () => {
+    if (!lastLog) return;
+    haptic("light");
+    setPushups(lastLog.pushups > 0 ? String(lastLog.pushups) : "");
+    setSitups(lastLog.situps > 0 ? String(lastLog.situps) : "");
+    setNotes(lastLog.notes ? `Repeat of ${lastLog.workout_date}` : "");
+    toast.success(`Copied ${format(new Date(lastLog.workout_date + "T00:00:00"), "MMM d")} — ${lastLog.pushups} pushups, ${lastLog.situps} situps`);
+  };
 
   const handleSave = async () => {
     const p = parseInt(pushups) || 0;
