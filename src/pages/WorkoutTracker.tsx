@@ -58,6 +58,7 @@ export default function WorkoutTracker() {
   const [existingLadder, setExistingLadder] = useState<number>(0);
   const [ladderLoaded, setLadderLoaded] = useState(false);
   const [existingData, setExistingData] = useState<any>(null);
+  const [lastLog, setLastLog] = useState<any>(null);
 
   const { user } = useAuth();
   const verse = getDailyVerse();
@@ -75,7 +76,20 @@ export default function WorkoutTracker() {
       }
       setLadderLoaded(true);
     });
+    // Most recent prior workout — powers "copy from a past day"
+    supabase.from("workout_logs").select("*").lt("workout_date", today)
+      .order("workout_date", { ascending: false }).limit(1).maybeSingle()
+      .then(({ data }) => { if (data) setLastLog(data); });
   }, [today]);
+
+  const copyLastDay = () => {
+    if (!lastLog) return;
+    haptic("light");
+    setPushups(lastLog.pushups > 0 ? String(lastLog.pushups) : "");
+    setSitups(lastLog.situps > 0 ? String(lastLog.situps) : "");
+    setNotes(lastLog.notes ? `Repeat of ${lastLog.workout_date}` : "");
+    toast.success(`Copied ${format(new Date(lastLog.workout_date + "T00:00:00"), "MMM d")} — ${lastLog.pushups} pushups, ${lastLog.situps} situps`);
+  };
 
   const handleSave = async () => {
     const p = parseInt(pushups) || 0;
