@@ -19,7 +19,7 @@ import { getDailyVerse } from "@/data/bibleVerses";
 import { getDailyMessage } from "@/data/encouragementMessages";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Check, Quote, Dumbbell, Timer as TimerIcon, Hand, Activity } from "lucide-react";
+import { Check, Quote, Dumbbell, Timer as TimerIcon, Hand, Activity, Copy } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { haptic } from "@/lib/haptics";
 import { cn } from "@/lib/utils";
@@ -29,6 +29,10 @@ import { CustomExercises } from "@/components/CustomExercises";
 import { RoutinesCard } from "@/components/RoutinesCard";
 import { WarmupCooldown } from "@/components/WarmupCooldown";
 import { RecoverySuggestions } from "@/components/RecoverySuggestions";
+import { RestTimer } from "@/components/RestTimer";
+import { RepSchemes } from "@/components/RepSchemes";
+import { CircuitBuilder } from "@/components/CircuitBuilder";
+import { SetLogger } from "@/components/SetLogger";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
