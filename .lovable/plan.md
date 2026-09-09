@@ -1,89 +1,59 @@
-# Mobile Roadmap: Next 50 Features
+# GRIND: Post-Launch Feature Roadmap (v2)
 
-Grouped into 10 waves of 5. Each wave is a coherent release you can ship on its own. Order is suggested by impact ÷ effort for a mobile-first PWA / Capacitor audience.
+All 50 original roadmap features are shipped. This plan covers the next 30 features, grouped into 6 waves of 5, ordered by impact ÷ effort for a mobile-first audience.
 
-## Wave 1 — Mobile Polish & Input Speed
-1. One-tap "Repeat last workout" button on the dashboard QuickLog
-2. Haptic-confirmed swipe-to-log on workout cards (left = skip, right = log)
-3. Large-thumb numeric keypad sheet for reps/weight (replaces native numeric input)
-4. Pull-to-refresh on Dashboard, Progress, and Bible pages
-5. Persistent bottom "Log workout" FAB visible across all main routes
+## Wave 11 — Workout Depth & Tracking
+1. **Supersets & circuits** — chain exercises into timed circuits with per-round logging
+2. **Rep schemes** — pyramid, EMOM (every minute on the minute), AMRAP modes in the tracker
+3. **Rest timer between sets** — auto-start countdown with haptic + sound at zero
+4. **Workout templates duplication** — clone any past day as a starting point
+5. **Per-set logging** — log individual sets (reps × weight) instead of only totals
 
-## Wave 2 — Streak & Motivation Mechanics
-6. Streak freeze tokens (earn 1 per 7-day streak, auto-spend on missed days)
-7. Weekly goal ring (M–S) with end-of-week celebration animation
-8. Personal best (PR) push notification when a new record is set
-9. Streak comeback flow: smaller "get back on track" target after a missed week
-10. Shareable streak card (image export) for Stories / iMessage
+## Wave 12 — Deeper Bible Integration
+6. **Verse memorization mode** — flashcard-style review of saved highlights with spaced repetition
+7. **Prayer journal** — private entries with answered/unanswered status
+8. **Shareable verse images** — canvas-generated verse cards for Stories (reuses ShareStreakCard tech)
+9. **Bible reading streak** — separate streak for daily reading, merged badge view
+10. **Group verse discussion** — a daily verse thread inside small groups
 
-## Wave 3 — Bible Study Depth
-11. Verse of the day lock-screen widget (iOS/Android via Capacitor)
-12. Save verses to a personal "Highlights" collection
-13. Reading plans: 7-day, 30-day, and 1-year tracks with progress
-14. Audio playback of the daily verse (Lovable AI TTS)
-15. Reflection journal: short prompt + private note attached to each day
+## Wave 13 — Social 2.0
+11. **Direct challenges** — "beat my 45 pushups this week" sent to a partner or group
+12. **Group workout feed** — live feed of group members' completed workouts with cheers
+13. **Partner streak sync** — combined "duo streak" only counts when both log
+14. **Comments on workouts** — short text replies beyond emoji cheers
+15. **Leaderboard filters** — weekly/monthly/all-time, per exercise
 
-## Wave 4 — Coaching & Personalization
-16. AI workout suggestion based on last 14 days (Lovable AI)
-17. Adaptive daily targets that scale with rolling 7-day average
-18. Personalized verse selection tied to current struggle tags
-19. Weekly AI recap: "What you crushed, what to focus on next"
-20. Onboarding fitness assessment (3-min) to seed initial goals
+## Wave 14 — AI Coach Pro
+16. **Conversational coach chat** — free-form Q&A about training, nutrition basics, faith
+17. **Injury-aware adjustments** — tell the coach a sore area; plans adapt around it
+18. **Plateau detection** — flags stalled metrics and suggests a deload or variation
+19. **AI-generated routines** — full multi-day routine generated from goals, saved to library
+20. **Voice coaching cues** — TTS countdowns and encouragement during timers (reuses tts-verse)
 
-## Wave 5 — Social & Accountability
-21. Accountability partner: invite by link, see each other's streaks
-22. Small groups (max 8) with shared weekly leaderboard
-23. Cheer reactions on partner's logged workouts (haptic + push)
-24. Public profile page with stats, badges, favorite verse
-25. Optional weekly "check-in" message sent to your partner
+## Wave 15 — Polish & Monetization Prep
+21. **Custom app icon + theme accents** — user-picked accent color persisted per profile
+22. **Widget-style dashboard layouts** — drag-to-reorder dashboard cards
+23. **Offline logging queue** — workouts saved locally and synced when back online
+24. **Localization groundwork** — extract strings, start with Spanish
+25. **Pro tier scaffolding** — feature-flag system + paywall UI, ready for RevenueCat
 
-## Wave 6 — Native Mobile Capabilities (Capacitor) — SHIPPED (26, 28 deferred)
-26. Apple Health / Google Fit import (steps, weight, HR)
-27. Background workout timer that survives screen lock
-28. Live Activity / Dynamic Island for active timers (iOS)
-29. App shortcuts / quick actions on long-press of icon
-30. Biometric (Face ID / fingerprint) app lock
-
-## Wave 7 — Data, Insights, Exports — SHIPPED (35 deferred)
-31. Body measurements tracker (chest, waist, arms, thigh)
-32. Progress photo timeline with side-by-side compare
-33. Heatmap calendar (GitHub-style) of workout intensity
-34. Monthly PDF report emailed/shared from the app
-35. Apple Watch / Wear OS companion: log a set, see streak
-
-## Wave 8 — Workout Library Expansion — SHIPPED
-36. Custom exercise builder (name, unit, target type)
-37. Programmed routines: multi-day templates with rest days
-38. Video form guides per exercise (short MP4, lazy-loaded)
-39. Warmup & cooldown timers built into a session
-40. Rest-day active recovery suggestions (mobility, stretch)
-
-## Wave 9 — Retention & Re-engagement — SHIPPED
-41. Smart re-engagement push (only when actually inactive, ML-lite)
-42. "Last chance" streak-save reminder 90 min before midnight local
-43. Milestone badges with full-screen celebration (100 days, 1000 reps)
-44. Year-in-review wrapped experience (annual share card)
-45. Referral program: gift a freeze token per friend who logs week 1
-
-## Wave 10 — Trust, Settings, Monetization — SHIPPED (46/47 deferred: needs RevenueCat + store accounts)
-46. In-app subscription (Pro) via RevenueCat (Capacitor)
-47. Family / accountability bundle pricing
-48. Granular notification controls (per-channel, per-day quiet hours)
-49. Data export bundle (CSV + JSON + photos) on demand
-50. In-app feedback widget with screenshot + auto-attached logs
+## Wave 16 — Native Store Launch
+26. **RevenueCat subscriptions** (deferred from Wave 10) — Pro unlocks AI coach pro, themes, advanced analytics
+27. **Apple Health / Google Fit import** (deferred from Wave 6)
+28. **Live Activities / lock-screen widget** (deferred from Waves 3 & 6)
+29. **App Store + Play Store submission** — screenshots, listings, review flow
+30. **Store rating prompt** — in-app review request after milestone celebrations
 
 ## Technical Notes
-- Waves 1–5 are deliverable as PWA-only and ship fastest.
-- Waves 6, 30, 35, 46–47 require Capacitor wrap; recommend pairing with App Store submission milestone.
-- AI-driven items (16, 17, 19, 41) use the existing Lovable AI Gateway — no new keys.
-- Social features (Wave 5) need a new `friendships`, `groups`, `group_members`, and `reactions` schema with strict RLS; budget one migration per feature.
-- Health integrations (26) need Capacitor plugins (`@capacitor-community/health` or equivalent) and per-platform permission prompts.
-- Live Activities (28), widgets (11), and Watch app (35) require native Swift/Kotlin targets added after `npx cap add ios|android`.
-- Subscriptions (46) should go through RevenueCat to stay store-compliant; gate Pro features behind a `is_pro` flag synced from RC webhooks to a `subscriptions` table.
+- Waves 11–15 are PWA-only; no new native dependencies.
+- Wave 13 needs one new table per feature (challenges, comments) with strict RLS.
+- Wave 14 reuses the existing `ai-coach` edge function and Lovable AI Gateway — no new keys.
+- Wave 15 item 24 should start before strings grow further; retrofitting later is costly.
+- Wave 16 requires Apple Developer ($99/yr) and Play Console ($25) accounts plus the RevenueCat setup.
+- Offline queue (23) uses the existing service worker + IndexedDB via Capacitor Preferences on native.
 
-## Suggested Sequencing
-- Months 1–2: Waves 1–3 (polish, retention, content depth) — pure PWA.
-- Months 3–4: Waves 4–5 (AI coaching, social) — still PWA.
-- Month 5: Capacitor wrap + Wave 6.
-- Months 6–7: Waves 7–8 (data depth, library).
-- Months 8–9: Waves 9–10 (re-engagement + monetization, store launch).
+## Suggested Order
+- Month 1: Wave 11 (core product depth)
+- Month 2: Wave 12 + 13 (engagement loops)
+- Month 3: Wave 14 + 15 (differentiation + monetization prep)
+- Month 4: Wave 16 (store launch)
