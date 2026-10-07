@@ -137,10 +137,8 @@ export default function WorkoutTracker() {
       .eq("workout_date", today)
       .maybeSingle();
     const current = (existing as any)?.[field] || 0;
-    const { error } = await supabase.from("workout_logs").upsert(
-      { workout_date: today, user_id: user.id, [field]: current + reps },
-      { onConflict: "workout_date,user_id" }
-    );
+    const upsertData: any = { workout_date: today, user_id: user.id, [field]: current + reps };
+    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
     if (error) toast.error("Failed to save.");
     else {
       haptic("success");

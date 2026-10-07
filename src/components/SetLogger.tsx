@@ -98,10 +98,8 @@ export function SetLogger() {
       .eq("workout_date", today)
       .maybeSingle();
     const current = (existing as any)?.[field] || 0;
-    const { error: logError } = await supabase.from("workout_logs").upsert(
-      { workout_date: today, user_id: user.id, [field]: current + total },
-      { onConflict: "workout_date,user_id" }
-    );
+    const upsertData: any = { workout_date: today, user_id: user.id, [field]: current + total };
+    const { error: logError } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
     setSaving(false);
     if (logError) {
       toast.error("Sets saved, but daily total failed to update.");
