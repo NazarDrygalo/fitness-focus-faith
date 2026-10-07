@@ -366,6 +366,22 @@ export default function WorkoutTracker() {
           </Card>
         </motion.div>
 
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.42 }} className="mt-5 sm:mt-6">
+          <RepSchemes onSave={handleAddReps} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.44 }} className="mt-5 sm:mt-6">
+          <CircuitBuilder onSave={handleSaveCircuit} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.46 }} className="mt-5 sm:mt-6">
+          <SetLogger />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.48 }} className="mt-5 sm:mt-6">
+          <RestTimer />
+        </motion.div>
+
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }} className="mt-5 sm:mt-6">
           <WarmupCooldown />
         </motion.div>
