@@ -127,6 +127,56 @@ export default function WorkoutTracker() {
     }
   };
 
+  /** Adds reps to today's log for one exercise (used by Rep Schemes). */
+  const handleAddReps = async (exercise: "pushups" | "situps" | "squats", reps: number) => {
+    if (!user?.id) { toast.error("Please sign in first."); return; }
+    const field = exercise === "squats" ? "squat_count" : exercise;
+    const { data: existing } = await supabase
+      .from("workout_logs")
+      .select("pushups, situps, squat_count")
+      .eq("workout_date", today)
+      .maybeSingle();
+    const current = (existing as any)?.[field] || 0;
+    const upsertData: any = { workout_date: today, user_id: user.id, [field]: current + reps };
+    const { error } = await supabase.from("workout_logs").upsert(upsertData, { onConflict: "workout_date,user_id" });
+    if (error) toast.error("Failed to save.");
+    else {
+      haptic("success");
+      toast.success(`${reps} ${exercise} added to today's total!`);
+      void syncUserStats(user.id);
+      const { data } = await supabase.from("workout_logs").select("*").eq("workout_date", today).maybeSingle();
+      if (data) setExistingData(data);
+    }
+  };
+
+  /** Saves circuit totals for all three exercises at once. */
+  const handleSaveCircuit = async (totals: Record<"pushups" | "situps" | "squats", number>) => {
+    if (!user?.id) { toast.error("Please sign in first."); return; }
+    const { data: existing } = await supabase
+      .from("workout_logs")
+      .select("pushups, situps, squat_count")
+      .eq("workout_date", today)
+      .maybeSingle();
+    const { error } = await supabase.from("workout_logs").upsert(
+      {
+        workout_date: today,
+        user_id: user.id,
+        pushups: (existing?.pushups || 0) + totals.pushups,
+        situps: (existing?.situps || 0) + totals.situps,
+        squat_count: (existing?.squat_count || 0) + totals.squats,
+      },
+      { onConflict: "workout_date,user_id" }
+    );
+    if (error) toast.error("Failed to save circuit.");
+    else {
+      haptic("success");
+      toast.success("Circuit saved to today's workout!");
+      void syncUserStats(user.id);
+      const { data } = await supabase.from("workout_logs").select("*").eq("workout_date", today).maybeSingle();
+      if (data) setExistingData(data);
+    }
+  };
+
   const handleSaveExercise = async (field: string, value: number, extras?: Record<string, any>) => {
     if (!user?.id) { toast.error("Please sign in first."); return; }
     const upsertData: any = { workout_date: today, [field]: value, ...extras, user_id: user.id };
@@ -161,8 +211,13 @@ export default function WorkoutTracker() {
         {/* Workout Input */}
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}>
           <Card className="bg-card border-border mb-5 sm:mb-6">
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 flex-row items-center justify-between space-y-0">
               <CardTitle className="text-lg flex items-center gap-2"><Dumbbell className="h-5 w-5" /> Log Today's Workout</CardTitle>
+              {lastLog && (lastLog.pushups > 0 || lastLog.situps > 0) && (
+                <Button variant="ghost" size="sm" onClick={copyLastDay} className="gap-1.5 text-xs tap">
+                  <Copy className="h-3.5 w-3.5" /> Copy {format(new Date(lastLog.workout_date + "T00:00:00"), "MMM d")}
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-4">
@@ -307,6 +362,22 @@ export default function WorkoutTracker() {
               </AnimatePresence>
             </CardContent>
           </Card>
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.42 }} className="mt-5 sm:mt-6">
+          <RepSchemes onSave={handleAddReps} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.44 }} className="mt-5 sm:mt-6">
+          <CircuitBuilder onSave={handleSaveCircuit} />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.46 }} className="mt-5 sm:mt-6">
+          <SetLogger />
+        </motion.div>
+
+        <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.48 }} className="mt-5 sm:mt-6">
+          <RestTimer />
         </motion.div>
 
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.45 }} className="mt-5 sm:mt-6">
