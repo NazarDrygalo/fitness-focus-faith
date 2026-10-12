@@ -14,6 +14,11 @@ import { ReflectionJournal } from "@/components/ReflectionJournal";
 import { ReadingPlansCard } from "@/components/ReadingPlansCard";
 import { HighlightsList } from "@/components/HighlightsList";
 import { PersonalizedVerseCard } from "@/components/PersonalizedVerseCard";
+import { ShareVerseButton } from "@/components/ShareVerseButton";
+import { ReadingStreakCard } from "@/components/ReadingStreakCard";
+import { VerseMemorization } from "@/components/VerseMemorization";
+import { PrayerJournal } from "@/components/PrayerJournal";
+import { GroupVerseDiscussion } from "@/components/GroupVerseDiscussion";
 
 const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } };
 
@@ -51,11 +56,13 @@ export default function BibleStudyPage() {
         <motion.div initial="hidden" animate="visible" variants={fadeIn} transition={{ duration: 0.5 }}>
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 tracking-tight">Bible Study</h1>
           <p className="text-sm text-muted-foreground mb-3 sm:mb-4">Today's reading: {study.reference}</p>
-          <div className="flex flex-wrap gap-2 mb-5 sm:mb-8">
+          <div className="flex flex-wrap gap-2 mb-5 sm:mb-6">
             <VerseHighlightButton reference={verse.reference} verseText={verse.verse} />
             <VerseAudioButton text={`${verse.verse} — ${verse.reference}`} />
+            <ShareVerseButton verse={verse.verse} reference={verse.reference} />
           </div>
         </motion.div>
+        <ReadingStreakCard />
 
 
         {/* Book Overview */}
@@ -115,7 +122,11 @@ export default function BibleStudyPage() {
           </Card>
         </motion.div>
 
+        <div className="mt-6" />
         <ReflectionJournal reference={verse.reference} />
+        <GroupVerseDiscussion reference={verse.reference} />
+        <VerseMemorization />
+        <PrayerJournal />
         <PersonalizedVerseCard />
         <ReadingPlansCard />
         <HighlightsList />

@@ -10,14 +10,17 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.1"
   }
   public: {
     Tables: {
       bible_highlights: {
         Row: {
           created_at: string
+          due_on: string
+          ease: number
           id: string
+          interval_days: number
           note: string | null
           reference: string
           user_id: string
@@ -25,7 +28,10 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          due_on?: string
+          ease?: number
           id?: string
+          interval_days?: number
           note?: string | null
           reference: string
           user_id: string
@@ -33,11 +39,32 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          due_on?: string
+          ease?: number
           id?: string
+          interval_days?: number
           note?: string | null
           reference?: string
           user_id?: string
           verse_text?: string
+        }
+        Relationships: []
+      }
+      bible_reading_days: {
+        Row: {
+          created_at: string
+          read_on: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          read_on: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          read_on?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -305,6 +332,44 @@ export type Database = {
           },
         ]
       }
+      group_verse_posts: {
+        Row: {
+          created_at: string
+          group_id: string
+          id: string
+          message: string
+          reference: string
+          user_id: string
+          verse_date: string
+        }
+        Insert: {
+          created_at?: string
+          group_id: string
+          id?: string
+          message: string
+          reference: string
+          user_id: string
+          verse_date: string
+        }
+        Update: {
+          created_at?: string
+          group_id?: string
+          id?: string
+          message?: string
+          reference?: string
+          user_id?: string
+          verse_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_verse_posts_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       groups: {
         Row: {
           created_at: string
@@ -431,6 +496,39 @@ export type Database = {
           inviter_id?: string
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      prayer_entries: {
+        Row: {
+          answered: boolean
+          answered_at: string | null
+          created_at: string
+          details: string | null
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answered?: boolean
+          answered_at?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answered?: boolean
+          answered_at?: string | null
+          created_at?: string
+          details?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

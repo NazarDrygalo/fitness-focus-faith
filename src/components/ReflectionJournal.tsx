@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "@/hooks/use-toast";
 import { getReflectionPrompt } from "@/data/readingPlans";
+import { markReadToday } from "@/lib/bibleStreak";
 
 interface Props { reference: string; }
 
@@ -63,6 +64,7 @@ export function ReflectionJournal({ reference }: Props) {
       }, { onConflict: "user_id,reflection_date" });
       if (error) throw error;
       setSavedAt(new Date().toISOString());
+      markReadToday(user.id);
       toast({ title: "Reflection saved" });
     } catch (e: any) {
       toast({ title: "Couldn't save", description: e?.message, variant: "destructive" });
