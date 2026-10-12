@@ -29,6 +29,13 @@
       "when": 1788984071129,
       "tag": "0003_create_workout_sets",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791823553839,
+      "tag": "0004_wave12_bible",
+      "breakpoints": true
     }
   ]
 }
